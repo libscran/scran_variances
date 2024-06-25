@@ -1,0 +1,5 @@
+<map id="scran/fit_variance_trend.hpp" name="scran/fit_variance_trend.hpp">
+<area shape="rect" id="Node000001" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="51,5,174,46"/>
+<area shape="rect" id="Node000002" href="$model__gene__variances_8hpp.html" title="Model the per&#45;gene variances." alt="" coords="5,94,220,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,62,115,93,110,93,110,62"/>
+</map>

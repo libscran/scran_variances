@@ -1,0 +1,5 @@
+<map id="scran::model_gene_variances::Options" name="scran::model_gene_variances::Options">
+<area shape="rect" id="Node000001" title="Default parameters for variance modelling." alt="" coords="5,124,198,165"/>
+<area shape="rect" id="Node000002" href="$structscran_1_1fit__variance__trend_1_1Options.html" title="Parameter defaults for trend fitting." alt="" coords="39,5,164,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,61,104,123,99,123,99,61"/>
+</map>
