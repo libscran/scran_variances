@@ -106,6 +106,14 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Fit a mean-variance trend to log-count data. </p>
+<p>We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data. We use a LOWESS smoother in several steps:</p>
+<ol type="1">
+<li>Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.</li>
+<li>Take the quarter-root of the variances, to squeeze the trend towards 1. This makes the trend more "linear" to improve the performance of the LOWESS smoother; it also reduces the chance of obtaining negative fitted values.</li>
+<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <b>WeightedLowess</b> library.</li>
+<li>Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.</li>
+<li>Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes. This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances. </li>
+</ol>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="ad9c43577a87c767d7d2d58ce770cd63c" name="ad9c43577a87c767d7d2d58ce770cd63c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad9c43577a87c767d7d2d58ce770cd63c">&#9670;&#160;</a></span>compute() <span class="overload">[1/2]</span></h2>
@@ -160,14 +168,6 @@ template&lt;<a class="el" href="structscran_1_1fit__variance__trend_1_1Options.h
 </div><div class="memdoc">
 
 <p>Fit a mean-variance trend to log-count data. </p>
-<p>Fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data. We use a LOWESS smoother in several steps:</p>
-<ol type="1">
-<li>Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.</li>
-<li>Take the quarter-root of the variances, to squeeze the trend towards 1. This makes the trend more "linear" to improve the performance of the LOWESS smoother; it also reduces the chance of obtaining negative fitted values.</li>
-<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <b>WeightedLowess</b> library.</li>
-<li>Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.</li>
-<li>Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes. This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.</li>
-</ol>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Float_</td><td>Floating-point type for the statistics.</td></tr>

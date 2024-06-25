@@ -165,7 +165,6 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Model the per-gene variances. </p>
-<p>This scans through a log-transformed normalized expression matrix and computes per-feature means and variances. It then fits a trend to the variances with respect to the means using <code>fit_variance_trend::compute()</code>. We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting. Under this assumption, the residual can be treated as a quantification of biologically interesting variation, and can be used to identify relevant features for downstream analyses. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
