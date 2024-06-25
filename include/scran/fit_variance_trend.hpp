@@ -13,8 +13,21 @@
 namespace scran {
 
 /**
- * @namespace fit_variance_trend
+ * @namespace scran::fit_variance_trend
  * @brief Fit a mean-variance trend to log-count data.
+ *
+ * We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data.
+ * We use a LOWESS smoother in several steps:
+ *
+ * 1. Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.
+ * 2. Take the quarter-root of the variances, to squeeze the trend towards 1.
+ * This makes the trend more "linear" to improve the performance of the LOWESS smoother;
+ * it also reduces the chance of obtaining negative fitted values.
+ * 3. Apply the LOWESS smoother to the quarter-root variances.
+ * This is done using the implementation in the **WeightedLowess** library.
+ * 4. Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.
+ * 5. Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes.
+ * This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.
  */
 namespace fit_variance_trend {
 
@@ -74,19 +87,6 @@ struct Options {
 
 /**
  * @brief Fit a mean-variance trend to log-count data.
- *
- * Fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data.
- * We use a LOWESS smoother in several steps:
- *
- * 1. Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.
- * 2. Take the quarter-root of the variances, to squeeze the trend towards 1.
- * This makes the trend more "linear" to improve the performance of the LOWESS smoother;
- * it also reduces the chance of obtaining negative fitted values.
- * 3. Apply the LOWESS smoother to the quarter-root variances.
- * This is done using the implementation in the **WeightedLowess** library.
- * 4. Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.
- * 5. Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes.
- * This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.
  *
  * @tparam Float_ Floating-point type for the statistics.
  *
@@ -204,6 +204,7 @@ struct Results {
  * @param n Number of features.
  * @param[in] mean Pointer to an array of length `n`, containing the means for all features.
  * @param[in] variance Pointer to an array of length `n`, containing the variances for all features.
+ * @param options Further options.
  * 
  * @return Result of the trend fit, containing the fitted values and residuals for each gene. 
  */

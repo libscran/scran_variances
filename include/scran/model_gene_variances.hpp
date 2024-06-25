@@ -15,19 +15,19 @@
 /**
  * @file model_gene_variances.hpp
  * @brief Model the per-gene variances. 
- *
- * This scans through a log-transformed normalized expression matrix and computes per-feature means and variances.
- * It then fits a trend to the variances with respect to the means using `fit_variance_trend::compute()`.
- * We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - 
- * this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting.
- * Under this assumption, the residual can be treated as a quantification of biologically interesting variation, and can be used to identify relevant features for downstream analyses.
  */
 
 namespace scran {
 
 /**
- * @file scran::model_gene_variances
+ * @namespace scran::model_gene_variances
  * @brief Model the per-gene variances. 
+ *
+ * Here, we scan through a log-transformed normalized expression matrix and compute per-gene means and variances.
+ * We then fits a trend to the variances with respect to the means using `fit_variance_trend::compute()`.
+ * We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - 
+ * this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting.
+ * Under this assumption, the residual can be treated as a quantification of biologically interesting variation, and can be used to identify relevant features for downstream analyses.
  */
 namespace model_gene_variances {
 
@@ -362,6 +362,7 @@ void compute_blocked(
  * Each vector stores the fitted value of the trend for each feature in the corresponding block of cells.
  * @param[out] residuals Vector of length equal to the number of blocks, containing pointers to output arrays of length equal to the number of rows in `mat`.
  * Each vector stores the residual from the trend for each feature in the corresponding block of cells.
+ * @param options Further options.
  */
 template<typename Value_, typename Index_, typename Block_, typename Stat_>
 void compute_blocked(
@@ -401,6 +402,7 @@ void compute_blocked(
  * @param[out] variances Pointer to an output array of length equal to the number of rows in `mat`, used to store the variance of each feature.
  * @param[out] fitted Pointer to an output array of length equal to the number of rows in `mat`, used to store the fitted value of the trend.
  * @param[out] residuals Pointer to an output array of length equal to the number of rows in `mat`, used to store the residual from the trend for each feature.
+ * @param options Further options.
  */
 template<typename Value_, typename Index_, typename Stat_> 
 void compute(const tatami::Matrix<Value_, Index_>* mat, Stat_* means, Stat_* variances, Stat_* fitted, Stat_* residuals, const Options& options) {
@@ -530,7 +532,7 @@ struct BlockResults {
  * @param options Further options.
  *
  * @return Results of the variance modelling in each block.
- * An average for each statistic is also computed if `Options::compute_average = true.
+ * An average for each statistic is also computed if `Options::compute_average = true`.
  */
 template<typename Stat_ = double, typename Value_ = double, typename Index_ = int, typename Block_ = int>
 BlockResults<Stat_> compute_blocked(const tatami::Matrix<Value_, Index_>* mat, const Block_* block, const Options& options) {

@@ -14,7 +14,7 @@
 namespace scran {
 
 /**
- * @namespace choose_highly_variable_genes
+ * @namespace scran::choose_highly_variable_genes
  * @brief Choose highly variable genes for downstream analyses.
  */
 namespace choose_highly_variable_genes {
@@ -111,7 +111,8 @@ std::vector<Bool_> compute(size_t n, const Stat_* statistic, const Options& opti
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
  * @param options Further options.
  *
- * @return Vector of sorted indices for the chosen genes.
+ * @return Vector of sorted and unique indices for the chosen genes.
+ * All indices are guaranteed to be non-negative and less than `n`.
  */
 template<typename Index_, typename Stat_>
 std::vector<Index_> compute_index(Index_ n, const Stat_* statistic, const Options& options) {
