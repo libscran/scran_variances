@@ -10,7 +10,7 @@ target_compile_features(scran_model_gene_variances INTERFACE cxx_std_17)
 target_include_directories(scran_model_gene_variances INTERFACE include/scran)
 
 add_subdirectory(extern)
-target_link_libraries(scran_model_gene_variances INTERFACE tatami::tatami ltla::WeightedLowess scran_core_utils)
+target_link_libraries(scran_model_gene_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess scran_core_utils)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)

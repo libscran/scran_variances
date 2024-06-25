@@ -29,6 +29,7 @@ macro(create_test name)
     add_executable(
         ${name} 
         src/fit_variance_trend.cpp
+        src/model_gene_variances.cpp
         src/choose_highly_variable_genes.cpp
     )
 
