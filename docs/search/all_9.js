@@ -88,10 +88,11 @@ var searchData=
   ['mean_5ffilter_85',['mean_filter',['../structscran_1_1fit__variance__trend_1_1Options.html#a7c75573f56a2506d3b0f47cbb1465d22',1,'scran::fit_variance_trend::Options']]],
   ['means_86',['means',['../structscran_1_1model__gene__variances_1_1Results.html#afd573efb30de0e1435a92b7eb1957bcb',1,'scran::model_gene_variances::Results']]],
   ['minimum_5fmean_87',['minimum_mean',['../structscran_1_1fit__variance__trend_1_1Options.html#a594d757567e8546ef4fe7f28fda9b726',1,'scran::fit_variance_trend::Options']]],
-  ['minimum_5fwindow_5fcount_88',['minimum_window_count',['../structscran_1_1fit__variance__trend_1_1Options.html#a4e0a6b25f6beade1362c7d5257318947',1,'scran::fit_variance_trend::Options']]],
-  ['mock_5fhelpers_2ehpp_89',['mock_helpers.hpp',['https://tatami-inc.github.io/tatami/unary_2mock__helpers_8hpp.html',1,'(Global Namespace)'],['https://tatami-inc.github.io/tatami/binary_2mock__helpers_8hpp.html',1,'(Global Namespace)']]],
-  ['model_20per_20gene_20variance_20in_20expression_90',['Model per-gene variance in expression',['../index.html',1,'']]],
-  ['model_5fgene_5fvariances_2ehpp_91',['model_gene_variances.hpp',['../model__gene__variances_8hpp.html',1,'']]],
-  ['myopicdenseextractor_92',['MyopicDenseExtractor',['https://tatami-inc.github.io/tatami/classtatami_1_1MyopicDenseExtractor.html',1,'tatami']]],
-  ['myopicsparseextractor_93',['MyopicSparseExtractor',['https://tatami-inc.github.io/tatami/classtatami_1_1MyopicSparseExtractor.html',1,'tatami']]]
+  ['minimum_5fwidth_88',['minimum_width',['../structscran_1_1fit__variance__trend_1_1Options.html#a01ee328deb637aab3656e3d77dcdd150',1,'scran::fit_variance_trend::Options']]],
+  ['minimum_5fwindow_5fcount_89',['minimum_window_count',['../structscran_1_1fit__variance__trend_1_1Options.html#a4e0a6b25f6beade1362c7d5257318947',1,'scran::fit_variance_trend::Options']]],
+  ['mock_5fhelpers_2ehpp_90',['mock_helpers.hpp',['https://tatami-inc.github.io/tatami/unary_2mock__helpers_8hpp.html',1,'(Global Namespace)'],['https://tatami-inc.github.io/tatami/binary_2mock__helpers_8hpp.html',1,'(Global Namespace)']]],
+  ['model_20per_20gene_20variance_20in_20expression_91',['Model per-gene variance in expression',['../index.html',1,'']]],
+  ['model_5fgene_5fvariances_2ehpp_92',['model_gene_variances.hpp',['../model__gene__variances_8hpp.html',1,'']]],
+  ['myopicdenseextractor_93',['MyopicDenseExtractor',['https://tatami-inc.github.io/tatami/classtatami_1_1MyopicDenseExtractor.html',1,'tatami']]],
+  ['myopicsparseextractor_94',['MyopicSparseExtractor',['https://tatami-inc.github.io/tatami/classtatami_1_1MyopicSparseExtractor.html',1,'tatami']]]
 ];

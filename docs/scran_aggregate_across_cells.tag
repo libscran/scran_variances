@@ -12,6 +12,7 @@
     <path>scran/</path>
     <filename>fit__variance__trend_8hpp.html</filename>
     <class kind="struct">scran::fit_variance_trend::Options</class>
+    <class kind="struct">scran::fit_variance_trend::Workspace</class>
     <class kind="struct">scran::fit_variance_trend::Results</class>
     <namespace>scran</namespace>
     <namespace>scran::fit_variance_trend</namespace>
@@ -85,16 +86,16 @@
     </member>
     <member kind="variable">
       <type>bool</type>
-      <name>use_fixed_width</name>
+      <name>use_minimum_width</name>
       <anchorfile>structscran_1_1fit__variance__trend_1_1Options.html</anchorfile>
-      <anchor>a7dd41df058ba90607b6b8c82651150b1</anchor>
+      <anchor>ab958e99903b5e586a869280e8fc0bc17</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>double</type>
-      <name>fixed_width</name>
+      <name>minimum_width</name>
       <anchorfile>structscran_1_1fit__variance__trend_1_1Options.html</anchorfile>
-      <anchor>a1f72d037601cd71520591b493280ebc0</anchor>
+      <anchor>a01ee328deb637aab3656e3d77dcdd150</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -102,6 +103,13 @@
       <name>minimum_window_count</name>
       <anchorfile>structscran_1_1fit__variance__trend_1_1Options.html</anchorfile>
       <anchor>a4e0a6b25f6beade1362c7d5257318947</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>num_threads</name>
+      <anchorfile>structscran_1_1fit__variance__trend_1_1Options.html</anchorfile>
+      <anchor>a0d05231069087607ea1b8c68d4e934e6</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -196,6 +204,11 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>scran::fit_variance_trend::Workspace</name>
+    <filename>structscran_1_1fit__variance__trend_1_1Workspace.html</filename>
+    <templarg>typename Float_</templarg>
+  </compound>
   <compound kind="namespace">
     <name>scran</name>
     <filename>namespacescran.html</filename>
@@ -233,12 +246,13 @@
     <filename>namespacescran_1_1fit__variance__trend.html</filename>
     <class kind="struct">scran::fit_variance_trend::Options</class>
     <class kind="struct">scran::fit_variance_trend::Results</class>
+    <class kind="struct">scran::fit_variance_trend::Workspace</class>
     <member kind="function">
       <type>void</type>
       <name>compute</name>
       <anchorfile>namespacescran_1_1fit__variance__trend.html</anchorfile>
-      <anchor>ad9c43577a87c767d7d2d58ce770cd63c</anchor>
-      <arglist>(size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, const Options &amp;options)</arglist>
+      <anchor>ab8296a4054e4eb94a44864c1ad47d53a</anchor>
+      <arglist>(size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, Workspace&lt; Float_ &gt; &amp;workspace, const Options &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>Results&lt; Float_ &gt;</type>

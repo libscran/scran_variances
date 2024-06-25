@@ -97,12 +97,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a77a862e1aba3394c8a6c896dfef5cfc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade37259a86a113b6dbed01cece15ac64" id="r_ade37259a86a113b6dbed01cece15ac64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#ade37259a86a113b6dbed01cece15ac64">span</a> = 0.3</td></tr>
 <tr class="separator:ade37259a86a113b6dbed01cece15ac64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dd41df058ba90607b6b8c82651150b1" id="r_a7dd41df058ba90607b6b8c82651150b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a7dd41df058ba90607b6b8c82651150b1">use_fixed_width</a> = <a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">false</a></td></tr>
-<tr class="separator:a7dd41df058ba90607b6b8c82651150b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f72d037601cd71520591b493280ebc0" id="r_a1f72d037601cd71520591b493280ebc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a1f72d037601cd71520591b493280ebc0">fixed_width</a> = 1</td></tr>
-<tr class="separator:a1f72d037601cd71520591b493280ebc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab958e99903b5e586a869280e8fc0bc17" id="r_ab958e99903b5e586a869280e8fc0bc17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#ab958e99903b5e586a869280e8fc0bc17">use_minimum_width</a> = <a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">false</a></td></tr>
+<tr class="separator:ab958e99903b5e586a869280e8fc0bc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01ee328deb637aab3656e3d77dcdd150" id="r_a01ee328deb637aab3656e3d77dcdd150"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a01ee328deb637aab3656e3d77dcdd150">minimum_width</a> = 1</td></tr>
+<tr class="separator:a01ee328deb637aab3656e3d77dcdd150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e0a6b25f6beade1362c7d5257318947" id="r_a4e0a6b25f6beade1362c7d5257318947"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a4e0a6b25f6beade1362c7d5257318947">minimum_window_count</a> = 200</td></tr>
 <tr class="separator:a4e0a6b25f6beade1362c7d5257318947"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d05231069087607ea1b8c68d4e934e6" id="r_a0d05231069087607ea1b8c68d4e934e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a0d05231069087607ea1b8c68d4e934e6">num_threads</a> = 1</td></tr>
+<tr class="separator:a0d05231069087607ea1b8c68d4e934e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Parameter defaults for trend fitting. </p>
@@ -163,37 +165,37 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Span for the LOWESS smoother, as a proportion of the total number of points. This is only used if <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a7dd41df058ba90607b6b8c82651150b1">Options::use_fixed_width</a> = false</code>. </p>
+<p>Span for the LOWESS smoother, as a proportion of the total number of points. This is only used if <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#ab958e99903b5e586a869280e8fc0bc17">Options::use_minimum_width</a> = false</code>. </p>
 
 </div>
 </div>
-<a id="a7dd41df058ba90607b6b8c82651150b1" name="a7dd41df058ba90607b6b8c82651150b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dd41df058ba90607b6b8c82651150b1">&#9670;&#160;</a></span>use_fixed_width</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">bool</a> scran::fit_variance_trend::Options::use_fixed_width = <a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">false</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Should a fixed-width constraint be applied to the LOWESS smoother? This forces each window to be a minimum width (see <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a1f72d037601cd71520591b493280ebc0">Options::fixed_width</a></code>) and avoids problems with large differences in density. For example, the default smoother performs poorly at high abundances where there are few genes. </p>
-
-</div>
-</div>
-<a id="a1f72d037601cd71520591b493280ebc0" name="a1f72d037601cd71520591b493280ebc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f72d037601cd71520591b493280ebc0">&#9670;&#160;</a></span>fixed_width</h2>
+<a id="ab958e99903b5e586a869280e8fc0bc17" name="ab958e99903b5e586a869280e8fc0bc17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab958e99903b5e586a869280e8fc0bc17">&#9670;&#160;</a></span>use_minimum_width</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">double</a> scran::fit_variance_trend::Options::fixed_width = 1</td>
+          <td class="memname"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">bool</a> scran::fit_variance_trend::Options::use_minimum_width = <a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">false</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Width of the window to use when <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a7dd41df058ba90607b6b8c82651150b1">Options::use_fixed_width</a> = true</code>. This should be relative to the range of <code>mean</code> values in <code><a class="el" href="namespacescran_1_1fit__variance__trend.html#ad9c43577a87c767d7d2d58ce770cd63c" title="Fit a mean-variance trend to log-count data.">compute()</a></code>; the default value is chosen based on the typical range in single-cell RNA-seq data. </p>
+<p>Should a fixed-width constraint be applied to the LOWESS smoother? This forces each window to be a minimum width (see <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a01ee328deb637aab3656e3d77dcdd150">Options::minimum_width</a></code>) and avoids problems with large differences in density. For example, the default smoother performs poorly at high abundances where there are few genes. </p>
+
+</div>
+</div>
+<a id="a01ee328deb637aab3656e3d77dcdd150" name="a01ee328deb637aab3656e3d77dcdd150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01ee328deb637aab3656e3d77dcdd150">&#9670;&#160;</a></span>minimum_width</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">double</a> scran::fit_variance_trend::Options::minimum_width = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Width of the window to use when <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#ab958e99903b5e586a869280e8fc0bc17">Options::use_minimum_width</a> = true</code>. This should be relative to the range of <code>mean</code> values in <code><a class="el" href="namespacescran_1_1fit__variance__trend.html#ab8296a4054e4eb94a44864c1ad47d53a" title="Fit a mean-variance trend to log-count data.">compute()</a></code>; the default value is chosen based on the typical range in single-cell RNA-seq data. </p>
 
 </div>
 </div>
@@ -208,7 +210,22 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum number of observations in each window when <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#a7dd41df058ba90607b6b8c82651150b1">Options::use_fixed_width</a> = true</code>. This ensures that each window contains at least a given number of observations; if it does not, it is extended using the standard LOWESS logic until the minimum number is achieved. </p>
+<p>Minimum number of observations in each window when <code><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html#ab958e99903b5e586a869280e8fc0bc17">Options::use_minimum_width</a> = true</code>. This ensures that each window contains at least a given number of observations; if it does not, it is extended using the standard LOWESS logic until the minimum number is achieved. </p>
+
+</div>
+</div>
+<a id="a0d05231069087607ea1b8c68d4e934e6" name="a0d05231069087607ea1b8c68d4e934e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d05231069087607ea1b8c68d4e934e6">&#9670;&#160;</a></span>num_threads</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structscran_1_1fit__variance__trend_1_1Options.html">int</a> scran::fit_variance_trend::Options::num_threads = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Number of threads to use in the LOWESS fit. </p>
 
 </div>
 </div>
