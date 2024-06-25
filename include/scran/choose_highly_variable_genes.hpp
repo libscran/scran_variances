@@ -103,6 +103,59 @@ std::vector<Bool_> compute(size_t n, const Stat_* statistic, const Options& opti
     return output;
 }
 
+/**
+ * @tparam Index_ Type of the indices.
+ * @tparam Stat_ Type of the variance statistic.
+ *
+ * @param n Number of genes.
+ * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
+ * @param options Further options.
+ *
+ * @return Vector of sorted indices for the chosen genes.
+ */
+template<typename Index_, typename Stat_>
+std::vector<Index_> compute_index(Index_ n, const Stat_* statistic, const Options& options) {
+    if (options.top >= n) {
+        std::vector<Index_> output(n);
+        std::iota(output.begin(), output.end(), static_cast<Index_>(0));
+        return output;
+    } else if (options.top == 0) {
+        return std::vector<Index_>();
+    }
+
+    std::vector<Index_> collected(n);
+    std::iota(collected.begin(), collected.end(), static_cast<Index_>(0));
+    auto cBegin = collected.begin(), cMid = cBegin + options.top - 1, cEnd = collected.end();
+    if (options.larger) {
+        std::nth_element(cBegin, cMid, cEnd, [&](size_t l, size_t r) -> bool { return statistic[l] > statistic[r]; });
+    } else {
+        std::nth_element(cBegin, cMid, cEnd, [&](size_t l, size_t r) -> bool { return statistic[l] < statistic[r]; });
+    }
+
+    if (!options.keep_ties) {
+        collected.resize(options.top);
+        std::sort(collected.begin(), collected.end());
+    } else {
+        auto threshold = statistic[collected[options.top - 1]];
+        collected.clear();
+        if (options.larger) {
+            for (Index_ i = 0; i < n; ++i) {
+                if (statistic[i] >= threshold) {
+                    collected.push_back(i);
+                }
+            }
+        } else {
+            for (Index_ i = 0; i < n; ++i) {
+                if (statistic[i] <= threshold) {
+                    collected.push_back(i);
+                }
+            }
+        }
+    }
+
+    return collected;
+}
+
 }
 
 }

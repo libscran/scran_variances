@@ -34,7 +34,7 @@ Typically, the residuals are used for feature selection, as these account for no
 ```cpp
 scran::choose_highly_variable_genes::Options copt;
 copt.top = 5000;
-auto chosen = scran::choose_highly_variable_genes::compute(
+auto chosen = scran::choose_highly_variable_genes::compute_index(
     res.residuals.size(), 
     res.residuals.data(), 
     copt
