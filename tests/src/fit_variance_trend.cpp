@@ -46,8 +46,8 @@ TEST(FitVarianceTrendTest, Extrapolation) {
 }
 
 TEST(FitVarianceTrendTest, Residuals) {
-    auto x = simulate_vector(101, /* lower = */ 0.0, /* upper = */ 1.0);
-    auto y = simulate_vector(101, /* lower = */ 0.1, /* upper = */ 2.0);
+    auto x = simulate_vector(101, /* lower = */ 0.0, /* upper = */ 1.0, /* seed = */ 42);
+    auto y = simulate_vector(101, /* lower = */ 0.1, /* upper = */ 2.0, /* seed = */ 69);
 
     scran::fit_variance_trend::Options opt;
     auto output = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt);
@@ -69,16 +69,42 @@ TEST(FitVarianceTrendTest, Residuals) {
     EXPECT_EQ(output.residuals, ref);
 }
 
-TEST(FitVarianceTrendTest, FixedMode) {
-    auto x = simulate_vector(101, /* lower = */ 0.0, /* upper = */ 1.0);
-    auto y = simulate_vector(101, /* lower = */ 0.1, /* upper = */ 2.0);
+TEST(FitVarianceTrendTest, Filtering) {
+    auto x = simulate_vector(1001, /* lower = */ 0.0, /* upper = */ 1.0, /* seed = */ 420);
+    auto y = simulate_vector(1001, /* lower = */ 0.1, /* upper = */ 2.0, /* seed = */ 8008);
+
+    scran::fit_variance_trend::Options opt;
+    auto ref = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt);
+
+    opt.mean_filter = false;
+    auto output_unfilt = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt);
+    EXPECT_NE(ref.residuals, output_unfilt.residuals); // check that there is a difference.
+
+    std::vector<double> submean, subvar, subfit, subresid;
+    for (size_t i = 0; i < x.size(); ++i) {
+        if (x[i] >= opt.minimum_mean) {
+            submean.push_back(x[i]);
+            subvar.push_back(y[i]);
+            subfit.push_back(ref.fitted[i]);
+            subresid.push_back(ref.residuals[i]);
+        }
+    }
+
+    auto output_manual = scran::fit_variance_trend::compute(submean.size(), submean.data(), subvar.data(), opt);
+    EXPECT_EQ(output_manual.residuals, subresid);
+    EXPECT_EQ(output_manual.fitted, subfit);
+}
+
+TEST(FitVarianceTrendTest, MinWidth) {
+    auto x = simulate_vector(101, /* lower = */ 0.0, /* upper = */ 1.0, /* seed = */ 12345);
+    auto y = simulate_vector(101, /* lower = */ 0.1, /* upper = */ 2.0, /* seed = */ 9876);
 
     scran::fit_variance_trend::Options opt;
     auto output = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt);
 
-    opt.use_fixed_width = true;
+    opt.use_minimum_width = true;
     opt.minimum_window_count = 10;
-    opt.fixed_width = 0.2;
+    opt.minimum_width = 0.2;
     auto foutput = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt);
 
     EXPECT_NE(output.residuals, foutput.residuals);
@@ -89,13 +115,13 @@ TEST(FitVarianceTrendTest, FixedMode) {
     opt2.span = 1;
     auto output2 = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt2);
 
-    opt2.use_fixed_width = true;
+    opt2.use_minimum_width = true;
     opt2.minimum_window_count = 200;
     auto foutput2 = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt2);
     EXPECT_EQ(output2.residuals, foutput2.residuals);
 
     opt2.minimum_window_count = 0;
-    opt2.fixed_width = 10;
+    opt2.minimum_width = 10;
     foutput2 = scran::fit_variance_trend::compute(x.size(), x.data(), y.data(), opt2);
     EXPECT_EQ(output2.residuals, foutput2.residuals);
 }

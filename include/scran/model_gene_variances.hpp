@@ -306,10 +306,12 @@ void compute_blocked(
         internal::compute(mat, means, variances, block, block_size, options.num_threads);
     }
 
+    fit_variance_trend::Workspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
+    fopt.num_threads = options.num_threads;
     for (size_t b = 0, nblocks = block_size.size(); b < nblocks; ++b) {
         if (block_size[b] >= 2) {
-            fit_variance_trend::compute(NR, means[b], variances[b], fitted[b], residuals[b], fopt);
+            fit_variance_trend::compute(NR, means[b], variances[b], fitted[b], residuals[b], work, fopt);
         } else {
             std::fill(fitted[b], fitted[b] + NR, std::numeric_limits<double>::quiet_NaN());
             std::fill(residuals[b], residuals[b] + NR, std::numeric_limits<double>::quiet_NaN());
