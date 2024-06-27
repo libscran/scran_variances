@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <array>
 #include "WeightedLowess/WeightedLowess.hpp"
 
 /**
@@ -153,8 +154,7 @@ void compute(size_t n, const Float_* mean, const Float_* variance, Float_* fitte
     auto& sorter = workspace.sorter;
     sorter.set(counter, xbuffer.data());
     auto& work = workspace.sort_workspace;
-    sorter.permute(xbuffer.data(), work);
-    sorter.permute(ybuffer.data(), work);
+    sorter.permute(std::array<Float_*, 2>{ xbuffer.data(), ybuffer.data() }, work);
 
     WeightedLowess::Options<Float_> smooth_opt;
     if (options.use_minimum_width) {
