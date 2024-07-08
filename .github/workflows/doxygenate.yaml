@@ -10,18 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - name: Add Pretty CSS
       uses: wei/wget@v1
       with:
         args: -O docs/doxygen-awesome.css https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/main/doxygen-awesome.css
-    - name: Download tagfile
+
+    - name: Download tatami tagfile
       uses: wei/wget@v1
       with:
         args: -O docs/tatami.tag https://tatami-inc.github.io/tatami/tatami.tag
+
+    - name: Download core utilities tagfile
+      uses: wei/wget@v1
+      with:
+        args: -O docs/scran_core_utils.tag https://libscran.github.io/core_utils/scran_core_utils.tag
+
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1
       with:
         working-directory: docs/
+
     - name: GH Pages Deployment
       uses: JamesIves/github-pages-deploy-action@v4
       with:
