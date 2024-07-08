@@ -1,5 +1,7 @@
 <map id="scran::model_gene_variances::Options" name="scran::model_gene_variances::Options">
-<area shape="rect" id="Node000001" title="Default parameters for variance modelling." alt="" coords="5,124,198,165"/>
-<area shape="rect" id="Node000002" href="$structscran_1_1fit__variance__trend_1_1Options.html" title="Parameter defaults for trend fitting." alt="" coords="39,5,164,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,61,104,123,99,123,99,61"/>
+<area shape="rect" id="Node000001" title="Default parameters for variance modelling." alt="" coords="51,124,243,165"/>
+<area shape="rect" id="Node000002" href="$structscran_1_1fit__variance__trend_1_1Options.html" title="Parameter defaults for trend fitting." alt="" coords="5,5,131,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,60,83,80,93,98,117,122,113,125,89,102,78,82,72,62"/>
+<area shape="rect" id="Node000003" href="/github/workspace/docs/scran_core_utils.tag$structscran_1_1block__weights_1_1VariableParameters.html" title=" " alt="" coords="154,5,297,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,62,198,102,175,125,172,122,194,98,213,59"/>
 </map>

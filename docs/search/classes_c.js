@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['workspace_0',['Workspace',['../structscran_1_1fit__variance__trend_1_1Workspace.html',1,'scran::fit_variance_trend']]]
+  ['variableparameters_0',['VariableParameters',['https://libscran.github.io/core_utils/structscran_1_1block__weights_1_1VariableParameters.html',1,'scran::block_weights']]]
 ];
