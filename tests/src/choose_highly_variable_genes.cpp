@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "choose_highly_variable_genes.hpp"
-#include "simulate_vector.h"
+#include "scran_variances/choose_highly_variable_genes.hpp"
+#include "scran_tests/scran_tests.hpp"
 
 class ChooseHvgsTest : public ::testing::TestWithParam<std::tuple<int, int> > {};
 
@@ -21,11 +21,17 @@ TEST_P(ChooseHvgsTest, Basic) {
     size_t ngenes = std::get<0>(p);
     size_t ntop = std::get<1>(p);
 
-    auto x = simulate_vector(ngenes, /* lower = */ 0, /* upper = */ 10.0, /* seed = */ ngenes * ntop + 42);
+    auto x = scran_tests::simulate_vector(ngenes, [&]{
+        scran_tests::SimulationParameters sparams;
+        sparams.lower = 0;
+        sparams.upper = 10;
+        sparams.seed = ngenes * ntop + 42;
+        return sparams;
+    }());
 
-    scran::choose_highly_variable_genes::Options opt;
+    scran_variances::ChooseHighlyVariableGenesOptions opt;
     opt.top = ntop;
-    auto output = scran::choose_highly_variable_genes::compute(ngenes, x.data(), opt);
+    auto output = scran_variances::choose_highly_variable_genes(ngenes, x.data(), opt);
 
     // Checking that everything is in order.
     auto nchosen = std::accumulate(output.begin(), output.end(), static_cast<int>(0));
@@ -41,12 +47,12 @@ TEST_P(ChooseHvgsTest, Basic) {
     }
     EXPECT_TRUE(min_has > max_lost);
 
-    auto ioutput = scran::choose_highly_variable_genes::compute_index(ngenes, x.data(), opt);
+    auto ioutput = scran_variances::choose_highly_variable_genes_index(ngenes, x.data(), opt);
     compare_bool_with_index(output, ioutput);
 
     // Checking that it works for smaller values.
     opt.larger = false;
-    auto output_low = scran::choose_highly_variable_genes::compute(ngenes, x.data(), opt);
+    auto output_low = scran_variances::choose_highly_variable_genes(ngenes, x.data(), opt);
     EXPECT_LE(std::min(ngenes, ntop), std::accumulate(output_low.begin(), output_low.end(), 0)); 
 
     double max_has = 0, min_lost = 100;
@@ -59,7 +65,7 @@ TEST_P(ChooseHvgsTest, Basic) {
     }
     EXPECT_TRUE(max_has < min_lost);
 
-    auto ioutput_low = scran::choose_highly_variable_genes::compute_index(ngenes, x.data(), opt);
+    auto ioutput_low = scran_variances::choose_highly_variable_genes_index(ngenes, x.data(), opt);
     compare_bool_with_index(output_low, ioutput_low);
 }
 
@@ -77,53 +83,53 @@ TEST(ChooseHvgs, Ties) {
 
     {
         // Ignoring ties.
-        scran::choose_highly_variable_genes::Options opt;
+        scran_variances::ChooseHighlyVariableGenesOptions opt;
         opt.keep_ties = false;
         opt.top = 3;
-        auto output = scran::choose_highly_variable_genes::compute(x.size(), x.data(), opt);
+        auto output = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_EQ(opt.top, std::accumulate(output.begin(), output.end(), 0));
 
-        auto ioutput = scran::choose_highly_variable_genes::compute_index(x.size(), x.data(), opt);
+        auto ioutput = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
         compare_bool_with_index(output, ioutput);
 
         // Keeping all ties.
         opt.keep_ties = true;
-        auto output2 = scran::choose_highly_variable_genes::compute(x.size(), x.data(), opt);
+        auto output2 = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_LT(opt.top, std::accumulate(output2.begin(), output2.end(), 0));
 
-        auto ioutput2 = scran::choose_highly_variable_genes::compute_index(x.size(), x.data(), opt);
+        auto ioutput2 = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
         compare_bool_with_index(output2, ioutput2);
     }
 
     {
         // Ignoring ties.
-        scran::choose_highly_variable_genes::Options opt;
+        scran_variances::ChooseHighlyVariableGenesOptions opt;
         opt.larger = false;
         opt.keep_ties = false;
         opt.top = 2;
-        auto output = scran::choose_highly_variable_genes::compute(x.size(), x.data(), opt);
+        auto output = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_EQ(opt.top, std::accumulate(output.begin(), output.end(), 0));
 
-        auto ioutput = scran::choose_highly_variable_genes::compute_index(x.size(), x.data(), opt);
+        auto ioutput = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
         compare_bool_with_index(output, ioutput);
 
         // Keeping all ties.
         opt.keep_ties = true;
-        auto output2 = scran::choose_highly_variable_genes::compute(x.size(), x.data(), opt);
+        auto output2 = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_LT(opt.top, std::accumulate(output2.begin(), output2.end(), 0));
 
-        auto ioutput2 = scran::choose_highly_variable_genes::compute_index(x.size(), x.data(), opt);
+        auto ioutput2 = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
         compare_bool_with_index(output2, ioutput2);
     }
 }
 
 TEST(ChooseHvgs, Extremes) {
     std::vector<double> x{ 1.1, 2.2, 1.1, 3.3, 0.0, 4.4, 4.4, 3.3 };
-    scran::choose_highly_variable_genes::Options opt;
+    scran_variances::ChooseHighlyVariableGenesOptions opt;
     opt.top = 0;
-    auto output = scran::choose_highly_variable_genes::compute(x.size(), x.data(), opt);
+    auto output = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
     EXPECT_EQ(0, std::accumulate(output.begin(), output.end(), 0));
 
-    auto ioutput = scran::choose_highly_variable_genes::compute_index(x.size(), x.data(), opt);
+    auto ioutput = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
     EXPECT_TRUE(ioutput.empty());
 }

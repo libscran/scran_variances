@@ -1,5 +1,5 @@
-#ifndef SCRAN_FIT_VARIANCE_TREND_H
-#define SCRAN_FIT_VARIANCE_TREND_H
+#ifndef SCRAN_VARIANCES_FIT_VARIANCE_TREND_H
+#define SCRAN_VARIANCES_FIT_VARIANCE_TREND_H
 
 #include <algorithm>
 #include <vector>
@@ -11,31 +11,12 @@
  * @brief Fit a mean-variance trend to log-count data.
  */
 
-namespace scran {
+namespace scran_variances {
 
 /**
- * @namespace scran::fit_variance_trend
- * @brief Fit a mean-variance trend to log-count data.
- *
- * We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data.
- * We use a LOWESS smoother in several steps:
- *
- * 1. Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.
- * 2. Take the quarter-root of the variances, to squeeze the trend towards 1.
- * This makes the trend more "linear" to improve the performance of the LOWESS smoother;
- * it also reduces the chance of obtaining negative fitted values.
- * 3. Apply the LOWESS smoother to the quarter-root variances.
- * This is done using the implementation in the **WeightedLowess** library.
- * 4. Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.
- * 5. Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes.
- * This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.
+ * @brief Options for `fit_variance_trend()`.
  */
-namespace fit_variance_trend {
-
-/**
- * @brief Parameter defaults for trend fitting.
- */
-struct Options {
+struct FitVarianceTrendOptions {
     /**
      * Minimum mean log-expression for trend fitting.
      * Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
@@ -70,7 +51,7 @@ struct Options {
 
     /**
      * Width of the window to use when `Options::use_minimum_width = true`.
-     * This should be relative to the range of `mean` values in `compute()`;
+     * This should be relative to the range of `mean` values in `fit_variance_trend()`;
      * the default value is chosen based on the typical range in single-cell RNA-seq data.
      */
     double minimum_width = 1;
@@ -89,12 +70,12 @@ struct Options {
 };
 
 /**
- * @brief Workspace for `compute()`.
+ * @brief Workspace for `fit_variance_trend()`.
  *
- * This avoids repeated memory allocations for repeated calls to `compute()`.
+ * This avoids repeated memory allocations for repeated calls to `fit_variance_trend()`.
  */
 template<typename Float_>
-struct Workspace {
+struct FitVarianceTrendWorkspace {
     /**
      * @cond
      */
@@ -109,7 +90,18 @@ struct Workspace {
 };
 
 /**
- * @brief Fit a mean-variance trend to log-count data.
+ * We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data.
+ * We use a LOWESS smoother in several steps:
+ *
+ * 1. Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.
+ * 2. Take the quarter-root of the variances, to squeeze the trend towards 1.
+ * This makes the trend more "linear" to improve the performance of the LOWESS smoother;
+ * it also reduces the chance of obtaining negative fitted values.
+ * 3. Apply the LOWESS smoother to the quarter-root variances.
+ * This is done using the implementation in the **WeightedLowess** library.
+ * 4. Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.
+ * 5. Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes.
+ * This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.
  *
  * @tparam Float_ Floating-point type for the statistics.
  *
@@ -119,11 +111,11 @@ struct Workspace {
  * @param[out] fitted Pointer to an array of length `n`, to store the fitted values.
  * @param[out] residuals Pointer to an array of length `n`, to store the residuals.
  * @param workspace Collection of temporary data structures.
- * This can be re-used across multiple `compute()` calls.
+ * This can be re-used across multiple `fit_variance_trend()` calls.
  * @param options Further options.
  */
 template<typename Float_>
-void compute(size_t n, const Float_* mean, const Float_* variance, Float_* fitted, Float_* residuals, Workspace<Float_>& workspace, const Options& options) {
+void fit_variance_trend(size_t n, const Float_* mean, const Float_* variance, Float_* fitted, Float_* residuals, FitVarianceTrendWorkspace<Float_>& workspace, const FitVarianceTrendOptions& options) {
     auto& xbuffer = workspace.xbuffer;
     xbuffer.resize(n);
     auto& ybuffer = workspace.ybuffer;
@@ -198,21 +190,21 @@ void compute(size_t n, const Float_* mean, const Float_* variance, Float_* fitte
 }
 
 /**
- * @brief Results of `fit_variance_trend::compute()`.
+ * @brief Results of `fit_variance_trend()`.
  *
- * Meaningful instances of this object should generally be constructed by calling the `fit_variance_trend::compute()` function.
+ * Meaningful instances of this object should generally be constructed by calling the `fit_variance_trend()` function.
  * Empty instances can be default-constructed as placeholders.
  *
  * @tparam Float_ Floating-point type for the statistics.
  */
 template<typename Float_>
-struct Results {
+struct FitVarianceTrendResults {
     /**
      * @cond
      */
-    Results() {}
+    FitVarianceTrendResults() {}
 
-    Results(size_t n) : fitted(n), residuals(n) {}
+    FitVarianceTrendResults(size_t n) : fitted(n), residuals(n) {}
     /**
      * @endcond
      */
@@ -229,7 +221,7 @@ struct Results {
 };
 
 /**
- * Overload of `fit_variance_trend::compute()` that allocates the output vectors.
+ * Overload of `fit_variance_trend()` that allocates the output vectors.
  *
  * @tparam Float_ Floating-point type for the statistics.
  *
@@ -241,13 +233,11 @@ struct Results {
  * @return Result of the trend fit, containing the fitted values and residuals for each gene. 
  */
 template<typename Float_>
-Results<Float_> compute(size_t n, const Float_* mean, const Float_* variance, const Options& options) {
-    Results<Float_> output(n);
-    Workspace<Float_> work;
-    compute(n, mean, variance, output.fitted.data(), output.residuals.data(), work, options);
+FitVarianceTrendResults<Float_> fit_variance_trend(size_t n, const Float_* mean, const Float_* variance, const FitVarianceTrendOptions& options) {
+    FitVarianceTrendResults<Float_> output(n);
+    FitVarianceTrendWorkspace<Float_> work;
+    fit_variance_trend(n, mean, variance, output.fitted.data(), output.residuals.data(), work, options);
     return output;
-}
-
 }
 
 }

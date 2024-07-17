@@ -1,5 +1,5 @@
-#ifndef SCRAN_CHOOSE_HIGHLY_VARIABLE_GENES_HPP
-#define SCRAN_CHOOSE_HIGHLY_VARIABLE_GENES_HPP
+#ifndef SCRAN_VARIANCES_CHOOSE_HIGHLY_VARIABLE_GENES_HPP
+#define SCRAN_VARIANCES_CHOOSE_HIGHLY_VARIABLE_GENES_HPP
 
 #include <vector>
 #include <algorithm>
@@ -11,15 +11,12 @@
  * @brief Choose highly variable genes for downstream analyses.
  */
 
-namespace scran {
+namespace scran_variances {
 
 /**
- * @namespace scran::choose_highly_variable_genes
- * @brief Choose highly variable genes for downstream analyses.
+ * @brief Options for `choose_highly_variable_genes()`.
  */
-namespace choose_highly_variable_genes {
-
-struct Options {
+struct ChooseHighlyVariableGenesOptions {
     /**
      * Number of top genes to choose.
      * This should be positive.
@@ -49,7 +46,7 @@ struct Options {
  * @param options Further options.
  */
 template<typename Stat_, typename Bool_>
-void compute(size_t n, const Stat_* statistic, Bool_* output, const Options& options) {
+void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* output, const ChooseHighlyVariableGenesOptions& options) {
     if (options.top >= n) {
         std::fill_n(output, n, true);
         return;
@@ -97,9 +94,9 @@ void compute(size_t n, const Stat_* statistic, Bool_* output, const Options& opt
  * @return A vector of booleans of length `n`, indicating whether each gene is to be retained.
  */
 template<typename Bool_ = uint8_t, typename Stat_>
-std::vector<Bool_> compute(size_t n, const Stat_* statistic, const Options& options) {
+std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
     std::vector<Bool_> output(n);
-    compute(n, statistic, output.data(), options);
+    choose_highly_variable_genes(n, statistic, output.data(), options);
     return output;
 }
 
@@ -115,7 +112,7 @@ std::vector<Bool_> compute(size_t n, const Stat_* statistic, const Options& opti
  * All indices are guaranteed to be non-negative and less than `n`.
  */
 template<typename Index_, typename Stat_>
-std::vector<Index_> compute_index(Index_ n, const Stat_* statistic, const Options& options) {
+std::vector<Index_> choose_highly_variable_genes_index(Index_ n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
     if (options.top >= n) {
         std::vector<Index_> output(n);
         std::iota(output.begin(), output.end(), static_cast<Index_>(0));
@@ -159,5 +156,4 @@ std::vector<Index_> compute_index(Index_ n, const Stat_* statistic, const Option
 
 }
 
-}
 #endif

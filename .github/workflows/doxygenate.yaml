@@ -21,10 +21,10 @@ jobs:
       with:
         args: -O docs/tatami.tag https://tatami-inc.github.io/tatami/tatami.tag
 
-    - name: Download core utilities tagfile
+    - name: Download blocks tagfile
       uses: wei/wget@v1
       with:
-        args: -O docs/scran_core_utils.tag https://libscran.github.io/core_utils/scran_core_utils.tag
+        args: -O docs/scran_blocks.tag https://libscran.github.io/scran_blocks/scran_blocks.tag
 
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1
