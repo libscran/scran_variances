@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['mean_5ffilter_0',['mean_filter',['../structscran_1_1fit__variance__trend_1_1Options.html#a7c75573f56a2506d3b0f47cbb1465d22',1,'scran::fit_variance_trend::Options']]],
-  ['means_1',['means',['../structscran_1_1model__gene__variances_1_1Results.html#afd573efb30de0e1435a92b7eb1957bcb',1,'scran::model_gene_variances::Results']]],
-  ['minimum_5fmean_2',['minimum_mean',['../structscran_1_1fit__variance__trend_1_1Options.html#a594d757567e8546ef4fe7f28fda9b726',1,'scran::fit_variance_trend::Options']]],
-  ['minimum_5fwidth_3',['minimum_width',['../structscran_1_1fit__variance__trend_1_1Options.html#a01ee328deb637aab3656e3d77dcdd150',1,'scran::fit_variance_trend::Options']]],
-  ['minimum_5fwindow_5fcount_4',['minimum_window_count',['../structscran_1_1fit__variance__trend_1_1Options.html#a4e0a6b25f6beade1362c7d5257318947',1,'scran::fit_variance_trend::Options']]]
+  ['value_0',['value',['https://tatami-inc.github.io/tatami/structtatami_1_1CompressedSparseContents.html#a42f014b8d8da15e6c49511db087bebf7',1,'tatami::CompressedSparseContents::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1FragmentedSparseContents.html#a24193eb145792effdc67d3e1425f1cd2',1,'tatami::FragmentedSparseContents::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1has__data.html#a11170da5b517708a7102d54ca6815d9e',1,'tatami::has_data::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1has__data_3_01T_00_01V_00_01decltype_07_07void_08_01std_1_1declval_3_01V_01_4_07_08_8data_07_08_00_010_08_4.html#a13d4f9e0cac2afe51fdde3c552cbf1a7',1,'tatami::has_data&lt; T, V, decltype((void) std::declval&lt; V &gt;().data(), 0)&gt;::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1SparseRange.html#a79079e1a7c41b0528542ad9f3ffa3fbd',1,'tatami::SparseRange::value']]]
 ];

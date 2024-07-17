@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>scran_model_gene_variances: Model per-gene variance in expression</title>
+<title>scran_variances: Model per-gene variance in expression</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">scran_model_gene_variances
+   <div id="projectname">scran_variances
    </div>
    <div id="projectbrief">Model per-gene variance in expression</div>
   </td>
@@ -74,65 +74,71 @@ $(function() {
   <div class="headertitle"><div class="title">Model per-gene variance in expression </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__2github_2workspace_2README"></a> <img src="https://github.com/libscran/model_gene_variances/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/libscran/model_gene_variances/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/> <a href="https://codecov.io/gh/libscran/model_gene_variances"><img src="https://codecov.io/gh/libscran/model_gene_variances/graph/badge.svg?token=JWV0I4WJX2" alt="Codecov" style="pointer-events: none;" class="inline"/></a></p>
+<div class="textblock"><p><a class="anchor" id="md__2github_2workspace_2README"></a> <img src="https://github.com/libscran/scran_variances/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/libscran/scran_variances/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/> <a href="https://codecov.io/gh/libscran/scran_variances"><img src="https://codecov.io/gh/libscran/scran_variances/graph/badge.svg?token=JWV0I4WJX2" alt="Codecov" style="pointer-events: none;" class="inline"/></a></p>
 <h1>Overview</h1>
 <p>This repository contains functions to model the per-gene expression from a gene-by-cell matrix of (log-transformed) expression values. Genes with high variance are considered to be more interesting and are prioritized for further analyses. The code itself was originally derived from the <a href="https://bioconductor.org/packages/scran"><b>scran</b> R package</a>, factored out into a separate C++ library for easier re-use.</p>
 <h1>Quick start</h1>
-<p>Given a <a href="https://github.com/tatami-inc/tatami"><code>tatami::Matrix</code></a>, the <code>model_gene_variances::compute()</code> function will compute several variance-related statistics for each gene:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="model__gene__variances_8hpp.html">scran/model_gene_variances.hpp</a>&quot;</span></div>
+<p>Given a <a href="https://github.com/tatami-inc/tatami"><code>tatami::Matrix</code></a> of log-expression values for each gene in each cell, we can compute the per-gene variances and model the trend with respect to the mean across genes:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;scran_variances/scran_variances.hpp&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_structRef" href="https://tatami-inc.github.io/tatami/structtatami_1_1Options.html">tatami::Matrix&lt;double, int&gt;</a>* ptr = some_data_source();</div>
+<div class="line">std::shared_ptr&lt;tatami::Matrix&lt;double, int&gt; &gt; mat = some_data_source();</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_struct" href="structscran_1_1model__gene__variances_1_1Options.html">scran::model_gene_variances::Options</a> opt;</div>
-<div class="line"><span class="keyword">auto</span> res = <a class="code hl_function" href="namespacescran_1_1model__gene__variances.html#a341ce22fc3d3aae1752e13b9bb2b304b">scran::model_gene_variances::compute</a>(ptr, opt);</div>
+<div class="line">scran_variances::ModelGeneVariancesOptions opt;</div>
+<div class="line"><span class="keyword">auto</span> res = scran_variances::model_gene_variances(*mat, opt);</div>
 <div class="line"> </div>
 <div class="line">res.means; <span class="comment">// vector of means across genes.</span></div>
 <div class="line">res.variances; <span class="comment">// vector of variances across genes.</span></div>
 <div class="line">res.fitted; <span class="comment">// vector of fitted values of the mean-variance trend for each gene.</span></div>
 <div class="line">res.residuals; <span class="comment">// vector of residuals from the trend.</span></div>
-<div class="ttc" id="amodel__gene__variances_8hpp_html"><div class="ttname"><a href="model__gene__variances_8hpp.html">model_gene_variances.hpp</a></div><div class="ttdoc">Model the per-gene variances.</div></div>
-<div class="ttc" id="anamespacescran_1_1model__gene__variances_html_a341ce22fc3d3aae1752e13b9bb2b304b"><div class="ttname"><a href="namespacescran_1_1model__gene__variances.html#a341ce22fc3d3aae1752e13b9bb2b304b">scran::model_gene_variances::compute</a></div><div class="ttdeci">void compute(const tatami::Matrix&lt; Value_, Index_ &gt; *mat, Stat_ *means, Stat_ *variances, Stat_ *fitted, Stat_ *residuals, const Options &amp;options)</div><div class="ttdef"><b>Definition</b> model_gene_variances.hpp:410</div></div>
-<div class="ttc" id="astructscran_1_1model__gene__variances_1_1Options_html"><div class="ttname"><a href="structscran_1_1model__gene__variances_1_1Options.html">scran::model_gene_variances::Options</a></div><div class="ttdoc">Default parameters for variance modelling.</div><div class="ttdef"><b>Definition</b> model_gene_variances.hpp:37</div></div>
-<div class="ttc" id="astructtatami_1_1Options_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/structtatami_1_1Options.html">tatami::Options</a></div></div>
 </div><!-- fragment --><p>Typically, the residuals are used for feature selection, as these account for non-trivial mean-variance trends in transformed count data.</p>
-<div class="fragment"><div class="line">scran::choose_highly_variable_genes::Options copt;</div>
+<div class="fragment"><div class="line">scran_variances::ChooseHighlyVariableGenesOptions copt;</div>
 <div class="line">copt.top = 5000;</div>
-<div class="line"><span class="keyword">auto</span> chosen = <a class="code hl_function" href="namespacescran_1_1choose__highly__variable__genes.html#a9a0d47de0eb9f7d5623a217611c9615b">scran::choose_highly_variable_genes::compute_index</a>(</div>
+<div class="line"><span class="keyword">auto</span> chosen = scran_variances::choose_highly_variable_genes_index(</div>
 <div class="line">    res.residuals.size(), </div>
 <div class="line">    res.residuals.data(), </div>
 <div class="line">    copt</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacescran_1_1choose__highly__variable__genes_html_a9a0d47de0eb9f7d5623a217611c9615b"><div class="ttname"><a href="namespacescran_1_1choose__highly__variable__genes.html#a9a0d47de0eb9f7d5623a217611c9615b">scran::choose_highly_variable_genes::compute_index</a></div><div class="ttdeci">std::vector&lt; Index_ &gt; compute_index(Index_ n, const Stat_ *statistic, const Options &amp;options)</div><div class="ttdef"><b>Definition</b> choose_highly_variable_genes.hpp:118</div></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Create the HVG submatrix for downstream analysis.</span></div>
+<div class="line"><span class="keyword">auto</span> hvg_subset = <a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a77fad1d2a2553899a7860521d6284f50">tatami::make_DelayedSubset</a>(mat, chosen, <span class="comment">/* by_row = */</span> <span class="keyword">true</span>);</div>
+<div class="ttc" id="anamespacetatami_html_a77fad1d2a2553899a7860521d6284f50"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#a77fad1d2a2553899a7860521d6284f50">tatami::make_DelayedSubset</a></div><div class="ttdeci">std::shared_ptr&lt; Matrix&lt; Value_, Index_ &gt; &gt; make_DelayedSubset(std::shared_ptr&lt; const Matrix&lt; Value_, Index_ &gt; &gt; matrix, SubsetStorage_ subset, bool by_row)</div></div>
 </div><!-- fragment --><p>Users can also fit a trend directly to their own statistics.</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structscran_1_1fit__variance__trend_1_1Options.html">scran::fit_variance_trend::Options</a> fopt;</div>
-<div class="line">fopt.<a class="code hl_variable" href="structscran_1_1fit__variance__trend_1_1Options.html#ade37259a86a113b6dbed01cece15ac64">span</a> = 0.5;</div>
-<div class="line">fopt.<a class="code hl_variable" href="structscran_1_1fit__variance__trend_1_1Options.html#a594d757567e8546ef4fe7f28fda9b726">minimum_mean</a> = 1;</div>
-<div class="line"><span class="keyword">auto</span> fit = <a class="code hl_function" href="namespacescran_1_1fit__variance__trend.html#ab8296a4054e4eb94a44864c1ad47d53a">scran::fit_variance_trend::compute</a>(100, means, variances, fopt);</div>
+<div class="fragment"><div class="line">scran_variances::FitVarianceTrendOptions fopt;</div>
+<div class="line">fopt.span = 0.5;</div>
+<div class="line">fopt.minimum_mean = 1;</div>
+<div class="line"><span class="keyword">auto</span> fit = scran_variances::fit_variance_trend(100, means, variances, fopt);</div>
 <div class="line">fit.fitted; <span class="comment">// fitted values for all genes.</span></div>
 <div class="line">fit.residuals; <span class="comment">// residuals values for all genes.</span></div>
-<div class="ttc" id="anamespacescran_1_1fit__variance__trend_html_ab8296a4054e4eb94a44864c1ad47d53a"><div class="ttname"><a href="namespacescran_1_1fit__variance__trend.html#ab8296a4054e4eb94a44864c1ad47d53a">scran::fit_variance_trend::compute</a></div><div class="ttdeci">void compute(size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, Workspace&lt; Float_ &gt; &amp;workspace, const Options &amp;options)</div><div class="ttdoc">Fit a mean-variance trend to log-count data.</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:126</div></div>
-<div class="ttc" id="astructscran_1_1fit__variance__trend_1_1Options_html"><div class="ttname"><a href="structscran_1_1fit__variance__trend_1_1Options.html">scran::fit_variance_trend::Options</a></div><div class="ttdoc">Parameter defaults for trend fitting.</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:38</div></div>
-<div class="ttc" id="astructscran_1_1fit__variance__trend_1_1Options_html_a594d757567e8546ef4fe7f28fda9b726"><div class="ttname"><a href="structscran_1_1fit__variance__trend_1_1Options.html#a594d757567e8546ef4fe7f28fda9b726">scran::fit_variance_trend::Options::minimum_mean</a></div><div class="ttdeci">double minimum_mean</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:44</div></div>
-<div class="ttc" id="astructscran_1_1fit__variance__trend_1_1Options_html_ade37259a86a113b6dbed01cece15ac64"><div class="ttname"><a href="structscran_1_1fit__variance__trend_1_1Options.html#ade37259a86a113b6dbed01cece15ac64">scran::fit_variance_trend::Options::span</a></div><div class="ttdeci">double span</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:62</div></div>
-</div><!-- fragment --><p>Check out the <a href="https://libscran.github.io/model_gene_variances">reference documentation</a> for more details.</p>
+</div><!-- fragment --><p>Check out the <a href="https://libscran.github.io/scran_variances">reference documentation</a> for more details.</p>
 <h1>Building projects</h1>
-<p>This repository is part of the broader <a href="https://github.com/libscran/libscran"><b>libscran</b></a> library, so users are recommended to use the latter in their projects. <b>libscran</b> developers should just use CMake with <code>FetchContent</code>:</p>
+<h2>CMake with <code>FetchContent</code></h2>
+<p>If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>
 <div class="line">FetchContent_Declare(</div>
-<div class="line">  scran_model_gene_variances </div>
-<div class="line">  GIT_REPOSITORY https://github.com/libscran/model_gene_variances</div>
+<div class="line">  scran_variances</div>
+<div class="line">  GIT_REPOSITORY https://github.com/libscran/scran_variances</div>
 <div class="line">  GIT_TAG master # or any version of interest</div>
 <div class="line">)</div>
 <div class="line"> </div>
-<div class="line">FetchContent_MakeAvailable(scran_model_gene_variances)</div>
-<div class="line"> </div>
-<div class="line"># For executables:</div>
-<div class="line">target_link_libraries(myexe scran_model_gene_variances)</div>
+<div class="line">FetchContent_MakeAvailable(scran_variances)</div>
+</div><!-- fragment --><p>Then you can link to <b>scran_variances</b> to make the headers available during compilation:</p>
+<div class="fragment"><div class="line"># For executables:</div>
+<div class="line">target_link_libraries(myexe libscran::scran_variances)</div>
 <div class="line"> </div>
 <div class="line"># For libaries</div>
-<div class="line">target_link_libraries(mylib INTERFACE scran_model_gene_variances)</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+<div class="line">target_link_libraries(mylib INTERFACE libscran::scran_variances)</div>
+</div><!-- fragment --><h2>CMake with <code>find_package()</code></h2>
+<div class="fragment"><div class="line">find_package(libscran_scran_variances CONFIG REQUIRED)</div>
+<div class="line">target_link_libraries(mylib INTERFACE libscran::scran_variances)</div>
+</div><!-- fragment --><p>To install the library, use:</p>
+<div class="fragment"><div class="line">mkdir build &amp;&amp; cd build</div>
+<div class="line">cmake .. -DSCRAN_VARIANCES_TESTS=OFF</div>
+<div class="line">cmake --build . --target install</div>
+</div><!-- fragment --><p>By default, this will use <code>FetchContent</code> to fetch all external dependencies. If you want to install them manually, use <code>-DSCRAN_VARIANCES_FETCH_EXTERN=OFF</code>. See the tags in <a href="extern/CMakeLists.txt"><code>extern/CMakeLists.txt</code></a> to find compatible versions of each dependency.</p>
+<h2>Manual</h2>
+<p>If you're not using CMake, the simple approach is to just copy the files in <code>include/</code> - either directly or with Git submodules - and include their path during compilation with, e.g., GCC's <code>-I</code>. This requires the external dependencies listed in <a href="extern/CMakeLists.txt"><code>extern/CMakeLists.txt</code></a>, which also need to be made available during compilation. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
