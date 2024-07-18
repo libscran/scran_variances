@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['number_0',['number',['https://tatami-inc.github.io/tatami/structtatami_1_1SparseRange.html#a8b959e01323bdbe112a6432b3c51a038',1,'tatami::SparseRange']]]
+  ['compute_5faverage_0',['compute_average',['../structscran__variances_1_1ModelGeneVariancesOptions.html#a7817148b82c400598b98804e9beb6d56',1,'scran_variances::ModelGeneVariancesOptions']]]
 ];

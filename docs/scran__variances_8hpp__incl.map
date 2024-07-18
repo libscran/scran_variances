@@ -1,0 +1,34 @@
+<map id="scran_variances/scran_variances.hpp" name="scran_variances/scran_variances.hpp">
+<area shape="rect" id="Node000001" title="Variance modelling for single&#45;cell expression data." alt="" coords="348,5,501,46"/>
+<area shape="rect" id="Node000002" href="$fit__variance__trend_8hpp.html" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="825,175,973,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,44,850,167,848,172,482,49"/>
+<area shape="rect" id="Node000007" href="$model__gene__variances_8hpp.html" title="Model the per&#45;gene variances." alt="" coords="335,94,514,120"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="427,46,427,78,422,78,422,46"/>
+<area shape="rect" id="Node000012" href="$choose__highly__variable__genes_8hpp.html" title="Choose highly variable genes for downstream analyses." alt="" coords="5,168,161,208"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="384,49,140,163,137,158,381,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="309,256,383,282"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="848,204,813,211,582,244,399,265,398,260,582,239,812,206,847,199"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="228,256,285,282"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="849,204,813,211,670,227,557,232,444,239,301,259,300,253,444,233,557,227,670,222,812,206,848,199"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="788,256,837,282"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="888,203,839,248,835,244,884,199"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="861,256,1110,282"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="914,199,963,244,959,248,910,203"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="514,118,655,138,813,165,832,169,831,174,812,170,654,144,514,123"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="403,122,376,142,355,169,345,205,345,241,339,241,339,205,350,166,373,138,400,118"/>
+<area shape="poly" id="edge12_Node000007_Node000004" title=" " alt="" coords="404,122,372,143,338,170,303,208,275,245,271,242,299,204,335,166,369,139,401,118"/>
+<area shape="rect" id="Node000008" href="/github/workspace/docs/tatami.tag$tatami_8hpp.html" title=" " alt="" coords="364,175,485,201"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="427,120,427,159,422,159,422,120"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="510,168,643,208"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="449,118,527,158,524,163,446,122"/>
+<area shape="rect" id="Node000010" href="/github/workspace/docs/scran_blocks.tag$scran__blocks_8hpp.html" title=" " alt="" coords="667,168,801,208"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="473,118,652,163,651,168,471,123"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="185,175,237,201"/>
+<area shape="poly" id="edge13_Node000007_Node000011" title=" " alt="" coords="390,123,257,170,253,172,251,167,255,165,388,118"/>
+<area shape="poly" id="edge16_Node000012_Node000003" title=" " alt="" coords="149,206,294,250,293,255,148,211"/>
+<area shape="poly" id="edge15_Node000012_Node000004" title=" " alt="" coords="127,207,217,247,215,252,125,211"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="93,256,161,282"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="96,207,115,241,111,244,92,210"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="9,256,69,282"/>
+<area shape="poly" id="edge18_Node000012_Node000014" title=" " alt="" coords="74,210,55,244,51,241,70,207"/>
+</map>

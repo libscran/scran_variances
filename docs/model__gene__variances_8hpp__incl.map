@@ -1,0 +1,23 @@
+<map id="scran_variances/model_gene_variances.hpp" name="scran_variances/model_gene_variances.hpp">
+<area shape="rect" id="Node000001" title="Model the per&#45;gene variances." alt="" coords="402,5,557,46"/>
+<area shape="rect" id="Node000002" href="/github/workspace/docs/tatami.tag$tatami_8hpp.html" title=" " alt="" coords="5,102,127,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,44,140,97,126,100,125,95,139,91,401,38"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="151,94,285,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,49,293,91,291,86,419,44"/>
+<area shape="rect" id="Node000004" href="/github/workspace/docs/scran_blocks.tag$scran__blocks_8hpp.html" title=" " alt="" coords="308,94,443,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="457,49,412,86,409,82,454,44"/>
+<area shape="rect" id="Node000005" href="$fit__variance__trend_8hpp.html" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="567,102,714,127"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="517,44,606,92,604,96,515,49"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="440,183,514,208"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="482,46,480,167,474,167,476,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="537,183,595,208"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="492,45,555,167,550,170,487,47"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="739,102,791,127"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="558,42,640,63,727,91,729,92,728,97,725,97,639,68,557,47"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="617,130,517,178,514,173,614,125"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="631,129,590,173,586,169,627,126"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="619,183,668,208"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="644,127,645,167,640,167,638,128"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="692,183,941,208"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="669,125,777,174,775,178,667,130"/>
+</map>

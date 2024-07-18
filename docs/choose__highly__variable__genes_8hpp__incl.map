@@ -1,0 +1,11 @@
+<map id="scran_variances/choose_highly_variable_genes.hpp" name="scran_variances/choose_highly_variable_genes.hpp">
+<area shape="rect" id="Node000001" title="Choose highly variable genes for downstream analyses." alt="" coords="80,5,260,46"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,94,63,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,49,69,88,66,84,135,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="86,94,161,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,48,141,82,136,79,156,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,94,252,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,45,205,79,201,82,180,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="276,94,336,120"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="205,44,274,84,271,88,203,49"/>
+</map>

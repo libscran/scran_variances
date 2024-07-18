@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lower_5fbound_0',['lower_bound',['https://libscran.github.io/scran_blocks/structscran__blocks_1_1VariableWeightParameters.html#a0c21095e5569208fa946c7f1b5791ea5',1,'scran_blocks::VariableWeightParameters']]]
+  ['block_5fweight_5fpolicy_0',['block_weight_policy',['../structscran__variances_1_1ModelGeneVariancesOptions.html#adcc6c3a8d53c6c7b785dedc53f7ef962',1,'scran_variances::ModelGeneVariancesOptions']]]
 ];
