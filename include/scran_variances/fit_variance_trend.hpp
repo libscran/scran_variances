@@ -20,12 +20,12 @@ struct FitVarianceTrendOptions {
     /**
      * Minimum mean log-expression for trend fitting.
      * Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
-     * Only used if `Options::mean_filter = true`.
+     * Only used if `FitVarianceTrendOptions::mean_filter = true`.
      */
     double minimum_mean = 0.1;
 
     /**
-     * Should any filtering be performed on the mean log-expression of each gene (see `Options::minimum_mean`)?
+     * Should any filtering be performed on the mean log-expression of each gene (see `FitVarianceTrend::minimum_mean`)?
      * This may need to be disabled if the trend is not being fitted on statistics computed from log-expression values.
      */
     bool mean_filter = true;
@@ -38,26 +38,26 @@ struct FitVarianceTrendOptions {
 
     /**
      * Span for the LOWESS smoother, as a proportion of the total number of points.
-     * This is only used if `Options::use_minimum_width = false`.
+     * This is only used if `FitVarianceTrendOptions::use_minimum_width = false`.
      */
     double span = 0.3;
 
     /**
      * Should a fixed-width constraint be applied to the LOWESS smoother?
-     * This forces each window to be a minimum width (see `Options::minimum_width`) and avoids problems with large differences in density.
+     * This forces each window to be a minimum width (see `FitVarianceTrendOptions::minimum_width`) and avoids problems with large differences in density.
      * For example, the default smoother performs poorly at high abundances where there are few genes.
      */
     bool use_minimum_width = false;
 
     /**
-     * Width of the window to use when `Options::use_minimum_width = true`.
+     * Width of the window to use when `FitVarianceTrendOptions::use_minimum_width = true`.
      * This should be relative to the range of `mean` values in `fit_variance_trend()`;
      * the default value is chosen based on the typical range in single-cell RNA-seq data.
      */
     double minimum_width = 1;
 
     /**
-     * Minimum number of observations in each window when `Options::use_minimum_width = true`.
+     * Minimum number of observations in each window when `FitVarianceTrendOptions::use_minimum_width = true`.
      * This ensures that each window contains at least a given number of observations;
      * if it does not, it is extended using the standard LOWESS logic until the minimum number is achieved.
      */

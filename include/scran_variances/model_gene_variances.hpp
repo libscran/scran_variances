@@ -42,7 +42,7 @@ struct ModelGeneVariancesOptions {
 
     /**
      * Whether to compute the average of each statistic across blocks.
-     * Note that this only affects the `model_gene_variances_blocked()` method that returns a `BlockResults` object.
+     * Note that this only affects the `model_gene_variances_blocked()` method that returns a `ModelGeneVariancesBlockedResults` object.
      */
     bool compute_average = true;
 
@@ -84,7 +84,7 @@ struct ModelGeneVariancesBuffers {
 };
 
 /**
- * @brief Results of `model_gene_variance()`. 
+ * @brief Results of `model_gene_variances()`. 
  * @tparam Stat_ Floating-point type for the output statistics.
  */
 template<typename Stat_>
