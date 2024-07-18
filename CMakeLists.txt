@@ -25,7 +25,7 @@ else()
     find_package(tatami_tatami 3.0.0 CONFIG REQUIRED)
     find_package(tatami_tatami_stats 1.0.0 CONFIG REQUIRED)
     find_package(ltla_WeightedLowess 2.0.0 CONFIG REQUIRED)
-    find_package(libscran_scran_blocks 1.0.0 CONFIG REQUIRED)
+    find_package(libscran_scran_blocks 0.1.0 CONFIG REQUIRED)
 endif()
 
 target_link_libraries(scran_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess libscran::scran_blocks)
