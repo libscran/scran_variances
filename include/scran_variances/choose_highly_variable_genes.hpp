@@ -20,6 +20,8 @@ struct ChooseHighlyVariableGenesOptions {
     /**
      * Number of top genes to choose.
      * This should be positive.
+     * The actual number of genes may be smaller, if there are fewer genes in the dataset than `top`;
+     * or larger, if `ChooseHighlyVariableGenesOptions::keep_ties = true`.
      */
     size_t top = 4000;
 
