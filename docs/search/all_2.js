@@ -19,7 +19,7 @@ var searchData=
   ['compute_5fweights_16',['compute_weights',['https://libscran.github.io/scran_blocks/namespacescran__blocks.html#a8a87f8dd41754b80ec0509f20ac2340f',1,'scran_blocks::compute_weights(const std::vector&lt; Size_ &gt; &amp;sizes, WeightPolicy policy, const VariableWeightParameters &amp;variable)'],['https://libscran.github.io/scran_blocks/namespacescran__blocks.html#a744e0293aa7028a351a0aad0c9c3662d',1,'scran_blocks::compute_weights(size_t num_blocks, const Size_ *sizes, WeightPolicy policy, const VariableWeightParameters &amp;variable, Weight_ *weights)']]],
   ['consecutive_5fextractor_17',['consecutive_extractor',['https://tatami-inc.github.io/tatami/namespacetatami.html#af05590455e558621c8ffc1b98c4fd454',1,'tatami']]],
   ['consecutive_5fextractor_2ehpp_18',['consecutive_extractor.hpp',['https://tatami-inc.github.io/tatami/consecutive__extractor_8hpp.html',1,'']]],
-  ['consecutiveoracle_19',['consecutiveoracle',['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html#ab6d9e6d767d2c9705d927be501abfe9d',1,'tatami::ConsecutiveOracle::ConsecutiveOracle()'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html',1,'tatami::ConsecutiveOracle&lt; typename Index_ &gt;']]],
+  ['consecutiveoracle_19',['consecutiveoracle',['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html',1,'tatami::ConsecutiveOracle&lt; typename Index_ &gt;'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html#ab6d9e6d767d2c9705d927be501abfe9d',1,'tatami::ConsecutiveOracle::ConsecutiveOracle()']]],
   ['consecutiveoracle_2ehpp_20',['ConsecutiveOracle.hpp',['https://tatami-inc.github.io/tatami/ConsecutiveOracle_8hpp.html',1,'']]],
   ['constantmatrix_21',['constantmatrix',['https://tatami-inc.github.io/tatami/classtatami_1_1ConstantMatrix.html',1,'tatami::ConstantMatrix&lt; typename Value_, typename Index_ &gt;'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConstantMatrix.html#ac51afe22e54a204c0b2b8a80abde30cc',1,'tatami::ConstantMatrix::ConstantMatrix()']]],
   ['constantmatrix_2ehpp_22',['ConstantMatrix.hpp',['https://tatami-inc.github.io/tatami/ConstantMatrix_8hpp.html',1,'']]],
@@ -30,5 +30,6 @@ var searchData=
   ['convert_5fto_5ffragmented_5fsparse_27',['convert_to_fragmented_sparse',['https://tatami-inc.github.io/tatami/namespacetatami.html#a2a4c4e213ecc4225882b3cf8b21600e0',1,'tatami']]],
   ['convert_5fto_5ffragmented_5fsparse_2ehpp_28',['convert_to_fragmented_sparse.hpp',['https://tatami-inc.github.io/tatami/convert__to__fragmented__sparse_8hpp.html',1,'']]],
   ['copy_2ehpp_29',['copy.hpp',['https://tatami-inc.github.io/tatami/copy_8hpp.html',1,'']]],
-  ['copy_5fn_30',['copy_n',['https://tatami-inc.github.io/tatami/namespacetatami.html#ab52a806e3f13a68741a9e1f77dccab14',1,'tatami']]]
+  ['copy_5fn_30',['copy_n',['https://tatami-inc.github.io/tatami/namespacetatami.html#ab52a806e3f13a68741a9e1f77dccab14',1,'tatami']]],
+  ['count_5fcompressed_5fsparse_5fnon_5fzeros_31',['count_compressed_sparse_non_zeros',['https://tatami-inc.github.io/tatami/namespacetatami.html#aedacbafb3041d3f5cafb2e87dacc1b7c',1,'tatami']]]
 ];
