@@ -50,6 +50,9 @@ TEST_P(ChooseHvgsTest, Basic) {
     auto ioutput = scran_variances::choose_highly_variable_genes_index(ngenes, x.data(), opt);
     compare_bool_with_index(output, ioutput);
 
+    auto ioutput2 = scran_variances::choose_highly_variable_genes_index<int>(ngenes, x.data(), opt); // check for different integer types.
+    EXPECT_EQ(std::vector<size_t>(ioutput2.begin(), ioutput2.end()), ioutput);
+
     // Checking that it works for smaller values.
     opt.larger = false;
     auto output_low = scran_variances::choose_highly_variable_genes(ngenes, x.data(), opt);

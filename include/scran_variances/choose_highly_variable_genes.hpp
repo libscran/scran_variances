@@ -115,7 +115,7 @@ std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic
  */
 template<typename Index_, typename Stat_>
 std::vector<Index_> choose_highly_variable_genes_index(Index_ n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
-    if (options.top >= n) {
+    if (options.top >= static_cast<size_t>(n)) {
         std::vector<Index_> output(n);
         std::iota(output.begin(), output.end(), static_cast<Index_>(0));
         return output;
