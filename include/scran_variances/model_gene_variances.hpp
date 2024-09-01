@@ -48,6 +48,7 @@ struct ModelGeneVariancesOptions {
 
     /**
      * Number of threads to use. 
+     * The parallelization scheme is defined by `tatami::parallelize()` and `FitVarianceTrendOptions::num_threads`.
      */
     int num_threads = 1;
 };

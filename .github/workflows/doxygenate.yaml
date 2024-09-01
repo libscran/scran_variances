@@ -21,6 +21,11 @@ jobs:
       with:
         args: -O docs/tatami.tag https://tatami-inc.github.io/tatami/tatami.tag
 
+    - name: Download tatami tagfile
+      uses: wei/wget@v1
+      with:
+        args: -O docs/WeightedLowess.tag https://ltla.github.io/CppWeightedLowess/WeightedLowess.tag
+
     - name: Download blocks tagfile
       uses: wei/wget@v1
       with:

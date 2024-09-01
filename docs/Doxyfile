@@ -2324,6 +2324,7 @@ SKIP_FUNCTION_MACROS   = YES
 # run, you must also specify the path to the tagfile here.
 
 TAGFILES               = tatami.tag=https://tatami-inc.github.io/tatami \
+                         WeightedLowess.tag=https://ltla.github.io/CppWeightedLowess \
                          scran_blocks.tag=https://libscran.github.io/scran_blocks
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a

@@ -66,6 +66,7 @@ struct FitVarianceTrendOptions {
 
     /**
      * Number of threads to use in the LOWESS fit.
+     * The parallelization scheme is defined by `WeightedLowess::parallelize()`.
      */
     int num_threads = 1;
 };
