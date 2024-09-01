@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['num_5fthreads_0',['num_threads',['../structscran__variances_1_1FitVarianceTrendOptions.html#a0811d658119b078fe61a0d65ea367586',1,'scran_variances::FitVarianceTrendOptions::num_threads'],['../structscran__variances_1_1ModelGeneVariancesOptions.html#ac7673607b1436c8edde68a3df08519aa',1,'scran_variances::ModelGeneVariancesOptions::num_threads']]],
-  ['number_1',['number',['https://tatami-inc.github.io/tatami/structtatami_1_1SparseRange.html#a8b959e01323bdbe112a6432b3c51a038',1,'tatami::SparseRange']]]
+  ['mean_5ffilter_0',['mean_filter',['../structscran__variances_1_1FitVarianceTrendOptions.html#acaaa268e4ebcdfcc105fb05cc99fa91c',1,'scran_variances::FitVarianceTrendOptions']]],
+  ['means_1',['means',['../structscran__variances_1_1ModelGeneVariancesBuffers.html#a2c8bfdbeb8eb86ced05eaeafe7cae484',1,'scran_variances::ModelGeneVariancesBuffers::means'],['../structscran__variances_1_1ModelGeneVariancesResults.html#a36eee93c18e635f5bd3531dd1af129fd',1,'scran_variances::ModelGeneVariancesResults::means']]],
+  ['minimum_5fmean_2',['minimum_mean',['../structscran__variances_1_1FitVarianceTrendOptions.html#aeb49baa7624a6aa1df7099761aa5fe53',1,'scran_variances::FitVarianceTrendOptions']]],
+  ['minimum_5fwidth_3',['minimum_width',['https://ltla.github.io/CppWeightedLowess/structWeightedLowess_1_1Options.html#a896253316d390568bbadd1ce40fe4ee9',1,'WeightedLowess::Options::minimum_width'],['../structscran__variances_1_1FitVarianceTrendOptions.html#a372f10d4bc53cd8e94297bf50328c3b3',1,'scran_variances::FitVarianceTrendOptions::minimum_width']]],
+  ['minimum_5fwindow_5fcount_4',['minimum_window_count',['../structscran__variances_1_1FitVarianceTrendOptions.html#aaed78ddd1cc4ce209f7b318c67bf22c2',1,'scran_variances::FitVarianceTrendOptions']]]
 ];

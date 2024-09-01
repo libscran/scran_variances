@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['upper_5fbound_0',['upper_bound',['https://libscran.github.io/scran_blocks/structscran__blocks_1_1VariableWeightParameters.html#a865b484b6fc8611048fcadab863de6bf',1,'scran_blocks::VariableWeightParameters']]],
-  ['use_5fminimum_5fwidth_1',['use_minimum_width',['../structscran__variances_1_1FitVarianceTrendOptions.html#a563b78705db208dce5727370357e0070',1,'scran_variances::FitVarianceTrendOptions']]]
+  ['top_0',['top',['../structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#aef002f38d9c138302a8a1ef521ac8c17',1,'scran_variances::ChooseHighlyVariableGenesOptions']]],
+  ['transform_1',['transform',['../structscran__variances_1_1FitVarianceTrendOptions.html#aa1e9b5b27d936b35e9cf18788c66792b',1,'scran_variances::FitVarianceTrendOptions']]]
 ];
