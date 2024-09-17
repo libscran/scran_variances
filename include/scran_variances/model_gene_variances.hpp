@@ -190,7 +190,7 @@ void compute_variances_dense_row(
     auto nblocks = block_size.size();
     auto NR = mat.nrow(), NC = mat.ncol();
 
-    tatami::parallelize([&](size_t, Index_ start, Index_ length) -> void {
+    tatami::parallelize([&](int, Index_ start, Index_ length) -> void {
         std::vector<Stat_> tmp_means(blocked ? nblocks : 0);
         std::vector<Stat_> tmp_vars(blocked ? nblocks : 0);
 
@@ -236,7 +236,7 @@ void compute_variances_sparse_row(
     auto nblocks = block_size.size();
     auto NR = mat.nrow(), NC = mat.ncol();
 
-    tatami::parallelize([&](size_t, Index_ start, Index_ length) -> void {
+    tatami::parallelize([&](int, Index_ start, Index_ length) -> void {
         std::vector<Stat_> tmp_means(nblocks);
         std::vector<Stat_> tmp_vars(nblocks);
         std::vector<Index_> tmp_nzero(nblocks);
@@ -289,7 +289,7 @@ void compute_variances_dense_column(
     auto nblocks = block_size.size();
     auto NR = mat.nrow(), NC = mat.ncol();
 
-    tatami::parallelize([&](size_t thread, Index_ start, Index_ length) -> void {
+    tatami::parallelize([&](int thread, Index_ start, Index_ length) -> void {
         std::vector<Value_> buffer(length);
         auto ext = tatami::consecutive_extractor<false>(&mat, false, 0, NC, start, length);
 
@@ -339,7 +339,7 @@ void compute_variances_sparse_column(
     auto NR = mat.nrow(), NC = mat.ncol();
     std::vector<std::vector<Index_> > nonzeros(nblocks, std::vector<Index_>(NR));
 
-    tatami::parallelize([&](size_t thread, Index_ start, Index_ length) -> void {
+    tatami::parallelize([&](int thread, Index_ start, Index_ length) -> void {
         std::vector<Value_> vbuffer(length);
         std::vector<Index_> ibuffer(length);
         tatami::Options opt;
