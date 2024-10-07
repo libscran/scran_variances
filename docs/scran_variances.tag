@@ -55,6 +55,13 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
+      <type>std::pair&lt; bool, double &gt;</type>
+      <name>bound</name>
+      <anchorfile>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</anchorfile>
+      <anchor>af884b0474068165ccc16dfb5c7fceebd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>bool</type>
       <name>keep_ties</name>
       <anchorfile>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</anchorfile>
