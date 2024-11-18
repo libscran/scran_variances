@@ -55,10 +55,17 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::pair&lt; bool, double &gt;</type>
+      <type>bool</type>
+      <name>use_bound</name>
+      <anchorfile>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</anchorfile>
+      <anchor>a2990bc14c7a1912b0a2bf9d0670be7fb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
       <name>bound</name>
       <anchorfile>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</anchorfile>
-      <anchor>af884b0474068165ccc16dfb5c7fceebd</anchor>
+      <anchor>a2d75802080acf97aae3f96e4e3e1f2b7</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">

@@ -100,8 +100,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aef002f38d9c138302a8a1ef521ac8c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ac6ad16838227b7ea5f2266b09c8d37" id="r_a7ac6ad16838227b7ea5f2266b09c8d37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a7ac6ad16838227b7ea5f2266b09c8d37">larger</a> = <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">true</a></td></tr>
 <tr class="separator:a7ac6ad16838227b7ea5f2266b09c8d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af884b0474068165ccc16dfb5c7fceebd" id="r_af884b0474068165ccc16dfb5c7fceebd"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>, <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#af884b0474068165ccc16dfb5c7fceebd">bound</a> = std::make_pair&lt;<a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>, <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a>&gt;(<a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">false</a>, 0)</td></tr>
-<tr class="separator:af884b0474068165ccc16dfb5c7fceebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2990bc14c7a1912b0a2bf9d0670be7fb" id="r_a2990bc14c7a1912b0a2bf9d0670be7fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2990bc14c7a1912b0a2bf9d0670be7fb">use_bound</a> = <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">false</a></td></tr>
+<tr class="separator:a2990bc14c7a1912b0a2bf9d0670be7fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d75802080acf97aae3f96e4e3e1f2b7" id="r_a2d75802080acf97aae3f96e4e3e1f2b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2d75802080acf97aae3f96e4e3e1f2b7">bound</a> = 0</td></tr>
+<tr class="separator:a2d75802080acf97aae3f96e4e3e1f2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a452e64f05baa4e9fe2fc35e97510bece" id="r_a452e64f05baa4e9fe2fc35e97510bece"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a452e64f05baa4e9fe2fc35e97510bece">keep_ties</a> = <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">true</a></td></tr>
 <tr class="separator:a452e64f05baa4e9fe2fc35e97510bece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -119,7 +121,12 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of top genes to choose. The actual number of genes may be smaller, if <code>top</code> is greater than the number of genes in the dataset with statistics greater than <code>threshold</code>; or larger, if <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a452e64f05baa4e9fe2fc35e97510bece">ChooseHighlyVariableGenesOptions::keep_ties</a> = true</code>. </p>
+<p>Number of top genes to choose. Note that the actual number of chosen genes may be:</p>
+<ul>
+<li>smaller than <code>top</code>, if the latter is greater than the total number of genes in the dataset.</li>
+<li>smaller than <code>top</code>, if <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2990bc14c7a1912b0a2bf9d0670be7fb">ChooseHighlyVariableGenesOptions::use_bound</a> = true</code> and <code>top</code> is greater than the total number of genes in the dataset with statistics greater than <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2d75802080acf97aae3f96e4e3e1f2b7">ChooseHighlyVariableGenesOptions::bound</a></code>.</li>
+<li>larger than <code>top</code>, if <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a452e64f05baa4e9fe2fc35e97510bece">ChooseHighlyVariableGenesOptions::keep_ties</a> = true</code> and there are multiple ties at the <code>top</code>-th chosen gene. </li>
+</ul>
 
 </div>
 </div>
@@ -138,18 +145,33 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af884b0474068165ccc16dfb5c7fceebd" name="af884b0474068165ccc16dfb5c7fceebd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af884b0474068165ccc16dfb5c7fceebd">&#9670;&#160;</a></span>bound</h2>
+<a id="a2990bc14c7a1912b0a2bf9d0670be7fb" name="a2990bc14c7a1912b0a2bf9d0670be7fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2990bc14c7a1912b0a2bf9d0670be7fb">&#9670;&#160;</a></span>use_bound</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;<a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>, <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a>&gt; scran_variances::ChooseHighlyVariableGenesOptions::bound = std::make_pair&lt;<a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a>, <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a>&gt;(<a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">false</a>, 0)</td>
+          <td class="memname"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">bool</a> scran_variances::ChooseHighlyVariableGenesOptions::use_bound = <a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">false</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The first value specifies whether to consider an absolute bound on the statistic when choosing HVGs. The second value is a lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top <code>top</code> genes. If <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a7ac6ad16838227b7ea5f2266b09c8d37">ChooseHighlyVariableGenesOptions::larger</a> = false</code>, this is an upper bound instead. </p>
+<p>Whether to consider an absolute bound on the statistic when choosing HVGs. The value of the bound is determined by <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2d75802080acf97aae3f96e4e3e1f2b7">ChooseHighlyVariableGenesOptions::bound</a></code>. </p>
+
+</div>
+</div>
+<a id="a2d75802080acf97aae3f96e4e3e1f2b7" name="a2d75802080acf97aae3f96e4e3e1f2b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d75802080acf97aae3f96e4e3e1f2b7">&#9670;&#160;</a></span>bound</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacescran__variances.html#a30a2a9b882ad09999bdf8d698e4a56ab">double</a> scran_variances::ChooseHighlyVariableGenesOptions::bound = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top <code>top</code> genes. If <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a7ac6ad16838227b7ea5f2266b09c8d37">ChooseHighlyVariableGenesOptions::larger</a> = false</code>, this is an upper bound instead. Only used if <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2990bc14c7a1912b0a2bf9d0670be7fb">ChooseHighlyVariableGenesOptions::use_bound</a> = true</code>. </p>
 
 </div>
 </div>
@@ -164,7 +186,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Whether to keep all genes with statistics that are tied with the <code>top</code>-th gene. If <code>false</code>, ties are arbitrarily broken but the number of retained genes will not be greater than <code>top</code>. </p>
+<p>Whether to keep all genes with statistics that are tied with the <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#aef002f38d9c138302a8a1ef521ac8c17">ChooseHighlyVariableGenesOptions::top</a></code>-th gene. If <code>false</code>, ties are arbitrarily broken but the number of retained genes will not be greater than <code><a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#aef002f38d9c138302a8a1ef521ac8c17">ChooseHighlyVariableGenesOptions::top</a></code>. </p>
 
 </div>
 </div>

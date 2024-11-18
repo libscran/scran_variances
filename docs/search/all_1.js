@@ -7,5 +7,5 @@ var searchData=
   ['boolean_5fhelpers_2ehpp_4',['boolean_helpers.hpp',['https://tatami-inc.github.io/tatami/binary_2boolean__helpers_8hpp.html',1,'(Global Namespace)'],['https://tatami-inc.github.io/tatami/unary_2boolean__helpers_8hpp.html',1,'(Global Namespace)']]],
   ['boolean_5futils_2ehpp_5',['boolean_utils.hpp',['https://tatami-inc.github.io/tatami/boolean__utils_8hpp.html',1,'']]],
   ['booleanoperation_6',['BooleanOperation',['https://tatami-inc.github.io/tatami/namespacetatami.html#a4e5eea599200bfb6bc42f184118be28a',1,'tatami']]],
-  ['bound_7',['bound',['../structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#af884b0474068165ccc16dfb5c7fceebd',1,'scran_variances::ChooseHighlyVariableGenesOptions']]]
+  ['bound_7',['bound',['../structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a2d75802080acf97aae3f96e4e3e1f2b7',1,'scran_variances::ChooseHighlyVariableGenesOptions']]]
 ];
