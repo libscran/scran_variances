@@ -32,7 +32,8 @@ TEST_P(ChooseHvgsTest, Basic) {
 
     scran_variances::ChooseHighlyVariableGenesOptions opt;
     opt.top = ntop;
-    opt.bound = bound;
+    opt.use_bound = bound.first;
+    opt.bound = bound.second;
     auto output = scran_variances::choose_highly_variable_genes(ngenes, x.data(), opt);
 
     // Checking that everything is in order.
@@ -127,7 +128,8 @@ TEST(ChooseHvgs, Ties) {
         compare_bool_with_index(output, ioutput);
 
         // Introducing a bound.
-        opt.bound = { true, 3.3 };
+        opt.use_bound = true;
+        opt.bound = 3.3;
         auto outputb = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_EQ(2, std::accumulate(outputb.begin(), outputb.end(), 0));
 
@@ -136,7 +138,7 @@ TEST(ChooseHvgs, Ties) {
 
         // Keeping all ties.
         opt.keep_ties = true;
-        opt.bound.first = false;
+        opt.use_bound = false;
         auto output2 = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_LT(opt.top, std::accumulate(output2.begin(), output2.end(), 0));
 
@@ -157,7 +159,8 @@ TEST(ChooseHvgs, Ties) {
         compare_bool_with_index(output, ioutput);
 
         // Introducing a bound.
-        opt.bound = { true, 1.1 };
+        opt.use_bound = true;
+        opt.bound = 1.1;
         auto outputb = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_EQ(1, std::accumulate(outputb.begin(), outputb.end(), 0));
 
@@ -166,7 +169,7 @@ TEST(ChooseHvgs, Ties) {
 
         // Keeping all ties.
         opt.keep_ties = true;
-        opt.bound.first = false;
+        opt.use_bound = false;
         auto output2 = scran_variances::choose_highly_variable_genes(x.size(), x.data(), opt);
         EXPECT_LT(opt.top, std::accumulate(output2.begin(), output2.end(), 0));
 

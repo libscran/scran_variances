@@ -19,8 +19,11 @@ namespace scran_variances {
 struct ChooseHighlyVariableGenesOptions {
     /**
      * Number of top genes to choose.
-     * The actual number of genes may be smaller, if `top` is greater than the number of genes in the dataset with statistics greater than `threshold`;
-     * or larger, if `ChooseHighlyVariableGenesOptions::keep_ties = true`.
+     * Note that the actual number of chosen genes may be: 
+     *
+     * - smaller than `top`, if the latter is greater than the total number of genes in the dataset. 
+     * - smaller than `top`, if `ChooseHighlyVariableGenesOptions::use_bound = true` and `top` is greater than the total number of genes in the dataset with statistics greater than `ChooseHighlyVariableGenesOptions::bound`.
+     * - larger than `top`, if `ChooseHighlyVariableGenesOptions::keep_ties = true` and there are multiple ties at the `top`-th chosen gene.
      */
     size_t top = 4000;
 
@@ -30,15 +33,21 @@ struct ChooseHighlyVariableGenesOptions {
     bool larger = true;
 
     /**
-     * The first value specifies whether to consider an absolute bound on the statistic when choosing HVGs.
-     * The second value is a lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top `top` genes.
-     * If `ChooseHighlyVariableGenesOptions::larger = false`, this is an upper bound instead.
+     * Whether to consider an absolute bound on the statistic when choosing HVGs.
+     * The value of the bound is determined by `ChooseHighlyVariableGenesOptions::bound`.
      */
-    std::pair<bool, double> bound = std::make_pair<bool, double>(false, 0);
+    bool use_bound = false;
 
     /**
-     * Whether to keep all genes with statistics that are tied with the `top`-th gene.
-     * If `false`, ties are arbitrarily broken but the number of retained genes will not be greater than `top`.
+     * A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top `top` genes.
+     * If `ChooseHighlyVariableGenesOptions::larger = false`, this is an upper bound instead.
+     * Only used if `ChooseHighlyVariableGenesOptions::use_bound = true`.
+     */
+    double bound = 0;
+
+    /**
+     * Whether to keep all genes with statistics that are tied with the `ChooseHighlyVariableGenesOptions::top`-th gene.
+     * If `false`, ties are arbitrarily broken but the number of retained genes will not be greater than `ChooseHighlyVariableGenesOptions::top`.
      */
     bool keep_ties = true;
 };
@@ -71,9 +80,9 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Output_* out
         return;
     }
 
-    Stat_ bound = options.bound.second;
+    Stat_ bound = options.bound;
     if (options.top >= n) {
-        if (options.bound.first) {
+        if (options.use_bound) {
             for (size_t i = 0; i < n; ++i) {
                 output[i] = cmp(statistic[i], bound);
             }
@@ -87,7 +96,7 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Output_* out
     Stat_ threshold = statistic[collected[options.top - 1]];
 
     if (options.keep_ties) {
-        if (options.bound.first && !cmp(threshold, bound)) {
+        if (options.use_bound && !cmp(threshold, bound)) {
             for (size_t i = 0; i < n; ++i) {
                 output[i] = cmp(statistic[i], bound);
             }
@@ -101,7 +110,7 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Output_* out
 
     std::fill_n(output, n, false);
     size_t counter = options.top;
-    if (options.bound.first && !cmp(threshold, bound)) {
+    if (options.use_bound && !cmp(threshold, bound)) {
         --counter;
         while (counter > 0) {
             --counter;
@@ -124,11 +133,11 @@ std::vector<Index_> choose_highly_variable_genes_index(size_t n, const Stat_* st
         return output;
     }
 
-    Stat_ bound = options.bound.second;
+    Stat_ bound = options.bound;
     if (options.top >= n) {
-        if (options.bound.first) {
+        if (options.use_bound) {
             for (size_t i = 0; i < n; ++i) {
-                if (options.bound.first && cmp(statistic[i], bound)) {
+                if (options.use_bound && cmp(statistic[i], bound)) {
                     output.push_back(i);
                 }
             }
@@ -144,7 +153,7 @@ std::vector<Index_> choose_highly_variable_genes_index(size_t n, const Stat_* st
 
     if (options.keep_ties) {
         output.clear();
-        if (options.bound.first && !cmp(threshold, bound)) {
+        if (options.use_bound && !cmp(threshold, bound)) {
             for (size_t i = 0; i < n; ++i) {
                 if (cmp(statistic[i], bound)) {
                     output.push_back(i);
@@ -161,7 +170,7 @@ std::vector<Index_> choose_highly_variable_genes_index(size_t n, const Stat_* st
     }
 
     size_t counter = options.top;
-    if (options.bound.first && !cmp(threshold, bound)) {
+    if (options.use_bound && !cmp(threshold, bound)) {
         --counter;
         while (counter > 0) {
             --counter;
