@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(scran_variances
-    VERSION 0.1.3
+    VERSION 0.1.4
     DESCRIPTION "Model per-gene variances in single-cell expression"
     LANGUAGES CXX)
 
