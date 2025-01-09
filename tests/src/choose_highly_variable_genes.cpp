@@ -1,7 +1,6 @@
-#include <gtest/gtest.h>
+#include "scran_tests/scran_tests.hpp"
 
 #include "scran_variances/choose_highly_variable_genes.hpp"
-#include "scran_tests/scran_tests.hpp"
 
 #include <unordered_set>
 

@@ -219,7 +219,11 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* outpu
  */
 template<typename Bool_ = uint8_t, typename Stat_>
 std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
-    std::vector<Bool_> output(n);
+    std::vector<Bool_> output(n
+#ifdef SCRAN_VARIANCES_TEST_INIT
+        , SCRAN_VARIANCES_TEST_INIT
+#endif
+    );
     choose_highly_variable_genes(n, statistic, output.data(), options);
     return output;
 }

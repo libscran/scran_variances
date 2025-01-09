@@ -1,7 +1,6 @@
-#include <gtest/gtest.h>
-#include <random>
-
 #include "scran_tests/scran_tests.hpp"
+
+#include <random>
 
 #include "scran_variances/fit_variance_trend.hpp"
 

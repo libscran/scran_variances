@@ -95,7 +95,28 @@ struct ModelGeneVariancesResults {
      */
     ModelGeneVariancesResults() = default;
 
-    ModelGeneVariancesResults(size_t ngenes) : means(ngenes), variances(ngenes), fitted(ngenes), residuals(ngenes) {}
+    ModelGeneVariancesResults(size_t ngenes) :
+        means(ngenes
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        ),
+        variances(ngenes
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        ),
+        fitted(ngenes
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        ),
+        residuals(ngenes
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        )
+    {}
     /**
      * @endcond
      */

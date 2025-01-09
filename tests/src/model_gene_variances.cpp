@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>
-
 #include "scran_tests/scran_tests.hpp"
 
 #include "tatami/tatami.hpp"

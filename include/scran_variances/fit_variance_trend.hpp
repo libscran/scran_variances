@@ -206,7 +206,18 @@ struct FitVarianceTrendResults {
      */
     FitVarianceTrendResults() {}
 
-    FitVarianceTrendResults(size_t n) : fitted(n), residuals(n) {}
+    FitVarianceTrendResults(size_t n) :
+        fitted(n
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        ),
+        residuals(n
+#ifdef SCRAN_VARIANCES_TEST_INIT
+            , SCRAN_VARIANCES_TEST_INIT
+#endif
+        )
+    {}
     /**
      * @endcond
      */

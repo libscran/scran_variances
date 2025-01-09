@@ -40,6 +40,15 @@ add_executable(
 decorate_test(libtest)
 
 add_executable(
+    dirtytest 
+    src/fit_variance_trend.cpp
+    src/model_gene_variances.cpp
+    src/choose_highly_variable_genes.cpp
+)
+decorate_test(dirtytest)
+target_compile_definitions(dirtytest PRIVATE "SCRAN_VARIANCES_TEST_INIT=scran_tests::initial_value()")
+
+add_executable(
     cuspartest
     src/model_gene_variances.cpp
 )
