@@ -314,17 +314,15 @@ void compute_variances_dense_column(
         std::vector<Value_> buffer(length);
         auto ext = tatami::consecutive_extractor<false>(&mat, false, static_cast<Index_>(0), NC, start, length);
 
-        std::vector<tatami_stats::LocalOutputBuffer<Stat_> > local_var_output;
-        local_var_output.reserve(nblocks);
-        std::vector<tatami_stats::LocalOutputBuffer<Stat_> > local_mean_output;
-        local_mean_output.reserve(nblocks);
+        auto get_var = [&](Index_ b) -> Stat_* { return buffers[b].variances; };
+        tatami_stats::LocalOutputBuffers<Stat_, decltype(get_var)> local_vars(thread, nblocks, start, length, std::move(get_var));
+        auto get_mean = [&](Index_ b) -> Stat_* { return buffers[b].means; };
+        tatami_stats::LocalOutputBuffers<Stat_, decltype(get_mean)> local_means(thread, nblocks, start, length, std::move(get_mean));
+
         std::vector<tatami_stats::variances::RunningDense<Stat_, Value_, Index_> > runners;
         runners.reserve(nblocks);
-
         for (size_t b = 0; b < nblocks; ++b) {
-            local_var_output.emplace_back(thread, start, length, buffers[b].variances);
-            local_mean_output.emplace_back(thread, start, length, buffers[b].means);
-            runners.emplace_back(length, local_mean_output.back().data(), local_var_output.back().data(), false);
+            runners.emplace_back(length, local_means.data(b), local_vars.data(b), false);
         }
 
         if (blocked) {
@@ -341,9 +339,9 @@ void compute_variances_dense_column(
 
         for (size_t b = 0; b < nblocks; ++b) {
             runners[b].finish();
-            local_var_output[b].transfer();
-            local_mean_output[b].transfer();
         }
+        local_vars.transfer();
+        local_means.transfer();
     }, NR, num_threads);
 }
 
@@ -367,17 +365,15 @@ void compute_variances_sparse_column(
         opt.sparse_ordered_index = false;
         auto ext = tatami::consecutive_extractor<true>(&mat, false, static_cast<Index_>(0), NC, start, length, opt);
 
-        std::vector<tatami_stats::LocalOutputBuffer<Stat_> > local_var_output;
-        local_var_output.reserve(nblocks);
-        std::vector<tatami_stats::LocalOutputBuffer<Stat_> > local_mean_output;
-        local_mean_output.reserve(nblocks);
+        auto get_var = [&](Index_ b) -> Stat_* { return buffers[b].variances; };
+        tatami_stats::LocalOutputBuffers<Stat_, decltype(get_var)> local_vars(thread, nblocks, start, length, std::move(get_var));
+        auto get_mean = [&](Index_ b) -> Stat_* { return buffers[b].means; };
+        tatami_stats::LocalOutputBuffers<Stat_, decltype(get_mean)> local_means(thread, nblocks, start, length, std::move(get_mean));
+
         std::vector<tatami_stats::variances::RunningSparse<Stat_, Value_, Index_> > runners;
         runners.reserve(nblocks);
-
         for (size_t b = 0; b < nblocks; ++b) {
-            local_var_output.emplace_back(thread, start, length, buffers[b].variances);
-            local_mean_output.emplace_back(thread, start, length, buffers[b].means);
-            runners.emplace_back(length, local_mean_output.back().data(), local_var_output.back().data(), false, start);
+            runners.emplace_back(length, local_means.data(b), local_vars.data(b), false, start);
         }
 
         if (blocked) {
@@ -394,9 +390,9 @@ void compute_variances_sparse_column(
 
         for (size_t b = 0; b < nblocks; ++b) {
             runners[b].finish();
-            local_var_output[b].transfer();
-            local_mean_output[b].transfer();
         }
+        local_vars.transfer();
+        local_means.transfer();
     }, NR, num_threads);
 }
 
