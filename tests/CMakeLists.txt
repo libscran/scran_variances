@@ -47,10 +47,3 @@ add_executable(
 )
 decorate_test(dirtytest)
 target_compile_definitions(dirtytest PRIVATE "SCRAN_VARIANCES_TEST_INIT=scran_tests::initial_value()")
-
-add_executable(
-    cuspartest
-    src/model_gene_variances.cpp
-)
-decorate_test(cuspartest)
-target_compile_definitions(cuspartest PRIVATE SUBPAR_CUSTOM_PARALLELIZE_RANGE=::subpar::test_parallelize_range)
