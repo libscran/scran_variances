@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="72,5,209,46"/>
 <area shape="rect" id="Node000002" href="$model__gene__variances_8hpp.html" title="Model the per&#45;gene variances." alt="" coords="5,94,161,135"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,60,98,95,94,92,117,57"/>
-<area shape="rect" id="Node000003" href="$scran__variances_8hpp.html" title="Variance modelling for single&#45;cell expression data." alt="" coords="64,183,217,223"/>
+<area shape="rect" id="Node000003" href="$scran__variances_8hpp.html" title="Variance modelling for single&#45;cell expression data." alt="" coords="64,183,216,223"/>
 <area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="162,59,175,93,178,114,175,135,166,161,155,184,150,181,161,159,170,134,173,114,170,95,157,60"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,146,130,181,125,184,102,149"/>
 </map>
