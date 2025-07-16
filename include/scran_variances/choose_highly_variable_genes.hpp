@@ -4,7 +4,9 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
-#include <cstdint>
+#include <cstddef>
+
+#include "sanisizer/sanisizer.hpp"
 
 /**
  * @file choose_highly_variable_genes.hpp
@@ -27,7 +29,7 @@ struct ChooseHighlyVariableGenesOptions {
      *   (or less than the bound, if `ChosenHighlyVariableGenesOptions::larger = false`).
      * - larger than `top`, if `ChooseHighlyVariableGenesOptions::keep_ties = true` and there are multiple ties at the `top`-th chosen gene.
      */
-    size_t top = 4000;
+    std::size_t top = 4000;
 
     /**
      * Whether larger statistics correspond to higher variances.
@@ -71,7 +73,7 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
     }
 
     Stat_ bound = options.bound;
-    if (static_cast<size_t>(options.top) >= static_cast<size_t>(n)) {
+    if (sanisizer::is_greater_than(options.top, n)) {
         if (options.use_bound) {
             for (Index_ i = 0; i < n; ++i) {
                 bool ok = cmp(statistic[i], bound);
@@ -85,7 +87,7 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
             }
         } else {
             if constexpr(keep_index_) {
-                output.resize(n);
+                output.resize(sanisizer::cast<decltype(output.size())>(n));
                 std::iota(output.begin(), output.end(), static_cast<Index_>(0));
             } else {
                 std::fill_n(output, n, true);
@@ -94,7 +96,7 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
         return;
     }
 
-    std::vector<Index_> semi_sorted(n);
+    auto semi_sorted = sanisizer::create<std::vector<Index_> >(n);
     std::iota(semi_sorted.begin(), semi_sorted.end(), static_cast<Index_>(0));
     auto cBegin = semi_sorted.begin(), cMid = cBegin + options.top - 1, cEnd = semi_sorted.end();
     std::nth_element(cBegin, cMid, cEnd, [&](Index_ l, Index_ r) -> bool { 
@@ -105,8 +107,7 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
             return cmp(L, R);
         }
     });
- 
-    Stat_ threshold = statistic[semi_sorted[options.top - 1]];
+    Stat_ threshold = statistic[*cMid];
 
     if (options.keep_ties) {
         if (options.use_bound && !cmp(threshold, bound)) {
@@ -158,7 +159,7 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
         if constexpr(keep_index_) {
             output.insert(output.end(), semi_sorted.begin(), semi_sorted.begin() + options.top);
         } else {
-            for (Index_ i = 0, end = options.top; i < end; ++i) {
+            for (decltype(options.top) i = 0; i < options.top; ++i) {
                 output[semi_sorted[i]] = true;
             }
         }
@@ -208,8 +209,8 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* outpu
 }
 
 /**
- * @tparam Stat_ Type of the variance statistic.
  * @tparam Bool_ Type to be used as a boolean.
+ * @tparam Stat_ Type of the variance statistic.
  *
  * @param n Number of genes.
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
@@ -217,9 +218,9 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* outpu
  *
  * @return A vector of booleans of length `n`, indicating whether each gene is to be retained.
  */
-template<typename Bool_ = uint8_t, typename Stat_>
+template<typename Bool_ = char, typename Stat_>
 std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
-    std::vector<Bool_> output(n
+    auto output = sanisizer::create<std::vector<Bool_> >(n
 #ifdef SCRAN_VARIANCES_TEST_INIT
         , SCRAN_VARIANCES_TEST_INIT
 #endif
