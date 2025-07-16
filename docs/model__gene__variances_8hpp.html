@@ -107,39 +107,47 @@ $(function(){ initResizable(false); });
 
 <p>Model the per-gene variances.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html">tatami/tatami.hpp</a>&quot;</code><br />
-<code>#include &quot;tatami_stats/tatami_stats.hpp&quot;</code><br />
-<code>#include &quot;<a class="elRef" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html">scran_blocks/scran_blocks.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fit__variance__trend_8hpp_source.html">fit_variance_trend.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="fit__variance__trend_8hpp_source.html">fit_variance_trend.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
+<code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html">tatami/tatami.hpp</a>&quot;</code><br />
+<code>#include &quot;tatami_stats/tatami_stats.hpp&quot;</code><br />
+<code>#include &quot;<a class="elRef" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html">scran_blocks/scran_blocks.hpp</a>&quot;</code><br />
+<code>#include &quot;sanisizer/sanisizer.hpp&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for model_gene_variances.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="model__gene__variances_8hpp__incl.png" border="0" usemap="#ascran__variances_2model__gene__variances_8hpp" alt=""/></div>
 <map name="ascran__variances_2model__gene__variances_8hpp" id="ascran__variances_2model__gene__variances_8hpp">
-<area shape="rect" title="Model the per&#45;gene variances." alt="" coords="402,5,557,46"/>
-<area shape="rect" target="_parent" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html" title=" " alt="" coords="5,102,127,127"/>
-<area shape="poly" title=" " alt="" coords="402,44,140,97,126,100,125,95,139,91,401,38"/>
-<area shape="rect" title=" " alt="" coords="151,94,285,135"/>
-<area shape="poly" title=" " alt="" coords="421,49,293,91,291,86,419,44"/>
-<area shape="rect" target="_parent" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html" title=" " alt="" coords="308,94,442,135"/>
-<area shape="poly" title=" " alt="" coords="457,49,412,86,409,82,454,44"/>
-<area shape="rect" href="fit__variance__trend_8hpp.html" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="567,102,714,127"/>
-<area shape="poly" title=" " alt="" coords="517,44,606,92,604,96,515,49"/>
-<area shape="rect" title=" " alt="" coords="440,183,514,208"/>
-<area shape="poly" title=" " alt="" coords="482,46,480,167,474,167,476,46"/>
-<area shape="rect" title=" " alt="" coords="537,183,595,208"/>
-<area shape="poly" title=" " alt="" coords="492,45,555,167,550,170,487,47"/>
-<area shape="rect" title=" " alt="" coords="738,102,791,127"/>
-<area shape="poly" title=" " alt="" coords="558,42,640,63,727,91,729,92,728,97,725,97,639,68,557,47"/>
-<area shape="poly" title=" " alt="" coords="617,130,517,178,514,173,614,125"/>
-<area shape="poly" title=" " alt="" coords="631,129,590,173,586,169,627,126"/>
-<area shape="rect" title=" " alt="" coords="619,183,668,208"/>
-<area shape="poly" title=" " alt="" coords="644,127,645,167,640,167,638,128"/>
-<area shape="rect" target="_parent" href="https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html" title=" " alt="" coords="692,183,941,208"/>
-<area shape="poly" title=" " alt="" coords="669,125,777,174,775,178,667,130"/>
+<area shape="rect" title="Model the per&#45;gene variances." alt="" coords="430,5,586,46"/>
+<area shape="rect" href="fit__variance__trend_8hpp.html" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="273,102,420,127"/>
+<area shape="poly" title=" " alt="" coords="472,49,384,96,381,92,470,44"/>
+<area shape="rect" title=" " alt="" coords="5,183,80,208"/>
+<area shape="poly" title=" " alt="" coords="430,38,318,59,256,75,197,96,126,135,70,175,67,171,124,130,195,92,255,70,317,54,429,33"/>
+<area shape="rect" title=" " alt="" coords="103,183,160,208"/>
+<area shape="poly" title=" " alt="" coords="431,43,348,63,304,78,262,96,203,134,157,174,153,170,200,130,260,92,302,73,346,58,429,37"/>
+<area shape="rect" title=" " alt="" coords="532,183,596,208"/>
+<area shape="poly" title=" " alt="" coords="500,47,487,89,486,112,492,134,507,155,528,172,525,176,503,159,487,136,481,112,482,88,495,46"/>
+<area shape="rect" title=" " alt="" coords="620,183,772,208"/>
+<area shape="poly" title=" " alt="" coords="510,46,515,90,522,113,535,133,568,159,606,176,604,181,565,163,531,136,518,115,509,91,505,47"/>
+<area shape="rect" title=" " alt="" coords="546,102,598,127"/>
+<area shape="poly" title=" " alt="" coords="524,45,556,88,552,91,520,48"/>
+<area shape="rect" target="_parent" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html" title=" " alt="" coords="622,102,743,127"/>
+<area shape="poly" title=" " alt="" coords="549,44,646,92,643,97,546,49"/>
+<area shape="rect" title=" " alt="" coords="768,94,901,135"/>
+<area shape="poly" title=" " alt="" coords="583,44,754,89,752,94,582,49"/>
+<area shape="rect" target="_parent" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html" title=" " alt="" coords="925,94,1059,135"/>
+<area shape="poly" title=" " alt="" coords="586,36,733,58,910,91,909,96,732,64,585,41"/>
+<area shape="poly" title=" " alt="" coords="300,130,96,183,94,178,299,125"/>
+<area shape="poly" title=" " alt="" coords="314,130,176,181,174,176,313,125"/>
+<area shape="rect" title=" " alt="" coords="184,183,234,208"/>
+<area shape="poly" title=" " alt="" coords="327,130,245,177,242,172,324,125"/>
+<area shape="poly" title=" " alt="" coords="381,125,518,175,516,180,379,130"/>
+<area shape="rect" target="_parent" href="https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html" title=" " alt="" coords="258,183,507,208"/>
+<area shape="poly" title=" " alt="" coords="354,126,373,167,368,170,350,129"/>
+<area shape="poly" title=" " alt="" coords="401,125,628,176,626,181,400,130"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

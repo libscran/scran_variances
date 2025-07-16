@@ -110,21 +110,27 @@ $(function(){ initResizable(false); });
 <div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;array&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &quot;<a class="elRef" href="https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html">WeightedLowess/WeightedLowess.hpp</a>&quot;</code><br />
+<code>#include &quot;sanisizer/sanisizer.hpp&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fit_variance_trend.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="fit__variance__trend_8hpp__incl.png" border="0" usemap="#ascran__variances_2fit__variance__trend_8hpp" alt=""/></div>
 <map name="ascran__variances_2fit__variance__trend_8hpp" id="ascran__variances_2fit__variance__trend_8hpp">
-<area shape="rect" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="102,5,239,46"/>
+<area shape="rect" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="180,5,318,46"/>
 <area shape="rect" title=" " alt="" coords="5,94,80,120"/>
-<area shape="poly" title=" " alt="" coords="140,49,76,88,73,83,137,44"/>
+<area shape="poly" title=" " alt="" coords="198,49,89,91,87,86,197,44"/>
 <area shape="rect" title=" " alt="" coords="103,94,160,120"/>
-<area shape="poly" title=" " alt="" coords="163,48,147,81,142,79,159,45"/>
+<area shape="poly" title=" " alt="" coords="222,49,164,87,161,83,219,44"/>
 <area shape="rect" title=" " alt="" coords="184,94,234,120"/>
-<area shape="poly" title=" " alt="" coords="182,45,199,79,194,81,178,48"/>
-<area shape="rect" target="_parent" href="https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html" title=" " alt="" coords="258,94,507,120"/>
-<area shape="poly" title=" " alt="" coords="224,44,337,86,335,91,223,49"/>
+<area shape="poly" title=" " alt="" coords="242,48,225,81,220,79,237,45"/>
+<area shape="rect" title=" " alt="" coords="258,94,323,120"/>
+<area shape="poly" title=" " alt="" coords="262,45,279,79,275,81,257,48"/>
+<area shape="rect" target="_parent" href="https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html" title=" " alt="" coords="347,94,596,120"/>
+<area shape="poly" title=" " alt="" coords="306,44,424,86,423,91,304,49"/>
+<area shape="rect" title=" " alt="" coords="620,94,772,120"/>
+<area shape="poly" title=" " alt="" coords="319,37,612,88,612,93,318,42"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -146,13 +152,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">scran_variances::FitVarianceTrendOptions</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendOptions.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">scran_variances::FitVarianceTrendWorkspace&lt; Float_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Workspace for <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendWorkspace.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Workspace for <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendWorkspace.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendResults.html">scran_variances::FitVarianceTrendResults&lt; Float_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendResults.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendResults.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -163,12 +169,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a79b79ab14c11d032a46020e1740fe0a2" id="r_a79b79ab14c11d032a46020e1740fe0a2"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
-<tr class="memitem:a79b79ab14c11d032a46020e1740fe0a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">scran_variances::fit_variance_trend</a> (size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, <a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace</a>&lt; Float_ &gt; &amp;workspace, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
-<tr class="separator:a79b79ab14c11d032a46020e1740fe0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a959c6d807cd535fdc46dbe64fed9d180" id="r_a959c6d807cd535fdc46dbe64fed9d180"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
-<tr class="memitem:a959c6d807cd535fdc46dbe64fed9d180"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structscran__variances_1_1FitVarianceTrendResults.html">FitVarianceTrendResults</a>&lt; Float_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacescran__variances.html#a959c6d807cd535fdc46dbe64fed9d180">scran_variances::fit_variance_trend</a> (size_t n, const Float_ *mean, const Float_ *variance, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
-<tr class="separator:a959c6d807cd535fdc46dbe64fed9d180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd5838e7db1a7d9c3614cdaa4c9eaf9d" id="r_acd5838e7db1a7d9c3614cdaa4c9eaf9d"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
+<tr class="memitem:acd5838e7db1a7d9c3614cdaa4c9eaf9d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">scran_variances::fit_variance_trend</a> (std::size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, <a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace</a>&lt; Float_ &gt; &amp;workspace, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
+<tr class="separator:acd5838e7db1a7d9c3614cdaa4c9eaf9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d96bfe8c7be6b0b92c68ef6080948b4" id="r_a1d96bfe8c7be6b0b92c68ef6080948b4"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
+<tr class="memitem:a1d96bfe8c7be6b0b92c68ef6080948b4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structscran__variances_1_1FitVarianceTrendResults.html">FitVarianceTrendResults</a>&lt; Float_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacescran__variances.html#a1d96bfe8c7be6b0b92c68ef6080948b4">scran_variances::fit_variance_trend</a> (std::size_t n, const Float_ *mean, const Float_ *variance, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
+<tr class="separator:a1d96bfe8c7be6b0b92c68ef6080948b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Fit a mean-variance trend to log-count data. </p>

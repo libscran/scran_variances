@@ -41,10 +41,10 @@
     <name>scran_variances::ChooseHighlyVariableGenesOptions</name>
     <filename>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</filename>
     <member kind="variable">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>top</name>
       <anchorfile>structscran__variances_1_1ChooseHighlyVariableGenesOptions.html</anchorfile>
-      <anchor>aef002f38d9c138302a8a1ef521ac8c17</anchor>
+      <anchor>a207b3e1474c88a93e9c9511e3757c43a</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -340,15 +340,15 @@
       <type>void</type>
       <name>fit_variance_trend</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a79b79ab14c11d032a46020e1740fe0a2</anchor>
-      <arglist>(size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
+      <anchor>acd5838e7db1a7d9c3614cdaa4c9eaf9d</anchor>
+      <arglist>(std::size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>FitVarianceTrendResults&lt; Float_ &gt;</type>
       <name>fit_variance_trend</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a959c6d807cd535fdc46dbe64fed9d180</anchor>
-      <arglist>(size_t n, const Float_ *mean, const Float_ *variance, const FitVarianceTrendOptions &amp;options)</arglist>
+      <anchor>a1d96bfe8c7be6b0b92c68ef6080948b4</anchor>
+      <arglist>(std::size_t n, const Float_ *mean, const Float_ *variance, const FitVarianceTrendOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

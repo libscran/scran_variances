@@ -104,7 +104,7 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>Options for <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>.  
+<p>Options for <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="fit__variance__trend_8hpp_source.html">fit_variance_trend.hpp</a>&gt;</code></p>
@@ -129,7 +129,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a0811d658119b078fe61a0d65ea367586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Options for <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>. </p>
+<div class="textblock"><p>Options for <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="aeb49baa7624a6aa1df7099761aa5fe53" name="aeb49baa7624a6aa1df7099761aa5fe53"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb49baa7624a6aa1df7099761aa5fe53">&#9670;&#160;</a></span>minimum_mean</h2>
@@ -142,7 +142,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum mean log-expression for trend fitting. Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin. Only used if <code><a class="el" href="#acaaa268e4ebcdfcc105fb05cc99fa91c">FitVarianceTrendOptions::mean_filter</a> = true</code>. </p>
+<p>Minimum mean log-expression for trend fitting. Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin. This ensures that the fitted trend is not driven by the majority of low-abundance genes. Only used if <code><a class="el" href="#acaaa268e4ebcdfcc105fb05cc99fa91c">FitVarianceTrendOptions::mean_filter</a> = true</code>. </p>
 
 </div>
 </div>
@@ -217,7 +217,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum width of the window to use when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This should be appropriate for the range of <code>mean</code> values used in <code><a class="el" href="namespacescran__variances.html#a79b79ab14c11d032a46020e1740fe0a2">fit_variance_trend()</a></code>; the default value is chosen based on the typical range in single-cell RNA-seq data. </p>
+<p>Minimum width of the window to use when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This should be appropriate for the range of <code>mean</code> values used in <code><a class="el" href="namespacescran__variances.html#acd5838e7db1a7d9c3614cdaa4c9eaf9d">fit_variance_trend()</a></code>. The default value is chosen based on the typical range in single-cell RNA-seq data. </p>
 
 </div>
 </div>
