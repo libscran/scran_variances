@@ -43,5 +43,5 @@ var searchData=
   ['copy_5fn_40',['copy_n',['https://tatami-inc.github.io/tatami/namespacetatami.html#ab52a806e3f13a68741a9e1f77dccab14',1,'tatami']]],
   ['count_5fcompressed_5fsparse_5fnon_5fzeros_41',['count_compressed_sparse_non_zeros',['https://tatami-inc.github.io/tatami/namespacetatami.html#ac004bfb30ee5623bec14d3783c2cc21e',1,'tatami']]],
   ['countcompressedsparsenonzerosoptions_42',['CountCompressedSparseNonZerosOptions',['https://tatami-inc.github.io/tatami/structtatami_1_1CountCompressedSparseNonZerosOptions.html',1,'tatami']]],
-  ['create_5fcontainer_5fof_5findex_5fsize_43',['create_container_of_Index_size',['https://tatami-inc.github.io/tatami/namespacetatami.html#a0ea335e69cc68e2ef5e5c48230a24d4b',1,'tatami']]]
+  ['create_5fcontainer_5fof_5findex_5fsize_43',['create_container_of_Index_size',['https://tatami-inc.github.io/tatami/namespacetatami.html#aa4210bdd032791100c12effa775e8b6b',1,'tatami']]]
 ];
