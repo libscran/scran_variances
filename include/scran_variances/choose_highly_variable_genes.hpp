@@ -7,6 +7,7 @@
 #include <cstddef>
 
 #include "sanisizer/sanisizer.hpp"
+#include "topicks/topicks.hpp"
 
 /**
  * @file choose_highly_variable_genes.hpp
@@ -61,113 +62,14 @@ struct ChooseHighlyVariableGenesOptions {
  */
 namespace internal {
 
-template<bool keep_index_, typename Index_, typename Stat_, class Output_, class Cmp_, class CmpEqual_>
-void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& output, Cmp_ cmp, CmpEqual_ cmpeq, const ChooseHighlyVariableGenesOptions& options) {
-    if (options.top == 0) {
-        if constexpr(keep_index_) {
-            ; // no-op, we assume it's already empty.
-        } else {
-            std::fill_n(output, n, false);
-        }
-        return;
+template<typename Stat_>
+topicks::PickTopGenesOptions<Stat_> translate_options(const ChooseHighlyVariableGenesOptions& chvg_options) {
+    topicks::PickTopGenesOptions<Stat_> opt;
+    opt.keep_ties = chvg_options.keep_ties;
+    if (chvg_options.use_bound) {
+        opt.bound = chvg_options.bound;
     }
-
-    Stat_ bound = options.bound;
-    if (sanisizer::is_greater_than(options.top, n)) {
-        if (options.use_bound) {
-            for (Index_ i = 0; i < n; ++i) {
-                bool ok = cmp(statistic[i], bound);
-                if constexpr(keep_index_) {
-                    if (ok) {
-                        output.push_back(i);
-                    }
-                } else {
-                    output[i] = ok;
-                }
-            }
-        } else {
-            if constexpr(keep_index_) {
-                output.resize(sanisizer::cast<decltype(output.size())>(n));
-                std::iota(output.begin(), output.end(), static_cast<Index_>(0));
-            } else {
-                std::fill_n(output, n, true);
-            }
-        }
-        return;
-    }
-
-    auto semi_sorted = sanisizer::create<std::vector<Index_> >(n);
-    std::iota(semi_sorted.begin(), semi_sorted.end(), static_cast<Index_>(0));
-    auto cBegin = semi_sorted.begin(), cMid = cBegin + options.top - 1, cEnd = semi_sorted.end();
-    std::nth_element(cBegin, cMid, cEnd, [&](Index_ l, Index_ r) -> bool { 
-        auto L = statistic[l], R = statistic[r];
-        if (L == R) {
-            return l < r; // always favor the earlier index for a stable sort, even if options.larger = false.
-        } else {
-            return cmp(L, R);
-        }
-    });
-    Stat_ threshold = statistic[*cMid];
-
-    if (options.keep_ties) {
-        if (options.use_bound && !cmp(threshold, bound)) {
-            for (Index_ i = 0; i < n; ++i) {
-                bool ok = cmp(statistic[i], bound);
-                if constexpr(keep_index_) {
-                    if (ok) {
-                        output.push_back(i);
-                    }
-                } else {
-                    output[i] = ok;
-                }
-            }
-        } else {
-            for (Index_ i = 0; i < n; ++i) {
-                bool ok = cmpeq(statistic[i], threshold);
-                if constexpr(keep_index_) {
-                    if (ok) {
-                        output.push_back(i);
-                    }
-                } else {
-                    output[i] = ok;
-                }
-            }
-        }
-        return;
-    }
-
-    if constexpr(keep_index_) {
-        output.reserve(options.top);
-    } else {
-        std::fill_n(output, n, false);
-    }
-
-    if (options.use_bound) {
-        Index_ counter = options.top;
-        while (counter > 0) {
-            --counter;
-            auto pos = semi_sorted[counter];
-            if (cmp(statistic[pos], bound)) {
-                if constexpr(keep_index_) {
-                    output.push_back(pos);
-                } else {
-                    output[pos] = true;
-                }
-            }
-        }
-    } else {
-        if constexpr(keep_index_) {
-            output.insert(output.end(), semi_sorted.begin(), semi_sorted.begin() + options.top);
-        } else {
-            for (decltype(options.top) i = 0; i < options.top; ++i) {
-                output[semi_sorted[i]] = true;
-            }
-        }
-    }
-
-    if constexpr(keep_index_) {
-        std::sort(output.begin(), output.end());
-    }
+    return opt;
 }
 
 }
@@ -186,26 +88,8 @@ void choose_highly_variable_genes(Index_ n, const Stat_* statistic, Output_& out
  * @param options Further options.
  */
 template<typename Stat_, typename Bool_>
-void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* output, const ChooseHighlyVariableGenesOptions& options) {
-    if (options.larger) {
-        internal::choose_highly_variable_genes<false>(
-            n, 
-            statistic, 
-            output, 
-            [](Stat_ l, Stat_ r) -> bool { return l > r; },
-            [](Stat_ l, Stat_ r) -> bool { return l >= r; },
-            options
-        );
-    } else {
-        internal::choose_highly_variable_genes<false>(
-            n, 
-            statistic, 
-            output, 
-            [](Stat_ l, Stat_ r) -> bool { return l < r; },
-            [](Stat_ l, Stat_ r) -> bool { return l <= r; },
-            options
-        );
-    }
+void choose_highly_variable_genes(std::size_t n, const Stat_* statistic, Bool_* output, const ChooseHighlyVariableGenesOptions& options) {
+    topicks::pick_top_genes(n, statistic, options.top, options.larger, output, internal::translate_options<Stat_>(options));
 }
 
 /**
@@ -219,7 +103,7 @@ void choose_highly_variable_genes(size_t n, const Stat_* statistic, Bool_* outpu
  * @return A vector of booleans of length `n`, indicating whether each gene is to be retained.
  */
 template<typename Bool_ = char, typename Stat_>
-std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
+std::vector<Bool_> choose_highly_variable_genes(std::size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
     auto output = sanisizer::create<std::vector<Bool_> >(n
 #ifdef SCRAN_VARIANCES_TEST_INIT
         , SCRAN_VARIANCES_TEST_INIT
@@ -242,27 +126,7 @@ std::vector<Bool_> choose_highly_variable_genes(size_t n, const Stat_* statistic
  */
 template<typename Index_, typename Stat_>
 std::vector<Index_> choose_highly_variable_genes_index(Index_ n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
-    std::vector<Index_> output;
-    if (options.larger) {
-        internal::choose_highly_variable_genes<true>(
-            n, 
-            statistic, 
-            output,
-            [](Stat_ l, Stat_ r) -> bool { return l > r; },
-            [](Stat_ l, Stat_ r) -> bool { return l >= r; },
-            options
-        );
-    } else {
-        internal::choose_highly_variable_genes<true>(
-            n, 
-            statistic, 
-            output,
-            [](Stat_ l, Stat_ r) -> bool { return l < r; },
-            [](Stat_ l, Stat_ r) -> bool { return l <= r; },
-            options
-        );
-    }
-    return output;
+    return topicks::pick_top_genes_index<Index_>(n, statistic, options.top, options.larger, internal::translate_options<Stat_>(options));
 }
 
 }

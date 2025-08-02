@@ -27,9 +27,10 @@ else()
     find_package(ltla_WeightedLowess 2.0.0 CONFIG REQUIRED)
     find_package(libscran_scran_blocks 0.1.0 CONFIG REQUIRED)
     find_package(ltla_sanisizer 0.1.0 CONFIG REQUIRED)
+    find_package(libscran_topicks 0.1.0 CONFIG REQUIRED)
 endif()
 
-target_link_libraries(scran_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess libscran::scran_blocks ltla::sanisizer)
+target_link_libraries(scran_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess libscran::scran_blocks ltla::sanisizer libscran::topicks)
 
 # Tests
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

@@ -30,8 +30,15 @@ FetchContent_Declare(
   GIT_TAG master # ^0.1.0
 )
 
+FetchContent_Declare(
+  topicks 
+  GIT_REPOSITORY https://github.com/libscran/topicks
+  GIT_TAG master # ^0.1.0
+)
+
 FetchContent_MakeAvailable(tatami)
 FetchContent_MakeAvailable(tatami_stats)
 FetchContent_MakeAvailable(WeightedLowess)
 FetchContent_MakeAvailable(scran_blocks)
 FetchContent_MakeAvailable(sanisizer)
+FetchContent_MakeAvailable(topicks)
