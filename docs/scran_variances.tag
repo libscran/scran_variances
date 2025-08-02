@@ -319,15 +319,15 @@
       <type>void</type>
       <name>choose_highly_variable_genes</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>af85b1a93b23c3a780d1529156d4401e7</anchor>
-      <arglist>(size_t n, const Stat_ *statistic, Bool_ *output, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
+      <anchor>a0eaed0c6084b20e9e155b8fda6a6a83a</anchor>
+      <arglist>(std::size_t n, const Stat_ *statistic, Bool_ *output, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Bool_ &gt;</type>
       <name>choose_highly_variable_genes</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a585d43182bc6bbc1a532e1708761f82d</anchor>
-      <arglist>(size_t n, const Stat_ *statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
+      <anchor>a56d00ba900e38a1be874a5dec872f906</anchor>
+      <arglist>(std::size_t n, const Stat_ *statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Index_ &gt;</type>
