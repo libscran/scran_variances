@@ -220,7 +220,7 @@ void compute_variances_dense_row(
         auto tmp_vars = sanisizer::create<std::vector<Stat_> >(blocked ? nblocks : 0);
 
         auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NC);
-        auto ext = tatami::consecutive_extractor<false>(&mat, true, start, length);
+        auto ext = tatami::consecutive_extractor<false>(mat, true, start, length);
         for (Index_ r = start, end = start + length; r < end; ++r) {
             auto ptr = ext->fetch(buffer.data());
 
@@ -270,7 +270,7 @@ void compute_variances_sparse_row(
         auto ibuffer = tatami::create_container_of_Index_size<std::vector<Index_> >(NC);
         tatami::Options opt;
         opt.sparse_ordered_index = false;
-        auto ext = tatami::consecutive_extractor<true>(&mat, true, start, length, opt);
+        auto ext = tatami::consecutive_extractor<true>(mat, true, start, length, opt);
 
         for (Index_ r = start, end = start + length; r < end; ++r) {
             auto range = ext->fetch(vbuffer.data(), ibuffer.data());
@@ -316,7 +316,7 @@ void compute_variances_dense_column(
 
     tatami::parallelize([&](int thread, Index_ start, Index_ length) -> void {
         auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(length);
-        auto ext = tatami::consecutive_extractor<false>(&mat, false, static_cast<Index_>(0), NC, start, length);
+        auto ext = tatami::consecutive_extractor<false>(mat, false, static_cast<Index_>(0), NC, start, length);
 
         auto get_var = [&](Index_ b) -> Stat_* { return buffers[b].variances; };
         tatami_stats::LocalOutputBuffers<Stat_, decltype(get_var)> local_vars(thread, nblocks, start, length, std::move(get_var));
@@ -370,7 +370,7 @@ void compute_variances_sparse_column(
         auto ibuffer = tatami::create_container_of_Index_size<std::vector<Index_> >(length);
         tatami::Options opt;
         opt.sparse_ordered_index = false;
-        auto ext = tatami::consecutive_extractor<true>(&mat, false, static_cast<Index_>(0), NC, start, length, opt);
+        auto ext = tatami::consecutive_extractor<true>(mat, false, static_cast<Index_>(0), NC, start, length, opt);
 
         auto get_var = [&](Index_ b) -> Stat_* { return buffers[b].variances; };
         tatami_stats::LocalOutputBuffers<Stat_, decltype(get_var)> local_vars(thread, nblocks, start, length, std::move(get_var));
