@@ -668,7 +668,7 @@ ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(const tatam
     ModelGeneVariancesBlockedResults<Stat_> output(mat.nrow(), nblocks, options.compute_average);
 
     ModelGeneVariancesBlockedBuffers<Stat_> buffers;
-    buffers.per_block.resize(nblocks);
+    sanisizer::resize(buffers.per_block, nblocks);
     for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
         auto& current = buffers.per_block[b];
         current.means = output.per_block[b].means.data();

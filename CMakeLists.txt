@@ -26,7 +26,7 @@ else()
     find_package(tatami_tatami_stats 2.0.0 CONFIG REQUIRED)
     find_package(ltla_WeightedLowess 2.0.0 CONFIG REQUIRED)
     find_package(libscran_scran_blocks 0.1.0 CONFIG REQUIRED)
-    find_package(ltla_sanisizer 0.1.0 CONFIG REQUIRED)
+    find_package(ltla_sanisizer 0.1.2 CONFIG REQUIRED)
     find_package(libscran_topicks 0.1.0 CONFIG REQUIRED)
 endif()
 

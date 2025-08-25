@@ -132,9 +132,9 @@ void fit_variance_trend(
     const FitVarianceTrendOptions& options)
 {
     auto& xbuffer = workspace.xbuffer;
-    xbuffer.resize(sanisizer::cast<decltype(I(xbuffer.size()))>(n));
+    sanisizer::resize(xbuffer, n);
     auto& ybuffer = workspace.ybuffer;
-    ybuffer.resize(sanisizer::cast<decltype(I(ybuffer.size()))>(n));
+    sanisizer::resize(ybuffer, n);
 
     const auto quad = [](Float_ x) -> Float_ {
         return x * x * x * x;
