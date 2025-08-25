@@ -33,11 +33,17 @@ struct ModelGeneVariancesOptions {
     /**
      * Policy to use for weighting the contribution from each block when computing the average for each statistic.
      * Only relevant to `model_gene_variances_blocked()` overloads where averaged outputs are requested.
+     *
+     * The default of `scran_blocks::WeightPolicy::VARIABLE` is to define equal weights for blocks once they reach a certain size (see `ModelGeneVariancesOptions::variable_block_weight_parameters`).
+     * For smaller blocks, the weight is linearly proportional to its size to avoid outsized contributions from very small blocks.
+     *
+     * Other options include `scran_blocks::WeightPolicy::EQUAL`, where all blocks are equally weighted regardless of size;
+     * and `scran_blocks::WeightPolicy::NONE`, where the contribution of each block is proportional to its size.
      */
     scran_blocks::WeightPolicy block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
 
     /**
-     * Parameters for the variable block weights.
+     * Parameters for the variable block weights, including the threshold at which blocks are considered to be large enough to have equal weight.
      * Only relevant to `model_gene_variances_blocked()` overloads where averaged outputs are requested
      * and `ModelGeneVariancesOptions::block_weight_policy = scran_blocks::WeightPolicy::VARIABLE`.
      */
@@ -45,20 +51,20 @@ struct ModelGeneVariancesOptions {
 
     /**
      * Whether to compute the average of each statistic across blocks.
-     * Note that this only affects the `model_gene_variances_blocked()` method that returns a `ModelGeneVariancesBlockedResults` object.
+     * This only affects the `model_gene_variances_blocked()` method that returns a `ModelGeneVariancesBlockedResults` object.
      */
     bool compute_average = true;
 
     /**
-     * Number of threads to use. 
-     * The parallelization scheme is defined by `tatami::parallelize()` and `FitVarianceTrendOptions::num_threads`.
+     * Number of threads to use for the variance calculations and trend fitting. 
+     * The parallelization scheme is defined by `tatami::parallelize()`. 
      */
     int num_threads = 1;
 };
 
 /**
  * @brief Buffers for `model_gene_variances()` and friends.
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  *
  * In general, the pointers in this class should _not_ be set to `NULL`.
  * The only exception is for instances of this class that are used as `ModelGeneVariancesBlockedBuffers::average`,
@@ -89,7 +95,7 @@ struct ModelGeneVariancesBuffers {
 
 /**
  * @brief Results of `model_gene_variances()`. 
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  */
 template<typename Stat_>
 struct ModelGeneVariancesResults {
@@ -148,7 +154,7 @@ struct ModelGeneVariancesResults {
 
 /**
  * @brief Buffers for `model_gene_variances_blocked()`.
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  */
 template<typename Stat_>
 struct ModelGeneVariancesBlockedBuffers {
@@ -167,7 +173,7 @@ struct ModelGeneVariancesBlockedBuffers {
 
 /**
  * @brief Results of `model_gene_variances_blocked()`.
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  */
 template<typename Stat_>
 struct ModelGeneVariancesBlockedResults {
@@ -468,8 +474,8 @@ void compute_average(
  */
 
 /** 
- * Compute and model the per-feature variances from a log-expression matrix with blocking.
- * The mean and variance of each gene is computed separately for all cells in each block, 
+ * Model the per-feature variances from a log-expression matrix with blocking.
+ * The mean and variance of each gene is computed separately for all cells in each block,
  * and a separate trend is fitted to each block to obtain residuals (see `model_gene_variances()`).
  * This ensures that sample and batch effects do not confound the variance estimates.
  *
@@ -477,11 +483,11 @@ void compute_average(
  * The average residual is particularly useful for feature selection with `choose_highly_variable_genes()`.
  *
  * @tparam Value_ Data type of the matrix.
- * @tparam Index_ Integer type for the row/column indices.
- * @tparam Block_ Integer type to hold the block IDs.
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Index_ Integer type of the row/column indices.
+ * @tparam Block_ Integer type of the block IDs.
+ * @tparam Stat_ Floating-point type of the output statistics.
  *
- * @param mat A **tatami** matrix containing log-expression values.
+ * @param mat Matrix of expression values, typically after normalization and log-transformation.
  * Rows should be genes while columns should be cells.
  * @param[in] block Pointer to an array of length equal to the number of cells.
  * Each entry should be a 0-based block identifier in \f$[0, B)\f$ where \f$B\f$ is the total number of blocks.
@@ -586,17 +592,18 @@ void model_gene_variances_blocked(
 }
 
 /** 
- * Here, we scan through a log-transformed normalized expression matrix and compute per-gene means and variances.
- * We then fit a trend to the variances with respect to the means using `fit_variance_trend()`.
+ * Model the per-gene variances as a function of the mean in single-cell expression data.
+ * We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using `fit_variance_trend()`.
  * We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - 
  * this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting.
- * Under this assumption, the residual can be treated as a measure of biologically interesting variation, and can be used to identify relevant features for downstream analyses.
+ * Under this assumption, the residual can be treated as a measure of biologically interesting variation.
+ * Genes with large residuals can then be selected for downstream analyses, e.g., with `choose_highly_variable_genes()`.
  *
  * @tparam Value_ Data type of the matrix.
- * @tparam Index_ Integer type for the row/column indices.
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Index_ Integer type of the row/column indices.
+ * @tparam Stat_ Floating-point type of the output statistics.
  *
- * @param mat A **tatami** matrix containing log-expression values.
+ * @param mat Matrix of expression values, typically after normalization and log-transformation.
  * Rows should be genes while columns should be cells.
  * @param buffers Collection of buffers in which to store the computed statistics.
  * @param options Further options.
@@ -621,11 +628,11 @@ void model_gene_variances(
 /** 
  * Overload of `model_gene_variances()` that allocates space for the output statistics.
  *
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  * @tparam Value_ Data type of the matrix.
- * @tparam Index_ Integer type for the row/column indices.
+ * @tparam Index_ Integer type of the row/column indices.
  *
- * @param mat A **tatami** matrix containing log-expression values.
+ * @param mat Matrix of expression values, typically after normalization and log-transformation.
  * Rows should be genes while columns should be cells.
  * @param options Further options.
  *
@@ -648,12 +655,12 @@ ModelGeneVariancesResults<Stat_> model_gene_variances(const tatami::Matrix<Value
 /** 
  * Overload of `model_gene_variances_blocked()` that allocates space for the output statistics.
  *
- * @tparam Stat_ Floating-point type for the output statistics.
+ * @tparam Stat_ Floating-point type of the output statistics.
  * @tparam Value_ Data type of the matrix.
- * @tparam Index_ Integer type for the row/column indices.
- * @tparam Block_ Integer type, to hold the block IDs.
+ * @tparam Index_ Integer type of the row/column indices.
+ * @tparam Block_ Integer type of the block IDs.
  *
- * @param mat A **tatami** matrix containing log-expression values.
+ * @param mat Matrix of expression values, typically after normalization and log-transformation.
  * Rows should be genes while columns should be cells.
  * @param[in] block Pointer to an array of length equal to the number of cells, containing 0-based block identifiers.
  * This may also be a `nullptr` in which case all cells are assumed to belong to the same block.

@@ -24,47 +24,53 @@ namespace scran_variances {
 struct FitVarianceTrendOptions {
     /**
      * Minimum mean log-expression for trend fitting.
-     * Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
-     * This ensures that the fitted trend is not driven by the majority of low-abundance genes.
+     * Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes.
+     * Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
+     * The default value is chosen based on the typical distribution of means of log-expression values across genes.
      * Only used if `FitVarianceTrendOptions::mean_filter = true`.
      */
     double minimum_mean = 0.1;
 
     /**
      * Should any filtering be performed on the mean log-expression of each gene (see `FitVarianceTrend::minimum_mean`)?
-     * This may need to be disabled if the trend is not being fitted on statistics computed from log-expression values.
+     * The default of `true` assumes that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.
      */
     bool mean_filter = true;
 
     /**
-     * Should any transformation of the variances be performed prior to LOWESS smoothing?
-     * This may need to be disabled if `FitVarianceTrend` is not being used on statistics computed from log-expression values.
+     * Should any quarter-root transformation of the variances be performed prior to LOWESS smoothing?
+     * This transformation is copied from `limma::voom()` and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
+     * The default of `true` assumes that the variances are computed from log-expression values, in which case there is typically a strong "hump" in the mean-variance relationship.
      */
     bool transform = true;
 
     /**
      * Span for the LOWESS smoother, as a proportion of the total number of points.
+     * Larger values improve stability at the cost of sensitivity to changes in low-density regions.
      * This is only used if `FitVarianceTrendOptions::use_minimum_width = false`.
      */
     double span = 0.3;
 
     /**
      * Should a minimum width constraint be applied to the LOWESS smoother?
-     * This forces each window to be a minimum width (see `FitVarianceTrendOptions::minimum_width`) to avoid overfitting from very small windows in high-density intervals.
-     * For example, the default smoother performs poorly at high abundances where there are few genes.
+     * This replaces the proportion-based span for defining each window.
+     * Instead, the window for each point must be of a minimum width (see `FitVarianceTrendOptions::minimum_width`) 
+     * and is extended until it contains a minimum number of points (see `FitVarianceTrendOptions::minimum_window_count`).
+     * Setting this to `true` ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances.
+     * It also avoids overfitting from very small windows in high-density intervals. 
      */
     bool use_minimum_width = false;
 
     /**
      * Minimum width of the window to use when `FitVarianceTrendOptions::use_minimum_width = true`.
-     * This should be appropriate for the range of `mean` values used in `fit_variance_trend()`.
+     * This should be appropriate for the range of means used in `fit_variance_trend()`.
      * The default value is chosen based on the typical range in single-cell RNA-seq data.
      */
     double minimum_width = 1;
 
     /**
      * Minimum number of observations in each window when `FitVarianceTrendOptions::use_minimum_width = true`.
-     * This ensures that each window contains at least a given number of observations for a good fit.
+     * This ensures that each window contains at least a given number of observations for a stable fit.
      * If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
      */
     int minimum_window_count = 200;
@@ -97,7 +103,7 @@ struct FitVarianceTrendWorkspace {
 };
 
 /**
- * We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data.
+ * Fit a trend to the per-feature variances against the means, both of which are typically computed from log-normalized expression data.
  * We use a LOWESS smoother in several steps:
  *
  * 1. Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.
@@ -105,12 +111,12 @@ struct FitVarianceTrendWorkspace {
  * This makes the trend more "linear" to improve the performance of the LOWESS smoother;
  * it also reduces the chance of obtaining negative fitted values.
  * 3. Apply the LOWESS smoother to the quarter-root variances.
- * This is done using the implementation in the **WeightedLowess** library.
+ * This is done using the implementation in the [**WeightedLowess**](https://github.com/LTLA/CppWeightedLowess) library.
  * 4. Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.
  * 5. Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes.
  * This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.
  *
- * @tparam Float_ Floating-point type for the statistics.
+ * @tparam Float_ Floating-point type of the statistics.
  *
  * @param n Number of features.
  * @param[in] mean Pointer to an array of length `n`, containing the means for all features.
@@ -210,7 +216,7 @@ void fit_variance_trend(
  * Meaningful instances of this object should generally be constructed by calling the `fit_variance_trend()` function.
  * Empty instances can be default-constructed as placeholders.
  *
- * @tparam Float_ Floating-point type for the statistics.
+ * @tparam Float_ Floating-point type of the statistics.
  */
 template<typename Float_>
 struct FitVarianceTrendResults {
@@ -249,7 +255,7 @@ struct FitVarianceTrendResults {
 /**
  * Overload of `fit_variance_trend()` that allocates the output vectors.
  *
- * @tparam Float_ Floating-point type for the statistics.
+ * @tparam Float_ Floating-point type of the statistics.
  *
  * @param n Number of features.
  * @param[in] mean Pointer to an array of length `n`, containing the means for all features.

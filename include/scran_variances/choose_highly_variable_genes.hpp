@@ -26,12 +26,12 @@ struct ChooseHighlyVariableGenesOptions {
      * - smaller than `top`, if `ChooseHighlyVariableGenesOptions::use_bound = true` and `top` is greater than `N`,
      *   where `N` is the number of genes in the dataset with statistics greater than `ChooseHighlyVariableGenesOptions::bound`
      *   (or less than the bound, if `ChosenHighlyVariableGenesOptions::larger = false`).
-     * - larger than `top`, if `ChooseHighlyVariableGenesOptions::keep_ties = true` and there are multiple ties at the `top`-th chosen gene.
+     * - larger than `top`, if `ChooseHighlyVariableGenesOptions::keep_ties = true` and there are multiple ties with the `top`-th chosen gene.
      */
     std::size_t top = 4000;
 
     /**
-     * Whether larger statistics correspond to higher variances.
+     * Whether larger statistics correspond to higher variability, i.e., the genes with the top `top` largest statistics should be chosen.
      */
     bool larger = true;
 
@@ -43,8 +43,11 @@ struct ChooseHighlyVariableGenesOptions {
 
     /**
      * A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top `top` genes.
-     * If `ChooseHighlyVariableGenesOptions::larger = false`, this is an upper bound instead.
      * Only used if `ChooseHighlyVariableGenesOptions::use_bound = true`.
+     * If `ChooseHighlyVariableGenesOptions::larger = false`, this is an upper bound instead.
+     *
+     * The default of zero assumes that the input statistics are residuals from a mean-variance trend (see `fit_variance_trend()`),
+     * in which case all chosen HVGs should have positive residuals.
      */
     double bound = 0;
 
@@ -81,8 +84,8 @@ topicks::PickTopGenesOptions<Stat_> translate_options(const ChooseHighlyVariable
  *
  * @param n Number of genes.
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
- * @param[out] output Pointer to an array of length `n`. 
- * On output, this is filled with `true` if the gene is to be retained and `false` otherwise.
+ * @param[out] output Pointer to an array of length `n`.
+ * On output, the `i`-th entry is `true` if the `i`-th gene is to be retained and `false` otherwise.
  * @param options Further options.
  */
 template<typename Stat_, typename Bool_>
