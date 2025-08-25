@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['parallelize_0',['parallelize',['https://tatami-inc.github.io/tatami/namespacetatami.html#a5a08e0387bc00e8045a0364d6e35d120',1,'tatami::parallelize()'],['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#ab7a8a00714734c71d1d7eb54f9e110e7',1,'WeightedLowess::parallelize()']]],
+  ['parallelize_0',['parallelize',['https://tatami-inc.github.io/tatami/namespacetatami.html#a5a08e0387bc00e8045a0364d6e35d120',1,'tatami::parallelize()'],['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#adfb0d596184fac8c548a45cb6fb8fbb1',1,'WeightedLowess::parallelize()']]],
   ['parallelize_2ehpp_1',['parallelize.hpp',['https://tatami-inc.github.io/tatami/parallelize_8hpp.html',1,'(Global Namespace)'],['https://ltla.github.io/CppWeightedLowess/parallelize_8hpp.html',1,'(Global Namespace)']]],
   ['per_20gene_20variance_20in_20expression_2',['Model per-gene variance in expression',['../index.html',1,'']]],
   ['per_5fblock_3',['per_block',['../structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a6d216ca738c5f1171c24a1fa5643639c',1,'scran_variances::ModelGeneVariancesBlockedBuffers::per_block'],['../structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4',1,'scran_variances::ModelGeneVariancesBlockedResults::per_block']]],

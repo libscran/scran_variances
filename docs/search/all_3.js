@@ -1,7 +1,7 @@
 var searchData=
 [
   ['data_0',['data',['https://tatami-inc.github.io/tatami/classtatami_1_1ArrayView.html#a6a02f0144809d21ff20cc6018279f218',1,'tatami::ArrayView']]],
-  ['define_5fwindows_1',['define_windows',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#a4dd0465feea6da633892bf916ecd933f',1,'WeightedLowess']]],
+  ['define_5fwindows_1',['define_windows',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#a30dc5c465fd1c49a9b8a0d8e1a51e1ee',1,'WeightedLowess']]],
   ['delayedbinaryisometricaddhelper_2',['DelayedBinaryIsometricAddHelper',['https://tatami-inc.github.io/tatami/namespacetatami.html#a57425b6548448b71576c04f16f4dc38d',1,'tatami']]],
   ['delayedbinaryisometricarithmetichelper_3',['DelayedBinaryIsometricArithmeticHelper',['https://tatami-inc.github.io/tatami/classtatami_1_1DelayedBinaryIsometricArithmeticHelper.html',1,'tatami']]],
   ['delayedbinaryisometricbooleanandhelper_4',['DelayedBinaryIsometricBooleanAndHelper',['https://tatami-inc.github.io/tatami/namespacetatami.html#abb2bedfee72494dd676f535b6e646944',1,'tatami']]],

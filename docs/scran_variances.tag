@@ -319,43 +319,43 @@
       <type>void</type>
       <name>choose_highly_variable_genes</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a0eaed0c6084b20e9e155b8fda6a6a83a</anchor>
-      <arglist>(std::size_t n, const Stat_ *statistic, Bool_ *output, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
+      <anchor>a836ab33e2b96134e9b3ad47df42aeb5e</anchor>
+      <arglist>(const std::size_t n, const Stat_ *const statistic, Bool_ *const output, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Bool_ &gt;</type>
       <name>choose_highly_variable_genes</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a56d00ba900e38a1be874a5dec872f906</anchor>
-      <arglist>(std::size_t n, const Stat_ *statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
+      <anchor>ad2e99f0413753c20e33c217e273ee120</anchor>
+      <arglist>(const std::size_t n, const Stat_ *const statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Index_ &gt;</type>
       <name>choose_highly_variable_genes_index</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a30a2a9b882ad09999bdf8d698e4a56ab</anchor>
-      <arglist>(Index_ n, const Stat_ *statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
+      <anchor>a526febe6eb07121cdd6649a938992ad2</anchor>
+      <arglist>(const Index_ n, const Stat_ *const statistic, const ChooseHighlyVariableGenesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>fit_variance_trend</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>acd5838e7db1a7d9c3614cdaa4c9eaf9d</anchor>
-      <arglist>(std::size_t n, const Float_ *mean, const Float_ *variance, Float_ *fitted, Float_ *residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
+      <anchor>a774f5059db93cedb24f461201f3131fd</anchor>
+      <arglist>(const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>FitVarianceTrendResults&lt; Float_ &gt;</type>
       <name>fit_variance_trend</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a1d96bfe8c7be6b0b92c68ef6080948b4</anchor>
-      <arglist>(std::size_t n, const Float_ *mean, const Float_ *variance, const FitVarianceTrendOptions &amp;options)</arglist>
+      <anchor>ada30bbfa19a0c28c23fb69f61355ea54</anchor>
+      <arglist>(const std::size_t n, const Float_ *const mean, const Float_ *const variance, const FitVarianceTrendOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>model_gene_variances_blocked</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>ae87efff9cd74d48186a9161aa2ee2945</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *block, const ModelGeneVariancesBlockedBuffers&lt; Stat_ &gt; &amp;buffers, const ModelGeneVariancesOptions &amp;options)</arglist>
+      <anchor>a34ffafc531b113e60ae57b3b5f8256be</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const ModelGeneVariancesBlockedBuffers&lt; Stat_ &gt; &amp;buffers, const ModelGeneVariancesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -375,8 +375,8 @@
       <type>ModelGeneVariancesBlockedResults&lt; Stat_ &gt;</type>
       <name>model_gene_variances_blocked</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>addfc93801a7e006441ed9d81e207dbe5</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *block, const ModelGeneVariancesOptions &amp;options)</arglist>
+      <anchor>af13889165f096e5af5db48a6046e2d27</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const ModelGeneVariancesOptions &amp;options)</arglist>
     </member>
   </compound>
   <compound kind="page">
