@@ -9,6 +9,8 @@
 #include "WeightedLowess/WeightedLowess.hpp"
 #include "sanisizer/sanisizer.hpp"
 
+#include "utils.hpp"
+
 /**
  * @file fit_variance_trend.hpp
  * @brief Fit a mean-variance trend to log-count data.
@@ -86,7 +88,7 @@ struct FitVarianceTrendWorkspace {
      */
     WeightedLowess::SortBy sorter;
 
-    std::vector<uint8_t> sort_workspace;
+    std::vector<unsigned char> sort_workspace;
 
     std::vector<Float_> xbuffer, ybuffer;
     /**
@@ -120,19 +122,27 @@ struct FitVarianceTrendWorkspace {
  * @param options Further options.
  */
 template<typename Float_>
-void fit_variance_trend(std::size_t n, const Float_* mean, const Float_* variance, Float_* fitted, Float_* residuals, FitVarianceTrendWorkspace<Float_>& workspace, const FitVarianceTrendOptions& options) {
+void fit_variance_trend(
+    const std::size_t n,
+    const Float_* const mean,
+    const Float_* const variance,
+    Float_* const fitted,
+    Float_* const residuals,
+    FitVarianceTrendWorkspace<Float_>& workspace,
+    const FitVarianceTrendOptions& options)
+{
     auto& xbuffer = workspace.xbuffer;
-    xbuffer.resize(sanisizer::cast<decltype(xbuffer.size())>(n));
+    xbuffer.resize(sanisizer::cast<decltype(I(xbuffer.size()))>(n));
     auto& ybuffer = workspace.ybuffer;
-    ybuffer.resize(sanisizer::cast<decltype(ybuffer.size())>(n));
+    ybuffer.resize(sanisizer::cast<decltype(I(ybuffer.size()))>(n));
 
-    auto quad = [](Float_ x) -> Float_ {
+    const auto quad = [](Float_ x) -> Float_ {
         return x * x * x * x;
     };
 
     std::size_t counter = 0;
-    Float_ min_mean = options.minimum_mean;
-    for (decltype(n) i = 0; i < n; ++i) {
+    const Float_ min_mean = options.minimum_mean;
+    for (decltype(I(n)) i = 0; i < n; ++i) {
         if (!options.mean_filter || mean[i] >= min_mean) {
             xbuffer[counter] = mean[i];
             if (options.transform) {
@@ -168,8 +178,8 @@ void fit_variance_trend(std::size_t n, const Float_* mean, const Float_* varianc
     WeightedLowess::compute(counter, xbuffer.data(), ybuffer.data(), fitted, residuals, smooth_opt);
 
     // Determining the left edge before we unpermute.
-    Float_ left_x = xbuffer[0];
-    Float_ left_fitted = (options.transform ? quad(fitted[0]) : fitted[0]);
+    const Float_ left_x = xbuffer[0];
+    const Float_ left_fitted = (options.transform ? quad(fitted[0]) : fitted[0]);
 
     sorter.unpermute(fitted, work);
 
@@ -188,7 +198,7 @@ void fit_variance_trend(std::size_t n, const Float_* mean, const Float_* varianc
         }
     }
 
-    for (decltype(n) i = 0; i < n; ++i) {
+    for (decltype(I(n)) i = 0; i < n; ++i) {
         residuals[i] = variance[i] - fitted[i];
     }
     return;
@@ -209,13 +219,13 @@ struct FitVarianceTrendResults {
      */
     FitVarianceTrendResults() {}
 
-    FitVarianceTrendResults(std::size_t n) :
-        fitted(sanisizer::cast<decltype(fitted.size())>(n)
+    FitVarianceTrendResults(const std::size_t n) :
+        fitted(sanisizer::cast<decltype(I(fitted.size()))>(n)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
         ),
-        residuals(sanisizer::cast<decltype(residuals.size())>(n)
+        residuals(sanisizer::cast<decltype(I(residuals.size()))>(n)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
@@ -249,7 +259,7 @@ struct FitVarianceTrendResults {
  * @return Result of the trend fit, containing the fitted values and residuals for each gene. 
  */
 template<typename Float_>
-FitVarianceTrendResults<Float_> fit_variance_trend(std::size_t n, const Float_* mean, const Float_* variance, const FitVarianceTrendOptions& options) {
+FitVarianceTrendResults<Float_> fit_variance_trend(const std::size_t n, const Float_* const mean, const Float_* const variance, const FitVarianceTrendOptions& options) {
     FitVarianceTrendResults<Float_> output(n);
     FitVarianceTrendWorkspace<Float_> work;
     fit_variance_trend(n, mean, variance, output.fitted.data(), output.residuals.data(), work, options);

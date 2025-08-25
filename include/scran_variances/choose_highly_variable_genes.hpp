@@ -2,8 +2,6 @@
 #define SCRAN_VARIANCES_CHOOSE_HIGHLY_VARIABLE_GENES_HPP
 
 #include <vector>
-#include <algorithm>
-#include <numeric>
 #include <cstddef>
 
 #include "sanisizer/sanisizer.hpp"
@@ -88,7 +86,7 @@ topicks::PickTopGenesOptions<Stat_> translate_options(const ChooseHighlyVariable
  * @param options Further options.
  */
 template<typename Stat_, typename Bool_>
-void choose_highly_variable_genes(std::size_t n, const Stat_* statistic, Bool_* output, const ChooseHighlyVariableGenesOptions& options) {
+void choose_highly_variable_genes(const std::size_t n, const Stat_* const statistic, Bool_* const output, const ChooseHighlyVariableGenesOptions& options) {
     topicks::pick_top_genes(n, statistic, options.top, options.larger, output, internal::translate_options<Stat_>(options));
 }
 
@@ -103,7 +101,7 @@ void choose_highly_variable_genes(std::size_t n, const Stat_* statistic, Bool_* 
  * @return A vector of booleans of length `n`, indicating whether each gene is to be retained.
  */
 template<typename Bool_ = char, typename Stat_>
-std::vector<Bool_> choose_highly_variable_genes(std::size_t n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
+std::vector<Bool_> choose_highly_variable_genes(const std::size_t n, const Stat_* const statistic, const ChooseHighlyVariableGenesOptions& options) {
     auto output = sanisizer::create<std::vector<Bool_> >(n
 #ifdef SCRAN_VARIANCES_TEST_INIT
         , SCRAN_VARIANCES_TEST_INIT
@@ -125,7 +123,7 @@ std::vector<Bool_> choose_highly_variable_genes(std::size_t n, const Stat_* stat
  * All indices are guaranteed to be non-negative and less than `n`.
  */
 template<typename Index_, typename Stat_>
-std::vector<Index_> choose_highly_variable_genes_index(Index_ n, const Stat_* statistic, const ChooseHighlyVariableGenesOptions& options) {
+std::vector<Index_> choose_highly_variable_genes_index(const Index_ n, const Stat_* const statistic, const ChooseHighlyVariableGenesOptions& options) {
     return topicks::pick_top_genes_index<Index_>(n, statistic, options.top, options.larger, internal::translate_options<Stat_>(options));
 }
 
