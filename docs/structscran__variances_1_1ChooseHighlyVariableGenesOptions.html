@@ -140,7 +140,7 @@ Public Attributes</h2></td></tr>
 <ul>
 <li>smaller than <code>top</code>, if the latter is greater than the total number of genes in the dataset.</li>
 <li>smaller than <code>top</code>, if <code><a class="el" href="#a2990bc14c7a1912b0a2bf9d0670be7fb">ChooseHighlyVariableGenesOptions::use_bound</a> = true</code> and <code>top</code> is greater than <code>N</code>, where <code>N</code> is the number of genes in the dataset with statistics greater than <code><a class="el" href="#a2d75802080acf97aae3f96e4e3e1f2b7">ChooseHighlyVariableGenesOptions::bound</a></code> (or less than the bound, if <code>ChosenHighlyVariableGenesOptions::larger = false</code>).</li>
-<li>larger than <code>top</code>, if <code><a class="el" href="#a452e64f05baa4e9fe2fc35e97510bece">ChooseHighlyVariableGenesOptions::keep_ties</a> = true</code> and there are multiple ties at the <code>top</code>-th chosen gene. </li>
+<li>larger than <code>top</code>, if <code><a class="el" href="#a452e64f05baa4e9fe2fc35e97510bece">ChooseHighlyVariableGenesOptions::keep_ties</a> = true</code> and there are multiple ties with the <code>top</code>-th chosen gene. </li>
 </ul>
 
 </div>
@@ -156,7 +156,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Whether larger statistics correspond to higher variances. </p>
+<p>Whether larger statistics correspond to higher variability, i.e., the genes with the top <code>top</code> largest statistics should be chosen. </p>
 
 </div>
 </div>
@@ -186,7 +186,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top <code>top</code> genes. If <code><a class="el" href="#a7ac6ad16838227b7ea5f2266b09c8d37">ChooseHighlyVariableGenesOptions::larger</a> = false</code>, this is an upper bound instead. Only used if <code><a class="el" href="#a2990bc14c7a1912b0a2bf9d0670be7fb">ChooseHighlyVariableGenesOptions::use_bound</a> = true</code>. </p>
+<p>A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top <code>top</code> genes. Only used if <code><a class="el" href="#a2990bc14c7a1912b0a2bf9d0670be7fb">ChooseHighlyVariableGenesOptions::use_bound</a> = true</code>. If <code><a class="el" href="#a7ac6ad16838227b7ea5f2266b09c8d37">ChooseHighlyVariableGenesOptions::larger</a> = false</code>, this is an upper bound instead.</p>
+<p>The default of zero assumes that the input statistics are residuals from a mean-variance trend (see <code><a class="el" href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>), in which case all chosen HVGs should have positive residuals. </p>
 
 </div>
 </div>

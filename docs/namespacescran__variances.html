@@ -207,7 +207,7 @@ template&lt;typename Stat_ , typename Bool_ &gt; </div>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">n</td><td>Number of genes. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Pointer to an array of length <code>n</code>. On output, this is filled with <code>true</code> if the gene is to be retained and <code>false</code> otherwise. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Pointer to an array of length <code>n</code>. On output, the <code>i</code>-th entry is <code>true</code> if the <code>i</code>-th gene is to be retained and <code>false</code> otherwise. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
   </dd>
@@ -348,17 +348,17 @@ template&lt;typename Float_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We fit a trend to the per-feature variances against the means, both of which are computed from log-normalized expression data. We use a LOWESS smoother in several steps:</p>
+<p>Fit a trend to the per-feature variances against the means, both of which are typically computed from log-normalized expression data. We use a LOWESS smoother in several steps:</p>
 <ol type="1">
 <li>Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.</li>
 <li>Take the quarter-root of the variances, to squeeze the trend towards 1. This makes the trend more "linear" to improve the performance of the LOWESS smoother; it also reduces the chance of obtaining negative fitted values.</li>
-<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <b><a class="elRef" href="https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html">WeightedLowess</a></b> library.</li>
+<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <a href="https://github.com/LTLA/CppWeightedLowess"><b>WeightedLowess</b></a> library.</li>
 <li>Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.</li>
 <li>Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes. This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.</li>
 </ol>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Float_</td><td>Floating-point type for the statistics.</td></tr>
+    <tr><td class="paramname">Float_</td><td>Floating-point type of the statistics.</td></tr>
   </table>
   </dd>
 </dl>
@@ -410,7 +410,7 @@ template&lt;typename Float_ &gt; </div>
 <p>Overload of <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code> that allocates the output vectors.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Float_</td><td>Floating-point type for the statistics.</td></tr>
+    <tr><td class="paramname">Float_</td><td>Floating-point type of the statistics.</td></tr>
   </table>
   </dd>
 </dl>
@@ -457,20 +457,20 @@ template&lt;typename Value_ , typename Index_ , typename Block_ , typename Stat_
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute and model the per-feature variances from a log-expression matrix with blocking. The mean and variance of each gene is computed separately for all cells in each block, and a separate trend is fitted to each block to obtain residuals (see <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>). This ensures that sample and batch effects do not confound the variance estimates.</p>
+<p>Model the per-feature variances from a log-expression matrix with blocking. The mean and variance of each gene is computed separately for all cells in each block, and a separate trend is fitted to each block to obtain residuals (see <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>). This ensures that sample and batch effects do not confound the variance estimates.</p>
 <p>We also compute the average of each statistic across blocks, using the weighting strategy specified in <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesOptions.html#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a></code>. The average residual is particularly useful for feature selection with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>
-    <tr><td class="paramname">Index_</td><td>Integer type for the row/column indices. </td></tr>
-    <tr><td class="paramname">Block_</td><td>Integer type to hold the block IDs. </td></tr>
-    <tr><td class="paramname">Stat_</td><td>Floating-point type for the output statistics.</td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column indices. </td></tr>
+    <tr><td class="paramname">Block_</td><td>Integer type of the block IDs. </td></tr>
+    <tr><td class="paramname">Stat_</td><td>Floating-point type of the output statistics.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">mat</td><td>A <b>tatami</b> matrix containing log-expression values. Rows should be genes while columns should be cells. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">mat</td><td>Matrix of expression values, typically after normalization and log-transformation. Rows should be genes while columns should be cells. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">block</td><td>Pointer to an array of length equal to the number of cells. Each entry should be a 0-based block identifier in \([0, B)\) where \(B\) is the total number of blocks. <code>block</code> can also be a <code>nullptr</code>, in which case all cells are assumed to belong to the same block. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">buffers</td><td>Collection of pointers of arrays in which to store the output statistics. The length of <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4">ModelGeneVariancesBlockedResults::per_block</a></code> should be equal to the number of blocks. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options. </td></tr>
@@ -505,18 +505,18 @@ template&lt;typename Value_ , typename Index_ , typename Stat_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Here, we scan through a log-transformed normalized expression matrix and compute per-gene means and variances. We then fit a trend to the variances with respect to the means using <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>. We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting. Under this assumption, the residual can be treated as a measure of biologically interesting variation, and can be used to identify relevant features for downstream analyses.</p>
+<p>Model the per-gene variances as a function of the mean in single-cell expression data. We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>. We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting. Under this assumption, the residual can be treated as a measure of biologically interesting variation. Genes with large residuals can then be selected for downstream analyses, e.g., with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>
-    <tr><td class="paramname">Index_</td><td>Integer type for the row/column indices. </td></tr>
-    <tr><td class="paramname">Stat_</td><td>Floating-point type for the output statistics.</td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column indices. </td></tr>
+    <tr><td class="paramname">Stat_</td><td>Floating-point type of the output statistics.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mat</td><td>A <b>tatami</b> matrix containing log-expression values. Rows should be genes while columns should be cells. </td></tr>
+    <tr><td class="paramname">mat</td><td>Matrix of expression values, typically after normalization and log-transformation. Rows should be genes while columns should be cells. </td></tr>
     <tr><td class="paramname">buffers</td><td>Collection of buffers in which to store the computed statistics. </td></tr>
     <tr><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
@@ -548,15 +548,15 @@ template&lt;typename Stat_  = double, typename Value_ , typename Index_ &gt; </d
 <p>Overload of <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code> that allocates space for the output statistics.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Stat_</td><td>Floating-point type for the output statistics. </td></tr>
+    <tr><td class="paramname">Stat_</td><td>Floating-point type of the output statistics. </td></tr>
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>
-    <tr><td class="paramname">Index_</td><td>Integer type for the row/column indices.</td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column indices.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mat</td><td>A <b>tatami</b> matrix containing log-expression values. Rows should be genes while columns should be cells. </td></tr>
+    <tr><td class="paramname">mat</td><td>Matrix of expression values, typically after normalization and log-transformation. Rows should be genes while columns should be cells. </td></tr>
     <tr><td class="paramname">options</td><td>Further options.</td></tr>
   </table>
   </dd>
@@ -593,16 +593,16 @@ template&lt;typename Stat_  = double, typename Value_ , typename Index_ , typena
 <p>Overload of <code><a class="el" href="#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> that allocates space for the output statistics.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Stat_</td><td>Floating-point type for the output statistics. </td></tr>
+    <tr><td class="paramname">Stat_</td><td>Floating-point type of the output statistics. </td></tr>
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>
-    <tr><td class="paramname">Index_</td><td>Integer type for the row/column indices. </td></tr>
-    <tr><td class="paramname">Block_</td><td>Integer type, to hold the block IDs.</td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column indices. </td></tr>
+    <tr><td class="paramname">Block_</td><td>Integer type of the block IDs.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">mat</td><td>A <b>tatami</b> matrix containing log-expression values. Rows should be genes while columns should be cells. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">mat</td><td>Matrix of expression values, typically after normalization and log-transformation. Rows should be genes while columns should be cells. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">block</td><td>Pointer to an array of length equal to the number of cells, containing 0-based block identifiers. This may also be a <code>nullptr</code> in which case all cells are assumed to belong to the same block. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options.</td></tr>
   </table>

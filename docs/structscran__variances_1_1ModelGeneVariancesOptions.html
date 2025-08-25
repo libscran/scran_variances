@@ -163,7 +163,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Policy to use for weighting the contribution from each block when computing the average for each statistic. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> overloads where averaged outputs are requested. </p>
+<p>Policy to use for weighting the contribution from each block when computing the average for each statistic. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> overloads where averaged outputs are requested.</p>
+<p>The default of <code>scran_blocks::WeightPolicy::VARIABLE</code> is to define equal weights for blocks once they reach a certain size (see <code><a class="el" href="#abe8aea0b4b820b47f52ed7c302d47db0">ModelGeneVariancesOptions::variable_block_weight_parameters</a></code>). For smaller blocks, the weight is linearly proportional to its size to avoid outsized contributions from very small blocks.</p>
+<p>Other options include <code>scran_blocks::WeightPolicy::EQUAL</code>, where all blocks are equally weighted regardless of size; and <code>scran_blocks::WeightPolicy::NONE</code>, where the contribution of each block is proportional to its size. </p>
 
 </div>
 </div>
@@ -178,7 +180,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parameters for the variable block weights. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> overloads where averaged outputs are requested and <code><a class="el" href="#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a> = scran_blocks::WeightPolicy::VARIABLE</code>. </p>
+<p>Parameters for the variable block weights, including the threshold at which blocks are considered to be large enough to have equal weight. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> overloads where averaged outputs are requested and <code><a class="el" href="#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a> = scran_blocks::WeightPolicy::VARIABLE</code>. </p>
 
 </div>
 </div>
@@ -193,7 +195,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Whether to compute the average of each statistic across blocks. Note that this only affects the <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> method that returns a <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html" title="Results of model_gene_variances_blocked().">ModelGeneVariancesBlockedResults</a></code> object. </p>
+<p>Whether to compute the average of each statistic across blocks. This only affects the <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> method that returns a <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html" title="Results of model_gene_variances_blocked().">ModelGeneVariancesBlockedResults</a></code> object. </p>
 
 </div>
 </div>
@@ -208,7 +210,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of threads to use. The parallelization scheme is defined by <code><a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a5a08e0387bc00e8045a0364d6e35d120">tatami::parallelize()</a></code> and <code><a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html#a0811d658119b078fe61a0d65ea367586">FitVarianceTrendOptions::num_threads</a></code>. </p>
+<p>Number of threads to use for the variance calculations and trend fitting. The parallelization scheme is defined by <code><a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a5a08e0387bc00e8045a0364d6e35d120">tatami::parallelize()</a></code>. </p>
 
 </div>
 </div>

@@ -142,7 +142,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum mean log-expression for trend fitting. Genes with lower means are not used in trend fitting, and their fitted values are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin. This ensures that the fitted trend is not driven by the majority of low-abundance genes. Only used if <code><a class="el" href="#acaaa268e4ebcdfcc105fb05cc99fa91c">FitVarianceTrendOptions::mean_filter</a> = true</code>. </p>
+<p>Minimum mean log-expression for trend fitting. Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes. Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin. The default value is chosen based on the typical distribution of means of log-expression values across genes. Only used if <code><a class="el" href="#acaaa268e4ebcdfcc105fb05cc99fa91c">FitVarianceTrendOptions::mean_filter</a> = true</code>. </p>
 
 </div>
 </div>
@@ -157,7 +157,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Should any filtering be performed on the mean log-expression of each gene (see <code>FitVarianceTrend::minimum_mean</code>)? This may need to be disabled if the trend is not being fitted on statistics computed from log-expression values. </p>
+<p>Should any filtering be performed on the mean log-expression of each gene (see <code>FitVarianceTrend::minimum_mean</code>)? The default of <code>true</code> assumes that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother. </p>
 
 </div>
 </div>
@@ -172,7 +172,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Should any transformation of the variances be performed prior to LOWESS smoothing? This may need to be disabled if <code>FitVarianceTrend</code> is not being used on statistics computed from log-expression values. </p>
+<p>Should any quarter-root transformation of the variances be performed prior to LOWESS smoothing? This transformation is copied from <code>limma::voom()</code> and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit. The default of <code>true</code> assumes that the variances are computed from log-expression values, in which case there is typically a strong "hump" in the mean-variance relationship. </p>
 
 </div>
 </div>
@@ -187,7 +187,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Span for the LOWESS smoother, as a proportion of the total number of points. This is only used if <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = false</code>. </p>
+<p>Span for the LOWESS smoother, as a proportion of the total number of points. Larger values improve stability at the cost of sensitivity to changes in low-density regions. This is only used if <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = false</code>. </p>
 
 </div>
 </div>
@@ -202,7 +202,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Should a minimum width constraint be applied to the LOWESS smoother? This forces each window to be a minimum width (see <code><a class="el" href="#a372f10d4bc53cd8e94297bf50328c3b3">FitVarianceTrendOptions::minimum_width</a></code>) to avoid overfitting from very small windows in high-density intervals. For example, the default smoother performs poorly at high abundances where there are few genes. </p>
+<p>Should a minimum width constraint be applied to the LOWESS smoother? This replaces the proportion-based span for defining each window. Instead, the window for each point must be of a minimum width (see <code><a class="el" href="#a372f10d4bc53cd8e94297bf50328c3b3">FitVarianceTrendOptions::minimum_width</a></code>) and is extended until it contains a minimum number of points (see <code><a class="el" href="#aaed78ddd1cc4ce209f7b318c67bf22c2">FitVarianceTrendOptions::minimum_window_count</a></code>). Setting this to <code>true</code> ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances. It also avoids overfitting from very small windows in high-density intervals. </p>
 
 </div>
 </div>
@@ -217,7 +217,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum width of the window to use when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This should be appropriate for the range of <code>mean</code> values used in <code><a class="el" href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>. The default value is chosen based on the typical range in single-cell RNA-seq data. </p>
+<p>Minimum width of the window to use when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This should be appropriate for the range of means used in <code><a class="el" href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>. The default value is chosen based on the typical range in single-cell RNA-seq data. </p>
 
 </div>
 </div>
@@ -232,7 +232,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Minimum number of observations in each window when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This ensures that each window contains at least a given number of observations for a good fit. If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved. </p>
+<p>Minimum number of observations in each window when <code><a class="el" href="#a563b78705db208dce5727370357e0070">FitVarianceTrendOptions::use_minimum_width</a> = true</code>. This ensures that each window contains at least a given number of observations for a stable fit. If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved. </p>
 
 </div>
 </div>
