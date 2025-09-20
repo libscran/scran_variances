@@ -147,6 +147,7 @@ TEST(ChooseHvgs, TiedLarger) {
     // Ignoring ties.
     scran_variances::ChooseHighlyVariableGenesOptions opt;
     opt.keep_ties = false;
+    opt.use_bound = false;
     opt.top = 3;
     {
         auto ioutput = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);
@@ -196,6 +197,7 @@ TEST(ChooseHvgs, TiedSmaller) {
     scran_variances::ChooseHighlyVariableGenesOptions opt;
     opt.larger = false;
     opt.keep_ties = false;
+    opt.use_bound = false;
     opt.top = 2;
     {
         auto ioutput = scran_variances::choose_highly_variable_genes_index(x.size(), x.data(), opt);

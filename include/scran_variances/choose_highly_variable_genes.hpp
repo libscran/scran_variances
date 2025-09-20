@@ -39,7 +39,7 @@ struct ChooseHighlyVariableGenesOptions {
      * Whether to consider an absolute bound on the statistic when choosing HVGs.
      * The value of the bound is determined by `ChooseHighlyVariableGenesOptions::bound`.
      */
-    bool use_bound = false;
+    bool use_bound = true;
 
     /**
      * A lower bound for the statistic, at or below which a gene will not be considered as highly variable even if it is among the top `top` genes.
@@ -84,6 +84,7 @@ topicks::PickTopGenesOptions<Stat_> translate_options(const ChooseHighlyVariable
  *
  * @param n Number of genes.
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
+ * This is typically the residuals from `model_gene_variances()`.
  * @param[out] output Pointer to an array of length `n`.
  * On output, the `i`-th entry is `true` if the `i`-th gene is to be retained and `false` otherwise.
  * @param options Further options.
@@ -99,6 +100,7 @@ void choose_highly_variable_genes(const std::size_t n, const Stat_* const statis
  *
  * @param n Number of genes.
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
+ * This is typically the residuals from `model_gene_variances()`.
  * @param options Further options.
  *
  * @return A vector of booleans of length `n`, indicating whether each gene is to be retained.
@@ -120,6 +122,7 @@ std::vector<Bool_> choose_highly_variable_genes(const std::size_t n, const Stat_
  *
  * @param n Number of genes.
  * @param[in] statistic Pointer to an array of length `n` containing the per-gene variance statistics.
+ * This is typically the residuals from `model_gene_variances()`.
  * @param options Further options.
  *
  * @return Vector of sorted and unique indices for the chosen genes.
