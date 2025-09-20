@@ -206,7 +206,7 @@ template&lt;typename Stat_ , typename Bool_ &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">n</td><td>Number of genes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. This is typically the residuals from <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Pointer to an array of length <code>n</code>. On output, the <code>i</code>-th entry is <code>true</code> if the <code>i</code>-th gene is to be retained and <code>false</code> otherwise. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
@@ -250,7 +250,7 @@ template&lt;typename Bool_  = char, typename Stat_ &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">n</td><td>Number of genes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. This is typically the residuals from <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options.</td></tr>
   </table>
   </dd>
@@ -294,7 +294,7 @@ template&lt;typename Index_ , typename Stat_ &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">n</td><td>Number of genes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">statistic</td><td>Pointer to an array of length <code>n</code> containing the per-gene variance statistics. This is typically the residuals from <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options.</td></tr>
   </table>
   </dd>

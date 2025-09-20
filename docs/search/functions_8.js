@@ -1,8 +1,8 @@
 var searchData=
 [
   ['make_5fdelayedcast_0',['make_DelayedCast',['https://tatami-inc.github.io/tatami/namespacetatami.html#ab4c8b88eeaa5fcbb1e5d47d020eb98ea',1,'tatami']]],
-  ['make_5fdelayedsubset_1',['make_DelayedSubset',['https://tatami-inc.github.io/tatami/namespacetatami.html#a77fad1d2a2553899a7860521d6284f50',1,'tatami']]],
-  ['make_5fdelayedsubsetblock_2',['make_DelayedSubsetBlock',['https://tatami-inc.github.io/tatami/namespacetatami.html#ad50326a317ed80de39a1a872e098b2b2',1,'tatami']]],
+  ['make_5fdelayedsubset_1',['make_DelayedSubset',['https://tatami-inc.github.io/tatami/namespacetatami.html#af62b9d27c0c501e5b65e52ce37f0ee5d',1,'tatami']]],
+  ['make_5fdelayedsubsetblock_2',['make_DelayedSubsetBlock',['https://tatami-inc.github.io/tatami/namespacetatami.html#a4fdae940708614108ad158f0c2590f8d',1,'tatami']]],
   ['model_5fgene_5fvariances_3',['model_gene_variances',['../namespacescran__variances.html#af48891a8979a6e46b37aaf7c9bc027cb',1,'scran_variances::model_gene_variances(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, ModelGeneVariancesBuffers&lt; Stat_ &gt; buffers, const ModelGeneVariancesOptions &amp;options)'],['../namespacescran__variances.html#ab7571d9531d24fb47fa0874ff5039725',1,'scran_variances::model_gene_variances(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const ModelGeneVariancesOptions &amp;options)']]],
   ['model_5fgene_5fvariances_5fblocked_4',['model_gene_variances_blocked',['../namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be',1,'scran_variances::model_gene_variances_blocked(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const ModelGeneVariancesBlockedBuffers&lt; Stat_ &gt; &amp;buffers, const ModelGeneVariancesOptions &amp;options)'],['../namespacescran__variances.html#af13889165f096e5af5db48a6046e2d27',1,'scran_variances::model_gene_variances_blocked(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const ModelGeneVariancesOptions &amp;options)']]]
 ];
