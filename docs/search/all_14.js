@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['weightedlowess_0',['WeightedLowess',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html',1,'']]],
-  ['weightedlowess_2ehpp_1',['WeightedLowess.hpp',['https://ltla.github.io/CppWeightedLowess/WeightedLowess_8hpp.html',1,'']]],
-  ['weightpolicy_2',['WeightPolicy',['https://libscran.github.io/scran_blocks/namespacescran__blocks.html#ac2412948da94055ff438267ba089ba97',1,'scran_blocks']]],
-  ['weights_3',['weights',['https://ltla.github.io/CppWeightedLowess/structWeightedLowess_1_1Options.html#a3c3cae26a248351a3fd78bbfd8f15b3d',1,'WeightedLowess::Options']]],
-  ['window_2ehpp_4',['window.hpp',['https://ltla.github.io/CppWeightedLowess/window_8hpp.html',1,'']]],
-  ['wrap_5fshared_5fptr_5',['wrap_shared_ptr',['https://tatami-inc.github.io/tatami/namespacetatami.html#a5a07f7937bfdbbe8e355cba20d7c0c3a',1,'tatami']]],
-  ['wrap_5fshared_5fptr_2ehpp_6',['wrap_shared_ptr.hpp',['https://tatami-inc.github.io/tatami/wrap__shared__ptr_8hpp.html',1,'']]]
+  ['value_0',['value',['https://tatami-inc.github.io/tatami/structtatami_1_1CompressedSparseContents.html#ad406234c4c87a0b3cbdd52948d2ae1b1',1,'tatami::CompressedSparseContents::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1FragmentedSparseContents.html#a24193eb145792effdc67d3e1425f1cd2',1,'tatami::FragmentedSparseContents::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1has__data.html#a8daea495b21dd7f51b24d297c5360d76',1,'tatami::has_data::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1has__data_3_01Type___00_01Container___00_01decltype_07_07void_08_01std_1_1declva66f694cee1ca6e7d197226a9c6d58cf5.html#acfcbad1792cd74438cc5be5ad7e46e9b',1,'tatami::has_data&lt; Type_, Container_, decltype((void) std::declval&lt; Container_ &gt;().data(), 0)&gt;::value'],['https://tatami-inc.github.io/tatami/structtatami_1_1SparseRange.html#a79079e1a7c41b0528542ad9f3ffa3fbd',1,'tatami::SparseRange::value']]],
+  ['value_5ftype_1',['value_type',['https://tatami-inc.github.io/tatami/structtatami_1_1SomeNumericArray_1_1Iterator.html#a693024f83ad1ce62afd12619ff455815',1,'tatami::SomeNumericArray::Iterator::value_type'],['https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a3154ad89a70ee70e4f12784f2461fa2d',1,'tatami::Matrix::value_type']]],
+  ['variable_5fblock_5fweight_5fparameters_2',['variable_block_weight_parameters',['../structscran__variances_1_1ModelGeneVariancesOptions.html#abe8aea0b4b820b47f52ed7c302d47db0',1,'scran_variances::ModelGeneVariancesOptions']]],
+  ['variableweightparameters_3',['VariableWeightParameters',['https://libscran.github.io/scran_blocks/structscran__blocks_1_1VariableWeightParameters.html',1,'scran_blocks']]],
+  ['variance_20in_20expression_4',['Model per-gene variance in expression',['../index.html',1,'']]],
+  ['variances_5',['variances',['../structscran__variances_1_1ModelGeneVariancesBuffers.html#aab31549e74c37274bccc1a691eecb2a4',1,'scran_variances::ModelGeneVariancesBuffers::variances'],['../structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871',1,'scran_variances::ModelGeneVariancesResults::variances']]],
+  ['vectorptr_6',['VectorPtr',['https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f',1,'tatami']]]
 ];

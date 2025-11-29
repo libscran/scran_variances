@@ -1,7 +1,7 @@
 var searchData=
 [
   ['data_0',['data',['https://tatami-inc.github.io/tatami/classtatami_1_1ArrayView.html#ad23ad79ab7ed43ebb652aa172e26977a',1,'tatami::ArrayView']]],
-  ['define_5fwindows_1',['define_windows',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#a30dc5c465fd1c49a9b8a0d8e1a51e1ee',1,'WeightedLowess']]],
+  ['define_5fwindows_1',['define_windows',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#a42bddecb5f16e2cc5586c8c956aeda38',1,'WeightedLowess']]],
   ['delayedbinaryisometricoperation_2',['DelayedBinaryIsometricOperation',['https://tatami-inc.github.io/tatami/classtatami_1_1DelayedBinaryIsometricOperation.html#a5b0f8bebfa5797832b258190bffc2a2f',1,'tatami::DelayedBinaryIsometricOperation']]],
   ['delayedbind_3',['DelayedBind',['https://tatami-inc.github.io/tatami/classtatami_1_1DelayedBind.html#a22b479c99b6034cfcab73bf05f03cc91',1,'tatami::DelayedBind::DelayedBind(std::vector&lt; std::shared_ptr&lt; const Matrix&lt; Value_, Index_ &gt; &gt; &gt; matrices, const bool by_row)'],['https://tatami-inc.github.io/tatami/classtatami_1_1DelayedBind.html#a79768f24f7fed44e0b6c239b57781943',1,'tatami::DelayedBind::DelayedBind(const std::vector&lt; std::shared_ptr&lt; Matrix&lt; Value_, Index_ &gt; &gt; &gt; &amp;matrices, const bool by_row)']]],
   ['delayedcast_4',['DelayedCast',['https://tatami-inc.github.io/tatami/classtatami_1_1DelayedCast.html#a1fc5fdee58e8f23353c8fd73ef87001e',1,'tatami::DelayedCast']]],

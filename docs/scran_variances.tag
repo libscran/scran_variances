@@ -242,6 +242,13 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
+      <type>AveragePolicy</type>
+      <name>average_policy</name>
+      <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
+      <anchor>a2bfa1fb8980242f25468bfc4e97e72ae</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>scran_blocks::WeightPolicy</type>
       <name>block_weight_policy</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
@@ -256,10 +263,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>bool</type>
-      <name>compute_average</name>
+      <type>double</type>
+      <name>quantile</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
-      <anchor>a7817148b82c400598b98804e9beb6d56</anchor>
+      <anchor>ae0284cc2d20d555745d19499b68fe776</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -315,6 +322,16 @@
     <class kind="struct">scran_variances::ModelGeneVariancesBuffers</class>
     <class kind="struct">scran_variances::ModelGeneVariancesOptions</class>
     <class kind="struct">scran_variances::ModelGeneVariancesResults</class>
+    <member kind="enumeration">
+      <type></type>
+      <name>AveragePolicy</name>
+      <anchorfile>namespacescran__variances.html</anchorfile>
+      <anchor>abf5ac38326d599ff3fe33ed2568362f2</anchor>
+      <arglist></arglist>
+      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2a4ea6d1161ea24d7599365f574aff6610">MEAN</enumvalue>
+      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2a4ce64f35e5957a6f3ecc9895dc1bb90f">QUANTILE</enumvalue>
+      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2ab50339a10e1de285ac99d4c3990b8693">NONE</enumvalue>
+    </member>
     <member kind="function">
       <type>void</type>
       <name>choose_highly_variable_genes</name>
