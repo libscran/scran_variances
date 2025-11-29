@@ -24,7 +24,7 @@ TEST_P(ChooseHvgsTest, Larger) {
     auto bound = std::get<2>(p);
 
     auto x = scran_tests::simulate_vector(ngenes, [&]{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0;
         sparams.upper = 10;
         sparams.seed = ngenes * ntop + 42;
@@ -79,7 +79,7 @@ TEST_P(ChooseHvgsTest, Smaller) {
     auto bound = std::get<2>(p);
 
     auto x = scran_tests::simulate_vector(ngenes, [&]{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0;
         sparams.upper = 10;
         sparams.seed = ngenes * ntop + 69;

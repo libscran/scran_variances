@@ -13,7 +13,7 @@ protected:
     static void SetUpTestSuite() {
         int nr = 178, nc = 155;
         auto vec = scran_tests::simulate_vector(nr * nc, []{
-            scran_tests::SimulationParameters sparams;
+            scran_tests::SimulateVectorParameters sparams;
             sparams.density = 0.3;
             sparams.lower = 0;
             sparams.upper = 5;
@@ -40,8 +40,8 @@ TEST_P(ModelGeneVariancesTest, Unblocked) {
         for (auto& x : means) {
             x /= dense_row->ncol();
         }
-        scran_tests::compare_almost_equal(ref.means, means);
-        scran_tests::compare_almost_equal(ref.variances, tatami_stats::variances::by_row(dense_row.get()));
+        scran_tests::compare_almost_equal_containers(ref.means, means, {});
+        scran_tests::compare_almost_equal_containers(ref.variances, tatami_stats::variances::by_row(*dense_row), {});
 
         for (auto f : ref.fitted) {
             EXPECT_TRUE(f > 0);
@@ -62,16 +62,16 @@ TEST_P(ModelGeneVariancesTest, Unblocked) {
 
     // Almost equal, as there are minor differences due to numerical imprecision.
     auto res2 = scran_variances::model_gene_variances(*dense_column, opt);
-    scran_tests::compare_almost_equal(ref.means, res2.means);
-    scran_tests::compare_almost_equal(ref.variances, res2.variances);
+    scran_tests::compare_almost_equal_containers(ref.means, res2.means, {});
+    scran_tests::compare_almost_equal_containers(ref.variances, res2.variances, {});
 
     auto res3 = scran_variances::model_gene_variances(*sparse_row, opt);
-    scran_tests::compare_almost_equal(ref.means, res3.means);
-    scran_tests::compare_almost_equal(ref.variances, res3.variances);
+    scran_tests::compare_almost_equal_containers(ref.means, res3.means, {});
+    scran_tests::compare_almost_equal_containers(ref.variances, res3.variances, {});
 
     auto res4 = scran_variances::model_gene_variances(*sparse_column, opt);
-    scran_tests::compare_almost_equal(ref.means, res4.means);
-    scran_tests::compare_almost_equal(ref.variances, res4.variances);
+    scran_tests::compare_almost_equal_containers(ref.means, res4.means, {});
+    scran_tests::compare_almost_equal_containers(ref.variances, res4.variances, {});
 }
 
 TEST_P(ModelGeneVariancesTest, Blocked) {
@@ -105,20 +105,20 @@ TEST_P(ModelGeneVariancesTest, Blocked) {
 
     auto res2 = scran_variances::model_gene_variances_blocked(*dense_column, blocks.data(), opt);
     for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal(ref.per_block[i].means, res2.per_block[i].means);
-        scran_tests::compare_almost_equal(ref.per_block[i].variances, res2.per_block[i].variances);
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res2.per_block[i].means, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res2.per_block[i].variances, {});
     }
 
     auto res3 = scran_variances::model_gene_variances_blocked(*sparse_row, blocks.data(), opt);
     for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal(ref.per_block[i].means, res3.per_block[i].means);
-        scran_tests::compare_almost_equal(ref.per_block[i].variances, res3.per_block[i].variances);
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res3.per_block[i].means, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res3.per_block[i].variances, {});
     }
 
     auto res4 = scran_variances::model_gene_variances_blocked(*sparse_column, blocks.data(), opt);
     for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal(ref.per_block[i].means, res3.per_block[i].means);
-        scran_tests::compare_almost_equal(ref.per_block[i].variances, res3.per_block[i].variances);
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res3.per_block[i].means, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res3.per_block[i].variances, {});
     }
 }
 
@@ -154,10 +154,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
             expected_residuals[r] /= 3;
         }
 
-        scran_tests::compare_almost_equal(expected_means, ares.average.means);
-        scran_tests::compare_almost_equal(expected_variances, ares.average.variances);
-        scran_tests::compare_almost_equal(expected_fitted, ares.average.fitted);
-        scran_tests::compare_almost_equal(expected_residuals, ares.average.residuals);
+        scran_tests::compare_almost_equal_containers(expected_means, ares.average.means, {});
+        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variances, {});
+        scran_tests::compare_almost_equal_containers(expected_fitted, ares.average.fitted, {});
+        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residuals, {});
 
         // Checking limit of the variable policy.
         opt.block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
@@ -165,10 +165,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
         opt.variable_block_weight_parameters.upper_bound = 0;
 
         auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        scran_tests::compare_almost_equal(ares.average.means, vres.average.means);
-        scran_tests::compare_almost_equal(ares.average.variances, vres.average.variances);
-        scran_tests::compare_almost_equal(ares.average.fitted, vres.average.fitted);
-        scran_tests::compare_almost_equal(ares.average.residuals, vres.average.residuals);
+        scran_tests::compare_almost_equal_containers(ares.average.means, vres.average.means, {});
+        scran_tests::compare_almost_equal_containers(ares.average.variances, vres.average.variances, {});
+        scran_tests::compare_almost_equal_containers(ares.average.fitted, vres.average.fitted, {});
+        scran_tests::compare_almost_equal_containers(ares.average.residuals, vres.average.residuals, {});
     }
 
     // Checking averages without equiweighting.
@@ -196,10 +196,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
             expected_residuals[r] /= blocks.size();
         }
 
-        scran_tests::compare_almost_equal(expected_means, ares.average.means);
-        scran_tests::compare_almost_equal(expected_variances, ares.average.variances);
-        scran_tests::compare_almost_equal(expected_fitted, ares.average.fitted);
-        scran_tests::compare_almost_equal(expected_residuals, ares.average.residuals);
+        scran_tests::compare_almost_equal_containers(expected_means, ares.average.means, {});
+        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variances, {});
+        scran_tests::compare_almost_equal_containers(expected_fitted, ares.average.fitted, {});
+        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residuals, {});
 
         // Checking limit of the variable policy.
         opt.block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
@@ -207,10 +207,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
         opt.variable_block_weight_parameters.upper_bound = 100000;
 
         auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        scran_tests::compare_almost_equal(ares.average.means, vres.average.means);
-        scran_tests::compare_almost_equal(ares.average.variances, vres.average.variances);
-        scran_tests::compare_almost_equal(ares.average.fitted, vres.average.fitted);
-        scran_tests::compare_almost_equal(ares.average.residuals, vres.average.residuals);
+        scran_tests::compare_almost_equal_containers(ares.average.means, vres.average.means, {});
+        scran_tests::compare_almost_equal_containers(ares.average.variances, vres.average.variances, {});
+        scran_tests::compare_almost_equal_containers(ares.average.fitted, vres.average.fitted, {});
+        scran_tests::compare_almost_equal_containers(ares.average.residuals, vres.average.residuals, {});
     }
 }
 
@@ -273,7 +273,7 @@ protected:
 
     void SetUp() {
         auto vec = scran_tests::simulate_vector(nr * nc, []{
-            scran_tests::SimulationParameters sparams;
+            scran_tests::SimulateVectorParameters sparams;
             sparams.density = 0.1;
             sparams.seed = 69;
             sparams.lower = 0;
@@ -360,7 +360,7 @@ TEST(ModelGeneVariances, NullAverages) {
 
     int nr = 10, nc = 6;
     auto vec = scran_tests::simulate_vector(nr * nc, []{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.density = 0.1;
         sparams.seed = 69;
         sparams.lower = 0;

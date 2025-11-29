@@ -6,7 +6,7 @@
 
 TEST(FitVarianceTrendTest, Basic) {
     auto x = scran_tests::simulate_vector(21, []{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0;
         sparams.upper = 1;
         return sparams;
@@ -17,7 +17,7 @@ TEST(FitVarianceTrendTest, Basic) {
     scran_variances::FitVarianceTrendOptions opt;
     opt.transform = false;
     auto output = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
-    scran_tests::compare_almost_equal(output.fitted, y); // should be an exact fit for a straight line.
+    scran_tests::compare_almost_equal_containers(output.fitted, y, {}); // should be an exact fit for a straight line.
 
     // Again, with the transformation, no filtering.
     y = x;
@@ -26,7 +26,7 @@ TEST(FitVarianceTrendTest, Basic) {
     opt.transform = true;
     opt.mean_filter = false;
     output = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
-    scran_tests::compare_almost_equal(output.fitted, y);
+    scran_tests::compare_almost_equal_containers(output.fitted, y, {});
 }
 
 TEST(FitVarianceTrendTest, Extrapolation) {
@@ -38,7 +38,7 @@ TEST(FitVarianceTrendTest, Extrapolation) {
     opt.minimum_mean = 5.5;
 
     auto output = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
-    scran_tests::compare_almost_equal(output.fitted, x); // should be y = x, extrapolation to the filtered elements.
+    scran_tests::compare_almost_equal_containers(output.fitted, x, {}); // should be y = x, extrapolation to the filtered elements.
 
     // Same result if we shuffle it.
     auto x2 = x;
@@ -47,11 +47,11 @@ TEST(FitVarianceTrendTest, Extrapolation) {
     std::reverse(y2.begin(), y2.end());
 
     auto output2 = scran_variances::fit_variance_trend(x2.size(), x2.data(), y2.data(), opt);
-    scran_tests::compare_almost_equal(output2.fitted, x2);
+    scran_tests::compare_almost_equal_containers(output2.fitted, x2, {});
 }
 
 TEST(FitVarianceTrendTest, Residuals) {
-    scran_tests::SimulationParameters sparams;
+    scran_tests::SimulateVectorParameters sparams;
     sparams.lower = 0;
     sparams.upper = 1;
     sparams.seed = 42;
@@ -81,14 +81,14 @@ TEST(FitVarianceTrendTest, Residuals) {
 
 TEST(FitVarianceTrendTest, Filtering) {
     auto x = scran_tests::simulate_vector(1001, []{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0;
         sparams.upper = 1;
         sparams.seed = 420;
         return sparams;
     }());
     auto y = scran_tests::simulate_vector(1001, []{ 
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0.1;
         sparams.upper = 2;
         sparams.seed = 80085;
@@ -119,14 +119,14 @@ TEST(FitVarianceTrendTest, Filtering) {
 
 TEST(FitVarianceTrendTest, MinWidth) {
     auto x = scran_tests::simulate_vector(101, []{
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0;
         sparams.upper = 1;
         sparams.seed = 12345;
         return sparams;
     }());
     auto y = scran_tests::simulate_vector(101, []{ 
-        scran_tests::SimulationParameters sparams;
+        scran_tests::SimulateVectorParameters sparams;
         sparams.lower = 0.1;
         sparams.upper = 2;
         sparams.seed = 6789;
