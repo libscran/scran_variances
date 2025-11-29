@@ -22,6 +22,15 @@
 namespace scran_variances {
 
 /**
+ * Policy to use for averaging statistics across blocks.
+ *
+ * - `MEAN`: weighted mean, where weights are computed using `scran_blocks::compute_weights()`.
+ * - `QUANTILE`: quantile, defaulting to 50%, a.k.a., the median.
+ * - `NONE`: do not report any inter-block average. 
+ */
+enum class AveragePolicy : unsigned char { MEAN, QUANTILE, NONE };
+
+/**
  * @brief Options for `model_gene_variances()` and friends.
  */
 struct ModelGeneVariancesOptions {
@@ -31,8 +40,15 @@ struct ModelGeneVariancesOptions {
     FitVarianceTrendOptions fit_variance_trend_options;
 
     /**
-     * Policy to use for weighting the contribution from each block when computing the average for each statistic.
-     * Only relevant to `model_gene_variances_blocked()` overloads where averaged outputs are requested.
+     * Policy to use for averaging statistics across blocks.
+     * Only relevant to `model_gene_variances_blocked()`.
+     * Ignored for overloads accepting `ModelGeneVariancesBlockedBuffers` where all entries in `average` are `NULL`.
+     */
+    AveragePolicy average_policy = AveragePolicy::MEAN;
+
+    /**
+     * Policy to use for weighting the contribution from each block when computing the mean for each statistic.
+     * Only relevant to `model_gene_variances_blocked()` when `ModelGeneVariancesOptions::average_policy = AveragePolicy::MEAN`. 
      *
      * The default of `scran_blocks::WeightPolicy::VARIABLE` is to define equal weights for blocks once they reach a certain size (see `ModelGeneVariancesOptions::variable_block_weight_parameters`).
      * For smaller blocks, the weight is linearly proportional to its size to avoid outsized contributions from very small blocks.
@@ -44,16 +60,26 @@ struct ModelGeneVariancesOptions {
 
     /**
      * Parameters for the variable block weights, including the threshold at which blocks are considered to be large enough to have equal weight.
-     * Only relevant to `model_gene_variances_blocked()` overloads where averaged outputs are requested
+     * Only relevant to `model_gene_variances_blocked()` when `ModelGeneVariancesOptions::average_policy = AveragePolicy::MEAN`.
      * and `ModelGeneVariancesOptions::block_weight_policy = scran_blocks::WeightPolicy::VARIABLE`.
      */
     scran_blocks::VariableWeightParameters variable_block_weight_parameters; 
 
     /**
-     * Whether to compute the average of each statistic across blocks.
-     * This only affects the `model_gene_variances_blocked()` method that returns a `ModelGeneVariancesBlockedResults` object.
+     * @cond
      */
+    // Back-compatibility only.
     bool compute_average = true;
+    /**
+     * @endcond
+     */
+
+    /**
+     * Quantile to use as an "average" statistic across blocks.
+     * Only relevant to `model_gene_variances_blocked()` when `ModelGeneVariancesOptions::average_policy = AveragePolicy::QUANTILE`. 
+     * Defaults to 0.5, a.k.a., the median.
+     */
+    double quantile = 0.5;
 
     /**
      * Number of threads to use for the variance calculations and trend fitting. 
@@ -183,7 +209,7 @@ struct ModelGeneVariancesBlockedResults {
     ModelGeneVariancesBlockedResults() = default;
 
     template<typename Ngenes_, typename Nblocks_>
-    ModelGeneVariancesBlockedResults(Ngenes_ ngenes, Nblocks_ nblocks, const bool compute_average) : average(compute_average ? ngenes : 0) {
+    ModelGeneVariancesBlockedResults(Ngenes_ ngenes, Nblocks_ nblocks, const bool do_average) : average(do_average ? ngenes : 0) {
         per_block.reserve(nblocks);
         for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
             per_block.emplace_back(ngenes);
@@ -200,7 +226,7 @@ struct ModelGeneVariancesBlockedResults {
 
     /**
      * Average across blocks for all statistics in `per_block`.
-     * This is only populated if `ModelGeneVariancesOptions::compute_average = true`.
+     * This is only populated if `ModelGeneVariancesOptions::average_policy` is not `AveragePolicy::NONE`.
      */
     ModelGeneVariancesResults<Stat_> average;
 };
@@ -437,35 +463,39 @@ void compute_variances(
     }
 }
 
-template<typename Index_, typename Stat_, class Function_>
-void compute_average(
-    const Index_ ngenes, 
-    const std::vector<ModelGeneVariancesBuffers<Stat_> >& per_block, 
-    const std::vector<Index_>& block_size,
+template<typename Stat_, typename Index_>
+void extract_weights(
     const std::vector<Stat_>& block_weights,
+    const std::vector<Index_>& block_size,
     const Index_ min_size,
-    const Function_ fun,
-    std::vector<Stat_*>& tmp_pointers,
-    std::vector<Stat_>& tmp_weights,
-    Stat_* const output) 
-{
-    if (!output) {
-        return;
-    }
-
-    tmp_pointers.clear();
+    std::vector<Stat_>& tmp_weights
+) {
+    const auto nblocks = block_weights.size();
     tmp_weights.clear();
-
-    const auto nblocks = per_block.size();
     for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
         if (block_size[b] < min_size) { // skip blocks with insufficient cells.
             continue;
         }
         tmp_weights.push_back(block_weights[b]);
+    }
+}
+
+template<typename Stat_, typename Index_, class Function_>
+void extract_pointers(
+    const std::vector<ModelGeneVariancesBuffers<Stat_> >& per_block, 
+    const std::vector<Index_>& block_size,
+    const Index_ min_size,
+    const Function_ fun,
+    std::vector<Stat_*>& tmp_pointers
+) {
+    const auto nblocks = per_block.size();
+    tmp_pointers.clear();
+    for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        if (block_size[b] < min_size) { // skip blocks with insufficient cells.
+            continue;
+        }
         tmp_pointers.push_back(fun(per_block[b]));
     }
-
-    scran_blocks::average_vectors_weighted(ngenes, tmp_pointers, tmp_weights.data(), output, /* skip_nan = */ false);
 }
 
 }
@@ -479,7 +509,9 @@ void compute_average(
  * and a separate trend is fitted to each block to obtain residuals (see `model_gene_variances()`).
  * This ensures that sample and batch effects do not confound the variance estimates.
  *
- * We also compute the average of each statistic across blocks, using the weighting strategy specified in `ModelGeneVariancesOptions::block_weight_policy`.
+ * We also compute the average of each statistic across blocks, using the policy described in `ModelGeneVariancesOptions::average_policy`.
+ * This is either a quantile (i.e., median, by default) or weighted mean of values for each gene.
+ * Weights are determined by `ModelGeneVariancesOptions::block_weight_policy` and are based on the size of each block.
  * The average residual is particularly useful for feature selection with `choose_highly_variable_genes()`.
  *
  * @tparam Value_ Data type of the matrix.
@@ -533,61 +565,60 @@ void model_gene_variances_blocked(
     const auto ave_fitted = buffers.average.fitted;
     const auto ave_residuals = buffers.average.residuals;
 
-    if (ave_means || ave_variances || ave_fitted || ave_residuals) {
-        const auto block_weight = scran_blocks::compute_weights<Stat_>(block_size, options.block_weight_policy, options.variable_block_weight_parameters);
+    std::vector<Stat_*> tmp_pointers;
+    tmp_pointers.reserve(nblocks);
 
-        std::vector<Stat_*> tmp_pointers;
+    if (options.average_policy == AveragePolicy::MEAN) {
+        const auto block_weight = scran_blocks::compute_weights<Stat_>(block_size, options.block_weight_policy, options.variable_block_weight_parameters);
         std::vector<Stat_> tmp_weights;
-        tmp_pointers.reserve(nblocks);
         tmp_weights.reserve(nblocks);
 
-        internal::compute_average(
-            NR,
-            buffers.per_block,
-            block_size,
-            block_weight,
-            /* min_size = */ static_cast<Index_>(1),  // skip blocks without enough cells to compute the mean.
-            [](const auto& x) -> Stat_* { return x.means; },
-            tmp_pointers,
-            tmp_weights,
-            ave_means
-        );
+        if (ave_means) {
+            internal::extract_weights(block_weight, block_size, static_cast<Index_>(1), tmp_weights);
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(1), [](const auto& x) -> Stat_* { return x.means; }, tmp_pointers);
+            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_means, /* skip_nan = */ false);
+        }
 
-        internal::compute_average(
-            NR,
-            buffers.per_block,
-            block_size,
-            block_weight,
-            /* min_size = */ static_cast<Index_>(2), // skip blocks without enough cells to compute the variance.
-            [](const auto& x) -> Stat_* { return x.variances; },
-            tmp_pointers,
-            tmp_weights,
-            ave_variances
-        );
+        // Skip blocks without enough cells to compute the variance.
+        internal::extract_weights(block_weight, block_size, static_cast<Index_>(2), tmp_weights);
 
-        internal::compute_average(
-            NR,
-            buffers.per_block,
-            block_size,
-            block_weight, 
-            /* min_size = */ static_cast<Index_>(2), // ditto.
-            [](const auto& x) -> Stat_* { return x.fitted; },
-            tmp_pointers,
-            tmp_weights,
-            ave_fitted
-        );
+        if (ave_variances) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.variances; }, tmp_pointers);
+            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_variances, /* skip_nan = */ false);
+        }
 
-        internal::compute_average(
-            NR,
-            buffers.per_block,
-            block_size,
-            block_weight, 
-            /* min_size = */ static_cast<Index_>(2), // ditto.
-            [](const auto& x) -> Stat_* { return x.residuals; },
-            tmp_pointers,
-            tmp_weights,
-            ave_residuals
-        );
+        if (ave_fitted) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.fitted; }, tmp_pointers);
+            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_fitted, /* skip_nan = */ false);
+        }
+
+        if (ave_residuals) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.residuals; }, tmp_pointers);
+            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_residuals, /* skip_nan = */ false);
+        }
+
+    } else if (options.average_policy == AveragePolicy::QUANTILE) {
+        if (ave_means) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(1), [](const auto& x) -> Stat_* { return x.means; }, tmp_pointers);
+            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.quantile, ave_means, /* skip_nan = */ false);
+        }
+
+        // Skip blocks without enough cells to compute the variance.
+
+        if (ave_variances) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.variances; }, tmp_pointers);
+            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.quantile, ave_variances, /* skip_nan = */ false);
+        }
+
+        if (ave_fitted) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.fitted; }, tmp_pointers);
+            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.quantile, ave_fitted, /* skip_nan = */ false);
+        }
+
+        if (ave_residuals) {
+            internal::extract_pointers(buffers.per_block, block_size, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.residuals; }, tmp_pointers);
+            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.quantile, ave_residuals, /* skip_nan = */ false);
+        }
     }
 }
 
@@ -667,12 +698,14 @@ ModelGeneVariancesResults<Stat_> model_gene_variances(const tatami::Matrix<Value
  * @param options Further options.
  *
  * @return Results of the variance modelling in each block.
- * An average for each statistic is also computed if `ModelGeneVariancesOptions::compute_average = true`.
+ * An average for each statistic is also computed if `ModelGeneVariancesOptions::average_policy` is not `AveragePolicy::NONE`.
  */
 template<typename Stat_ = double, typename Value_, typename Index_, typename Block_>
 ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(const tatami::Matrix<Value_, Index_>& mat, const Block_* const block, const ModelGeneVariancesOptions& options) {
     const auto nblocks = (block ? tatami_stats::total_groups(block, mat.ncol()) : 1);
-    ModelGeneVariancesBlockedResults<Stat_> output(mat.nrow(), nblocks, options.compute_average);
+
+    const bool do_average = options.compute_average /* for back-compatibility */ && options.average_policy != AveragePolicy::NONE;
+    ModelGeneVariancesBlockedResults<Stat_> output(mat.nrow(), nblocks, do_average);
 
     ModelGeneVariancesBlockedBuffers<Stat_> buffers;
     sanisizer::resize(buffers.per_block, nblocks);
@@ -684,7 +717,7 @@ ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(const tatam
         current.residuals = output.per_block[b].residuals.data();
     }
 
-    if (!options.compute_average) {
+    if (!do_average) {
         buffers.average.means = NULL;
         buffers.average.variances = NULL;
         buffers.average.fitted = NULL;
