@@ -130,8 +130,7 @@ struct ModelGeneVariancesResults {
      */
     ModelGeneVariancesResults() = default;
 
-    template<typename Ngenes_>
-    ModelGeneVariancesResults(const Ngenes_ ngenes) :
+    ModelGeneVariancesResults(const std::size_t ngenes) :
         means(sanisizer::cast<decltype(I(means.size()))>(ngenes)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
@@ -208,8 +207,9 @@ struct ModelGeneVariancesBlockedResults {
      */
     ModelGeneVariancesBlockedResults() = default;
 
-    template<typename Ngenes_, typename Nblocks_>
-    ModelGeneVariancesBlockedResults(Ngenes_ ngenes, Nblocks_ nblocks, const bool do_average) : average(do_average ? ngenes : 0) {
+    ModelGeneVariancesBlockedResults(const std::size_t ngenes, const std::size_t nblocks, const bool do_average) :
+        average(do_average ? ngenes : 0)
+    {
         per_block.reserve(nblocks);
         for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
             per_block.emplace_back(ngenes);
@@ -671,7 +671,7 @@ void model_gene_variances(
  */
 template<typename Stat_ = double, typename Value_, typename Index_>
 ModelGeneVariancesResults<Stat_> model_gene_variances(const tatami::Matrix<Value_, Index_>& mat, const ModelGeneVariancesOptions& options) {
-    ModelGeneVariancesResults<Stat_> output(mat.nrow());
+    ModelGeneVariancesResults<Stat_> output(mat.nrow()); // cast is safe, as any tatami Index_ can always fit into a size_t.
 
     ModelGeneVariancesBuffers<Stat_> buffers;
     buffers.means = output.means.data();
@@ -705,7 +705,7 @@ ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(const tatam
     const auto nblocks = (block ? tatami_stats::total_groups(block, mat.ncol()) : 1);
 
     const bool do_average = options.compute_average /* for back-compatibility */ && options.average_policy != AveragePolicy::NONE;
-    ModelGeneVariancesBlockedResults<Stat_> output(mat.nrow(), nblocks, do_average);
+    ModelGeneVariancesBlockedResults<Stat_> output(mat.nrow(), nblocks, do_average); // cast is safe, any tatami Index_ can always fit into a size_t.
 
     ModelGeneVariancesBlockedBuffers<Stat_> buffers;
     sanisizer::resize(buffers.per_block, nblocks);
