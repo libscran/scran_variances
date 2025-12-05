@@ -131,22 +131,22 @@ struct ModelGeneVariancesResults {
     ModelGeneVariancesResults() = default;
 
     ModelGeneVariancesResults(const std::size_t ngenes) :
-        means(sanisizer::cast<decltype(I(means.size()))>(ngenes)
+        means(sanisizer::cast<I<decltype(means.size())> >(ngenes)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
         ),
-        variances(sanisizer::cast<decltype(I(variances.size()))>(ngenes)
+        variances(sanisizer::cast<I<decltype(variances.size())> >(ngenes)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
         ),
-        fitted(sanisizer::cast<decltype(I(fitted.size()))>(ngenes)
+        fitted(sanisizer::cast<I<decltype(fitted.size())> >(ngenes)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
         ),
-        residuals(sanisizer::cast<decltype(I(residuals.size()))>(ngenes)
+        residuals(sanisizer::cast<I<decltype(residuals.size())> >(ngenes)
 #ifdef SCRAN_VARIANCES_TEST_INIT
             , SCRAN_VARIANCES_TEST_INIT
 #endif
@@ -211,7 +211,7 @@ struct ModelGeneVariancesBlockedResults {
         average(do_average ? ngenes : 0)
     {
         per_block.reserve(nblocks);
-        for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             per_block.emplace_back(ngenes);
         }
     }
@@ -269,7 +269,7 @@ void compute_variances_dense_row(
                     false,
                     static_cast<Index_*>(NULL)
                 );
-                for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+                for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
                     buffers[b].means[r] = tmp_means[b];
                     buffers[b].variances[r] = tmp_vars[b];
                 }
@@ -324,7 +324,7 @@ void compute_variances_sparse_row(
                     false,
                     static_cast<Index_*>(NULL)
                 );
-                for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+                for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
                     buffers[b].means[r] = tmp_means[b];
                     buffers[b].variances[r] = tmp_vars[b];
                 }
@@ -360,23 +360,23 @@ void compute_variances_dense_column(
 
         std::vector<tatami_stats::variances::RunningDense<Stat_, Value_, Index_> > runners;
         runners.reserve(nblocks);
-        for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             runners.emplace_back(length, local_means.data(b), local_vars.data(b), false);
         }
 
         if (blocked) {
-            for (decltype(I(NC)) c = 0; c < NC; ++c) {
+            for (I<decltype(NC)> c = 0; c < NC; ++c) {
                 auto ptr = ext->fetch(buffer.data());
                 runners[block[c]].add(ptr);
             }
         } else {
-            for (decltype(I(NC)) c = 0; c < NC; ++c) {
+            for (I<decltype(NC)> c = 0; c < NC; ++c) {
                 auto ptr = ext->fetch(buffer.data());
                 runners[0].add(ptr);
             }
         }
 
-        for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             runners[b].finish();
         }
         local_vars.transfer();
@@ -416,23 +416,23 @@ void compute_variances_sparse_column(
 
         std::vector<tatami_stats::variances::RunningSparse<Stat_, Value_, Index_> > runners;
         runners.reserve(nblocks);
-        for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             runners.emplace_back(length, local_means.data(b), local_vars.data(b), false, start);
         }
 
         if (blocked) {
-            for (decltype(I(NC)) c = 0; c < NC; ++c) {
+            for (I<decltype(NC)> c = 0; c < NC; ++c) {
                 auto range = ext->fetch(vbuffer.data(), ibuffer.data());
                 runners[block[c]].add(range.value, range.index, range.number);
             }
         } else {
-            for (decltype(I(NC)) c = 0; c < NC; ++c) {
+            for (I<decltype(NC)> c = 0; c < NC; ++c) {
                 auto range = ext->fetch(vbuffer.data(), ibuffer.data());
                 runners[0].add(range.value, range.index, range.number);
             }
         }
 
-        for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             runners[b].finish();
         }
         local_vars.transfer();
@@ -472,7 +472,7 @@ void extract_weights(
 ) {
     const auto nblocks = block_weights.size();
     tmp_weights.clear();
-    for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+    for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
         if (block_size[b] < min_size) { // skip blocks with insufficient cells.
             continue;
         }
@@ -490,7 +490,7 @@ void extract_pointers(
 ) {
     const auto nblocks = per_block.size();
     tmp_pointers.clear();
-    for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+    for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
         if (block_size[b] < min_size) { // skip blocks with insufficient cells.
             continue;
         }
@@ -550,7 +550,7 @@ void model_gene_variances_blocked(
     FitVarianceTrendWorkspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
     fopt.num_threads = options.num_threads;
-    for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+    for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
         const auto& current = buffers.per_block[b];
         if (block_size[b] >= 2) {
             fit_variance_trend(NR, current.means, current.variances, current.fitted, current.residuals, work, fopt);
@@ -709,7 +709,7 @@ ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(const tatam
 
     ModelGeneVariancesBlockedBuffers<Stat_> buffers;
     sanisizer::resize(buffers.per_block, nblocks);
-    for (decltype(I(nblocks)) b = 0; b < nblocks; ++b) {
+    for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
         auto& current = buffers.per_block[b];
         current.means = output.per_block[b].means.data();
         current.variances = output.per_block[b].variances.data();
