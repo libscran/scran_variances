@@ -157,22 +157,22 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <a class="code hl_struct" href="structscran__variances_1_1ModelGeneVariancesResults.html">ModelGeneVariancesResults</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <a class="code hl_struct" href="structscran__variances_1_1ModelGeneVariancesResults.html">ModelGeneVariancesResults</a>(<span class="keyword">const</span> std::size_t ngenes) :</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a36eee93c18e635f5bd3531dd1af129fd">means</a>(sanisizer::cast&lt;<span class="keyword">decltype</span>(I(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a36eee93c18e635f5bd3531dd1af129fd">means</a>.size()))&gt;(ngenes)</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a36eee93c18e635f5bd3531dd1af129fd">means</a>(sanisizer::cast&lt;I&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a36eee93c18e635f5bd3531dd1af129fd">means</a>.size())&gt; &gt;(ngenes)</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>#ifdef SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>            , SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>#endif</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        ),</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871">variances</a>(sanisizer::cast&lt;<span class="keyword">decltype</span>(I(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871">variances</a>.size()))&gt;(ngenes)</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871">variances</a>(sanisizer::cast&lt;I&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871">variances</a>.size())&gt; &gt;(ngenes)</div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>#ifdef SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            , SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>#endif</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        ),</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a299a3d92ce9b0936c71209f39b117048">fitted</a>(sanisizer::cast&lt;<span class="keyword">decltype</span>(I(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a299a3d92ce9b0936c71209f39b117048">fitted</a>.size()))&gt;(ngenes)</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a299a3d92ce9b0936c71209f39b117048">fitted</a>(sanisizer::cast&lt;I&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a299a3d92ce9b0936c71209f39b117048">fitted</a>.size())&gt; &gt;(ngenes)</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>#ifdef SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            , SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>#endif</div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        ),</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a399ae7f3838bb65fed1ce059d3b6572b">residuals</a>(sanisizer::cast&lt;<span class="keyword">decltype</span>(I(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a399ae7f3838bb65fed1ce059d3b6572b">residuals</a>.size()))&gt;(ngenes)</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a399ae7f3838bb65fed1ce059d3b6572b">residuals</a>(sanisizer::cast&lt;I&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesResults.html#a399ae7f3838bb65fed1ce059d3b6572b">residuals</a>.size())&gt; &gt;(ngenes)</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>#ifdef SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>            , SCRAN_VARIANCES_TEST_INIT</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>#endif</div>
@@ -206,7 +206,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#ade429098d3a50eb760e69b229d80b49b">average</a>(do_average ? ngenes : 0)</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    {</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4">per_block</a>.reserve(nblocks);</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>            <a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4">per_block</a>.emplace_back(ngenes);</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        }</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }</div>
@@ -251,7 +251,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                    <span class="keyword">false</span>,</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                    <span class="keyword">static_cast&lt;</span>Index_*<span class="keyword">&gt;</span>(NULL)</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                );</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                    buffers[b].means[r] = tmp_means[b];</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    buffers[b].variances[r] = tmp_vars[b];</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                }</div>
@@ -306,7 +306,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                    <span class="keyword">false</span>,</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>                    <span class="keyword">static_cast&lt;</span>Index_*<span class="keyword">&gt;</span>(NULL)</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>                );</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>                <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>                <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>                    buffers[b].means[r] = tmp_means[b];</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>                    buffers[b].variances[r] = tmp_vars[b];</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>                }</div>
@@ -342,23 +342,23 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>        std::vector&lt;tatami_stats::variances::RunningDense&lt;Stat_, Value_, Index_&gt; &gt; runners;</div>
 <div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        runners.reserve(nblocks);</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>        <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>        <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>            runners.emplace_back(length, local_means.data(b), local_vars.data(b), <span class="keyword">false</span>);</div>
 <div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        }</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>        <span class="keywordflow">if</span> (blocked) {</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(NC)) c = 0; c &lt; NC; ++c) {</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(NC)&gt; c = 0; c &lt; NC; ++c) {</div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>                <span class="keyword">auto</span> ptr = ext-&gt;fetch(buffer.data());</div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                runners[block[c]].add(ptr);</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            }</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>            <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(NC)) c = 0; c &lt; NC; ++c) {</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>            <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(NC)&gt; c = 0; c &lt; NC; ++c) {</div>
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>                <span class="keyword">auto</span> ptr = ext-&gt;fetch(buffer.data());</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>                runners[0].add(ptr);</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>            }</div>
 <div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        }</div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>            runners[b].finish();</div>
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        }</div>
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        local_vars.transfer();</div>
@@ -398,23 +398,23 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span> </div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>        std::vector&lt;tatami_stats::variances::RunningSparse&lt;Stat_, Value_, Index_&gt; &gt; runners;</div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>        runners.reserve(nblocks);</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>            runners.emplace_back(length, local_means.data(b), local_vars.data(b), <span class="keyword">false</span>, start);</div>
 <div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        }</div>
 <div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
 <div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        <span class="keywordflow">if</span> (blocked) {</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>            <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(NC)) c = 0; c &lt; NC; ++c) {</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>            <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(NC)&gt; c = 0; c &lt; NC; ++c) {</div>
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>                <span class="keyword">auto</span> range = ext-&gt;fetch(vbuffer.data(), ibuffer.data());</div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>                runners[block[c]].add(range.value, range.index, range.number);</div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>            }</div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>            <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(NC)) c = 0; c &lt; NC; ++c) {</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>            <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(NC)&gt; c = 0; c &lt; NC; ++c) {</div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>                <span class="keyword">auto</span> range = ext-&gt;fetch(vbuffer.data(), ibuffer.data());</div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>                runners[0].add(range.value, range.index, range.number);</div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>            }</div>
 <div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        }</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>            runners[b].finish();</div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>        }</div>
 <div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        local_vars.transfer();</div>
@@ -454,7 +454,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span>) {</div>
 <div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span>    <span class="keyword">const</span> <span class="keyword">auto</span> nblocks = block_weights.size();</div>
 <div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span>    tmp_weights.clear();</div>
-<div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span>    <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span>    <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span>        <span class="keywordflow">if</span> (block_size[b] &lt; min_size) { <span class="comment">// skip blocks with insufficient cells.</span></div>
 <div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>        }</div>
@@ -472,7 +472,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>) {</div>
 <div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>    <span class="keyword">const</span> <span class="keyword">auto</span> nblocks = per_block.size();</div>
 <div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>    tmp_pointers.clear();</div>
-<div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>    <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>    <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>        <span class="keywordflow">if</span> (block_size[b] &lt; min_size) { <span class="comment">// skip blocks with insufficient cells.</span></div>
 <div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>            <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>        }</div>
@@ -504,7 +504,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>    <a class="code hl_struct" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace&lt;Stat_&gt;</a> work;</div>
 <div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>    <span class="keyword">auto</span> fopt = options.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesOptions.html#a2b6b4ecf7ad8a02a930d683382b0e926">fit_variance_trend_options</a>;</div>
 <div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>    fopt.<a class="code hl_variable" href="structscran__variances_1_1FitVarianceTrendOptions.html#a0811d658119b078fe61a0d65ea367586">num_threads</a> = options.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesOptions.html#ac7673607b1436c8edde68a3df08519aa">num_threads</a>;</div>
-<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>    <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>    <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; current = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a6d216ca738c5f1171c24a1fa5643639c">per_block</a>[b];</div>
 <div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>        <span class="keywordflow">if</span> (block_size[b] &gt;= 2) {</div>
 <div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>            <a class="code hl_function" href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">fit_variance_trend</a>(NR, current.means, current.variances, current.fitted, current.residuals, work, fopt);</div>
@@ -622,7 +622,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span> </div>
 <div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>    <a class="code hl_struct" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html">ModelGeneVariancesBlockedBuffers&lt;Stat_&gt;</a> buffers;</div>
 <div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>    sanisizer::resize(buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a6d216ca738c5f1171c24a1fa5643639c">per_block</a>, nblocks);</div>
-<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>    <span class="keywordflow">for</span> (<span class="keyword">decltype</span>(I(nblocks)) b = 0; b &lt; nblocks; ++b) {</div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>    <span class="keywordflow">for</span> (I&lt;<span class="keyword">decltype</span>(nblocks)&gt; b = 0; b &lt; nblocks; ++b) {</div>
 <div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>        <span class="keyword">auto</span>&amp; current = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a6d216ca738c5f1171c24a1fa5643639c">per_block</a>[b];</div>
 <div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>        current.means = output.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4">per_block</a>[b].means.data();</div>
 <div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>        current.variances = output.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBlockedResults.html#a924b8308d55e630808c783b543ca89c4">per_block</a>[b].variances.data();</div>
