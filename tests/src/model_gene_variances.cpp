@@ -81,7 +81,7 @@ TEST_P(ModelGeneVariancesTest, Blocked) {
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
-    opt.average_policy = scran_variances::AveragePolicy::NONE;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::NONE;
     auto ref = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
     EXPECT_TRUE(ref.average.means.empty());
     EXPECT_TRUE(ref.average.variances.empty());
@@ -129,7 +129,7 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
-    opt.average_policy = scran_variances::AveragePolicy::MEAN;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
 
     // Checking averages with equiweighting.
     opt.block_weight_policy = scran_blocks::WeightPolicy::EQUAL;
@@ -221,7 +221,7 @@ TEST_P(ModelGeneVariancesTest, BlockedMedian) {
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
-    opt.average_policy = scran_variances::AveragePolicy::QUANTILE;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
     auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
 
     std::vector<double> expected_means(dense_row->nrow()), buffer_means,
@@ -329,7 +329,7 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Mean) {
 
 TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
     scran_variances::ModelGeneVariancesOptions opt;
-    opt.average_policy = scran_variances::AveragePolicy::QUANTILE;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
     auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
 
     // Subset to blocks 0 and 4 to ignore all blocks with fewer than two cells. This means we do [2, ncol).
@@ -356,7 +356,7 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
 
 TEST(ModelGeneVariances, NullAverages) {
     // Get some test coverage for the case where the Buffer::average pointers
-    // null and thus should be skipped regardless of what average_policy says.
+    // null and thus should be skipped regardless of what block_average_policy says.
 
     int nr = 10, nc = 6;
     auto vec = scran_tests::simulate_vector(nr * nc, []{
@@ -391,9 +391,9 @@ TEST(ModelGeneVariances, NullAverages) {
     buffers.average.residuals = NULL;
 
     scran_variances::ModelGeneVariancesOptions opt;
-    opt.average_policy = scran_variances::AveragePolicy::MEAN;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
     scran_variances::model_gene_variances_blocked(mat, blocks.data(), buffers, opt);
-    opt.average_policy = scran_variances::AveragePolicy::QUANTILE;
+    opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
     scran_variances::model_gene_variances_blocked(mat, blocks.data(), buffers, opt);
 
     for (decltype(nblocks) b = 0; b < nblocks; ++b) {
