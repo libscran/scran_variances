@@ -242,10 +242,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>AveragePolicy</type>
-      <name>average_policy</name>
+      <type>BlockAveragePolicy</type>
+      <name>block_average_policy</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
-      <anchor>a2bfa1fb8980242f25468bfc4e97e72ae</anchor>
+      <anchor>aae7a01cbb0c6ffcb0131d11d0c699a7d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -264,9 +264,9 @@
     </member>
     <member kind="variable">
       <type>double</type>
-      <name>quantile</name>
+      <name>block_quantile</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
-      <anchor>ae0284cc2d20d555745d19499b68fe776</anchor>
+      <anchor>a432cca04ce2e5d5b0c897c2c70b5f326</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -324,13 +324,13 @@
     <class kind="struct">scran_variances::ModelGeneVariancesResults</class>
     <member kind="enumeration">
       <type></type>
-      <name>AveragePolicy</name>
+      <name>BlockAveragePolicy</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>abf5ac38326d599ff3fe33ed2568362f2</anchor>
+      <anchor>affb6ebee93bfa1a418f68e3265179feb</anchor>
       <arglist></arglist>
-      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2a4ea6d1161ea24d7599365f574aff6610">MEAN</enumvalue>
-      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2a4ce64f35e5957a6f3ecc9895dc1bb90f">QUANTILE</enumvalue>
-      <enumvalue file="namespacescran__variances.html" anchor="abf5ac38326d599ff3fe33ed2568362f2ab50339a10e1de285ac99d4c3990b8693">NONE</enumvalue>
+      <enumvalue file="namespacescran__variances.html" anchor="affb6ebee93bfa1a418f68e3265179feba4ea6d1161ea24d7599365f574aff6610">MEAN</enumvalue>
+      <enumvalue file="namespacescran__variances.html" anchor="affb6ebee93bfa1a418f68e3265179feba4ce64f35e5957a6f3ecc9895dc1bb90f">QUANTILE</enumvalue>
+      <enumvalue file="namespacescran__variances.html" anchor="affb6ebee93bfa1a418f68e3265179febab50339a10e1de285ac99d4c3990b8693">NONE</enumvalue>
     </member>
     <member kind="function">
       <type>void</type>

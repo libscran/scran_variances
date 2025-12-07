@@ -136,11 +136,11 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:abf5ac38326d599ff3fe33ed2568362f2" id="r_abf5ac38326d599ff3fe33ed2568362f2"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf5ac38326d599ff3fe33ed2568362f2">AveragePolicy</a> : unsigned char { <b>MEAN</b>
+<tr class="memitem:affb6ebee93bfa1a418f68e3265179feb" id="r_affb6ebee93bfa1a418f68e3265179feb"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affb6ebee93bfa1a418f68e3265179feb">BlockAveragePolicy</a> : unsigned char { <b>MEAN</b>
 , <b>QUANTILE</b>
 , <b>NONE</b>
  }</td></tr>
-<tr class="separator:abf5ac38326d599ff3fe33ed2568362f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:affb6ebee93bfa1a418f68e3265179feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -175,8 +175,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Variance modelling for single-cell expression data. </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="abf5ac38326d599ff3fe33ed2568362f2" name="abf5ac38326d599ff3fe33ed2568362f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf5ac38326d599ff3fe33ed2568362f2">&#9670;&#160;</a></span>AveragePolicy</h2>
+<a id="affb6ebee93bfa1a418f68e3265179feb" name="affb6ebee93bfa1a418f68e3265179feb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affb6ebee93bfa1a418f68e3265179feb">&#9670;&#160;</a></span>BlockAveragePolicy</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +185,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum class <a class="el" href="#abf5ac38326d599ff3fe33ed2568362f2">scran_variances::AveragePolicy</a> : unsigned char</td>
+          <td class="memname">enum class <a class="el" href="#affb6ebee93bfa1a418f68e3265179feb">scran_variances::BlockAveragePolicy</a> : unsigned char</td>
         </tr>
       </table>
   </td>
@@ -194,7 +194,7 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Policy to use for averaging statistics across blocks.</p>
+<p>Policy for averaging statistics across blocks.</p>
 <ul>
 <li><code>MEAN</code>: weighted mean, where weights are computed using <code><a class="elRef" href="https://libscran.github.io/scran_blocks/namespacescran__blocks.html#a2eb0ccb73289d97436afd94824ec0fae">scran_blocks::compute_weights()</a></code>.</li>
 <li><code>QUANTILE</code>: quantile, defaulting to 50%, a.k.a., the median.</li>
@@ -496,7 +496,7 @@ template&lt;typename Value_ , typename Index_ , typename Block_ , typename Stat_
       </table>
 </div><div class="memdoc">
 <p>Model the per-feature variances from a log-expression matrix with blocking. The mean and variance of each gene is computed separately for all cells in each block, and a separate trend is fitted to each block to obtain residuals (see <code><a class="el" href="#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code>). This ensures that sample and batch effects do not confound the variance estimates.</p>
-<p>We also compute the average of each statistic across blocks, using the policy described in <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesOptions.html#a2bfa1fb8980242f25468bfc4e97e72ae">ModelGeneVariancesOptions::average_policy</a></code>. This is either a quantile (i.e., median, by default) or weighted mean of values for each gene. Weights are determined by <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesOptions.html#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a></code> and are based on the size of each block. The average residual is particularly useful for feature selection with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
+<p>We also compute the average of each statistic across blocks, using the policy described in <code>ModelGeneVariancesOptions::average_policy</code>. This is either a quantile (i.e., median, by default) or weighted mean of values for each gene. Weights are determined by <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesOptions.html#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a></code> and are based on the size of each block. The average residual is particularly useful for feature selection with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>
@@ -646,7 +646,7 @@ template&lt;typename Stat_  = double, typename Value_ , typename Index_ , typena
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Results of the variance modelling in each block. An average for each statistic is also computed if <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesOptions.html#a2bfa1fb8980242f25468bfc4e97e72ae">ModelGeneVariancesOptions::average_policy</a></code> is not <code>AveragePolicy::NONE</code>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Results of the variance modelling in each block. An average for each statistic is also computed if <code>ModelGeneVariancesOptions::average_policy</code> is not <code>BlockAveragePolicy::NONE</code>. </dd></dl>
 
 </div>
 </div>

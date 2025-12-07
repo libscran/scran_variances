@@ -8,7 +8,5 @@ var searchData=
   ['arrayview_2ehpp_5',['ArrayView.hpp',['https://tatami-inc.github.io/tatami/ArrayView_8hpp.html',1,'']]],
   ['assign_5fto_5fsegments_6',['assign_to_segments',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html#a63e5d05d4cbdd95dc99bd7a0907947c4',1,'WeightedLowess']]],
   ['assignedsegments_7',['AssignedSegments',['https://ltla.github.io/CppWeightedLowess/structWeightedLowess_1_1AssignedSegments.html',1,'WeightedLowess']]],
-  ['average_8',['average',['../structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a2b5059a052625bddab66169fe5b8184e',1,'scran_variances::ModelGeneVariancesBlockedBuffers::average'],['../structscran__variances_1_1ModelGeneVariancesBlockedResults.html#ade429098d3a50eb760e69b229d80b49b',1,'scran_variances::ModelGeneVariancesBlockedResults::average']]],
-  ['average_5fpolicy_9',['average_policy',['../structscran__variances_1_1ModelGeneVariancesOptions.html#a2bfa1fb8980242f25468bfc4e97e72ae',1,'scran_variances::ModelGeneVariancesOptions']]],
-  ['averagepolicy_10',['AveragePolicy',['../namespacescran__variances.html#abf5ac38326d599ff3fe33ed2568362f2',1,'scran_variances']]]
+  ['average_8',['average',['../structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a2b5059a052625bddab66169fe5b8184e',1,'scran_variances::ModelGeneVariancesBlockedBuffers::average'],['../structscran__variances_1_1ModelGeneVariancesBlockedResults.html#ade429098d3a50eb760e69b229d80b49b',1,'scran_variances::ModelGeneVariancesBlockedResults::average']]]
 ];
