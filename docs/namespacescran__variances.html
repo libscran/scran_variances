@@ -390,7 +390,7 @@ template&lt;typename Float_ &gt; </div>
 <ol type="1">
 <li>Filter out low-abundance genes, to ensure the span of the smoother is not skewed by many low-abundance genes.</li>
 <li>Take the quarter-root of the variances, to squeeze the trend towards 1. This makes the trend more "linear" to improve the performance of the LOWESS smoother; it also reduces the chance of obtaining negative fitted values.</li>
-<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <a href="https://github.com/LTLA/CppWeightedLowess"><b>WeightedLowess</b></a> library.</li>
+<li>Apply the LOWESS smoother to the quarter-root variances. This is done using the implementation in the <a href="https://github.com/libscran/WeightedLowess"><b>WeightedLowess</b></a> library.</li>
 <li>Reverse the quarter-root transformation to obtain the fitted values for all non-low-abundance genes.</li>
 <li>Extrapolate linearly from the left-most fitted value to the origin to obtain fitted values for the previously filtered genes. This is empirically justified by the observation that mean-variance trends of log-expression data are linear at very low abundances.</li>
 </ol>

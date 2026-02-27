@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weightedlowess_0',['WeightedLowess',['https://ltla.github.io/CppWeightedLowess/namespaceWeightedLowess.html',1,'']]]
+  ['weightedlowess_0',['WeightedLowess',['https://libscran.github.io/WeightedLowess/namespaceWeightedLowess.html',1,'']]]
 ];
