@@ -374,7 +374,7 @@ TEST(ModelGeneVariances, NullAverages) {
     std::fill_n(blocks.begin() + 2, 2, 1);
     std::fill_n(blocks.begin() + 4, 2, 2);
 
-    scran_variances::ModelGeneVariancesBlockedResults<double> output(nr, nblocks, false);
+    scran_variances::ModelGeneVariancesBlockedResults<double> output(nr, nblocks, /* average = */ false, /* trend = */ true);
     scran_variances::ModelGeneVariancesBlockedBuffers<double> buffers;
     sanisizer::resize(buffers.per_block, nblocks);
     for (decltype(nblocks) b = 0; b < nblocks; ++b) {
@@ -401,5 +401,83 @@ TEST(ModelGeneVariances, NullAverages) {
         EXPECT_FALSE(std::isnan(buffers.per_block[b].variances[1]));
         EXPECT_FALSE(std::isnan(buffers.per_block[b].fitted[2]));
         EXPECT_FALSE(std::isnan(buffers.per_block[b].residuals[4]));
+    }
+}
+
+TEST(ModelGeneVariances, NoTrend) {
+    int nr = 10, nc = 6;
+    auto vec = scran_tests::simulate_vector(nr * nc, []{
+        scran_tests::SimulateVectorParameters sparams;
+        sparams.density = 0.1;
+        sparams.seed = 69;
+        sparams.lower = 0;
+        sparams.upper = 5;
+        return sparams;
+    }());
+    tatami::DenseMatrix<double, int, decltype(vec)> mat(nr, nc, std::move(vec), true);
+
+    {
+        scran_variances::ModelGeneVariancesOptions opt;
+        auto ref = scran_variances::model_gene_variances(mat, opt);
+
+        opt.trend = false;
+        auto res = scran_variances::model_gene_variances(mat, opt);
+        EXPECT_EQ(ref.means, res.means);
+        EXPECT_EQ(ref.variances, res.variances);
+        EXPECT_TRUE(res.fitted.empty());
+        EXPECT_TRUE(res.residuals.empty());
+    }
+
+    std::vector<int> block { 0, 1, 0, 1, 0, 1 };
+
+    // Check blocked as well.
+    {
+        scran_variances::ModelGeneVariancesOptions opt;
+        auto ref = scran_variances::model_gene_variances_blocked(mat, block.data(), opt);
+
+        opt.trend = false;
+        auto res = scran_variances::model_gene_variances_blocked(mat, block.data(), opt);
+        EXPECT_EQ(ref.average.means, res.average.means);
+        EXPECT_EQ(ref.average.variances, res.average.variances);
+        EXPECT_TRUE(res.average.fitted.empty());
+        EXPECT_TRUE(res.average.residuals.empty());
+
+        ASSERT_EQ(res.per_block.size(), 2);
+        for (int b = 0; b < 2; ++b) {
+            EXPECT_EQ(ref.per_block[b].means, res.per_block[b].means);
+            EXPECT_EQ(ref.per_block[b].variances, res.per_block[b].variances);
+            EXPECT_TRUE(res.per_block[b].fitted.empty());
+            EXPECT_TRUE(res.per_block[b].residuals.empty());
+        }
+    }
+
+    // Check that an error is correctly thrown if average fit/residuals are requested without per-block values.
+    {
+        scran_variances::ModelGeneVariancesBlockedResults<double> output(nr, 2, /* average = */ false, /* trend = */ false);
+        scran_variances::ModelGeneVariancesBlockedBuffers<double> buffers;
+        sanisizer::resize(buffers.per_block, 2);
+        for (int b = 0; b < 2; ++b) {
+            auto& current = buffers.per_block[b];
+            current.means = output.per_block[b].means.data();
+            current.variances = output.per_block[b].variances.data();
+            current.fitted = NULL;
+            current.residuals = NULL;
+        }
+
+        scran_variances::ModelGeneVariancesResults<double> averages(nr, /* trend = */ true);
+        scran_variances::ModelGeneVariancesBuffers<double> abuffers;
+        abuffers.means = averages.means.data();
+        abuffers.variances = averages.means.data();
+        abuffers.fitted = averages.fitted.data();
+        abuffers.residuals = averages.fitted.data();
+        buffers.average = abuffers; 
+
+        std::string msg;
+        try {
+            scran_variances::model_gene_variances_blocked(mat, block.data(), buffers, {});
+        } catch (std::exception& e) {
+            msg = e.what();
+        }
+        EXPECT_TRUE(msg.find("per-block trend fits") != std::string::npos);
     }
 }
