@@ -123,6 +123,8 @@ Collaboration diagram for scran_variances::ModelGeneVariancesOptions:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aad9cfc611c7013c9d75c075bf145d549" id="r_aad9cfc611c7013c9d75c075bf145d549"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad9cfc611c7013c9d75c075bf145d549">trend</a> = true</td></tr>
+<tr class="separator:aad9cfc611c7013c9d75c075bf145d549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b6b4ecf7ad8a02a930d683382b0e926" id="r_a2b6b4ecf7ad8a02a930d683382b0e926"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b6b4ecf7ad8a02a930d683382b0e926">fit_variance_trend_options</a></td></tr>
 <tr class="separator:a2b6b4ecf7ad8a02a930d683382b0e926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae7a01cbb0c6ffcb0131d11d0c699a7d" id="r_aae7a01cbb0c6ffcb0131d11d0c699a7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacescran__variances.html#affb6ebee93bfa1a418f68e3265179feb">BlockAveragePolicy</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae7a01cbb0c6ffcb0131d11d0c699a7d">block_average_policy</a> = BlockAveragePolicy::MEAN</td></tr>
@@ -139,6 +141,21 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Options for <code><a class="el" href="namespacescran__variances.html#af48891a8979a6e46b37aaf7c9bc027cb">model_gene_variances()</a></code> and friends. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="aad9cfc611c7013c9d75c075bf145d549" name="aad9cfc611c7013c9d75c075bf145d549"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad9cfc611c7013c9d75c075bf145d549">&#9670;&#160;</a></span>trend</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool scran_variances::ModelGeneVariancesOptions::trend = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Whether to fit a mean-variance trend. It can be occasionally desirable to disable the trend fitting if the trend is to be obtained from some other source, e.g., using a separate set of spike-in transcripts to estimate the technical component of each gene's variance. </p>
+
+</div>
+</div>
 <a id="a2b6b4ecf7ad8a02a930d683382b0e926" name="a2b6b4ecf7ad8a02a930d683382b0e926"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2b6b4ecf7ad8a02a930d683382b0e926">&#9670;&#160;</a></span>fit_variance_trend_options</h2>
 
@@ -150,7 +167,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Options for fitting the mean-variance trend. </p>
+<p>Options for fitting the mean-variance trend. Ignored if <code><a class="el" href="#aad9cfc611c7013c9d75c075bf145d549">ModelGeneVariancesOptions::trend</a> = false</code>. </p>
 
 </div>
 </div>

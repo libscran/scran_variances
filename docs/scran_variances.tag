@@ -235,6 +235,13 @@
     <name>scran_variances::ModelGeneVariancesOptions</name>
     <filename>structscran__variances_1_1ModelGeneVariancesOptions.html</filename>
     <member kind="variable">
+      <type>bool</type>
+      <name>trend</name>
+      <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>
+      <anchor>aad9cfc611c7013c9d75c075bf145d549</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>FitVarianceTrendOptions</type>
       <name>fit_variance_trend_options</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesOptions.html</anchorfile>

@@ -178,7 +178,8 @@ template&lt;typename Stat_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pointer to an array of length equal to the number of genes, containing the fitted value of the mean-variance trend for each gene. </p>
+<p>Pointer to an array of length equal to the number of genes, containing the fitted value of the mean-variance trend for each gene.</p>
+<p>If this or <code><a class="el" href="#a6db98e3f6ace51821686ceaed178e4d6">ModelGeneVariancesBuffers::residuals</a></code> is <code>NULL</code>, no trend is fitted. </p>
 
 </div>
 </div>
@@ -195,7 +196,8 @@ template&lt;typename Stat_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Vector of length equal to the number of genes, containing the residuals of the mean-variance trend for each gene. </p>
+<p>Vector of length equal to the number of genes, containing the residuals of the mean-variance trend for each gene.</p>
+<p>If this or <code><a class="el" href="#abbfb61ecb3c2aef9ef4a04efff3bc5c9">ModelGeneVariancesBuffers::fitted</a></code> is <code>NULL</code>, no trend is fitted. </p>
 
 </div>
 </div>

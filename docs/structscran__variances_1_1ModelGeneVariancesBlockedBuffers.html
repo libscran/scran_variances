@@ -156,7 +156,9 @@ template&lt;typename Stat_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Buffers to store the average across blocks for all statistics in <code>per_block</code>. Any of the pointers may be <code>NULL</code>, in which case the corresponding average is not computed. </p>
+<p>Buffers to store the average across blocks for all statistics in <code>per_block</code>.</p>
+<p>Any of the pointers in this object may be <code>NULL</code>, in which case the corresponding average is not computed.</p>
+<p>If <code>average.fitted</code> or <code>average.residuals</code> is not <code>NULL</code>, all entries of <code>per_block</code> should have non-<code>NULL</code> pointers for their own <code>fitted</code> and <code>residuals</code>. (That is, a mean-variance trend should have been fitted in each block.) Otherwise, an error will be thrown. </p>
 
 </div>
 </div>
