@@ -198,7 +198,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Policy for weighting the contribution from each block when computing the mean for each statistic. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> when <code>ModelGeneVariancesOptions::average_policy = BlockAveragePolicy::MEAN</code>.</p>
-<p>The default of <code>scran_blocks::WeightPolicy::VARIABLE</code> is to define equal weights for blocks once they reach a certain size (see <code><a class="el" href="#abe8aea0b4b820b47f52ed7c302d47db0">ModelGeneVariancesOptions::variable_block_weight_parameters</a></code>). For smaller blocks, the weight is linearly proportional to its size to avoid outsized contributions from very small blocks.</p>
+<p>By default, we define equal weights for blocks beyond a certain size (see <code><a class="el" href="#abe8aea0b4b820b47f52ed7c302d47db0">ModelGeneVariancesOptions::variable_block_weight_parameters</a></code>). For smaller blocks, the weight is linearly proportional to its size to avoid putting too much confidence in estimates from very small blocks.</p>
 <p>Other options include <code>scran_blocks::WeightPolicy::EQUAL</code>, where all blocks are equally weighted regardless of size; and <code>scran_blocks::WeightPolicy::NONE</code>, where the contribution of each block is proportional to its size. </p>
 
 </div>
@@ -214,7 +214,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parameters for the variable block weights, including the threshold at which blocks are considered to be large enough to have equal weight. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> when <code>ModelGeneVariancesOptions::average_policy = BlockAveragePolicy::MEAN</code>. and <code><a class="el" href="#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a> = scran_blocks::WeightPolicy::VARIABLE</code>. </p>
+<p>Parameters for the variable block weights, including the threshold at which blocks are considered to be large enough to have equal weight. Only relevant to <code><a class="el" href="namespacescran__variances.html#a34ffafc531b113e60ae57b3b5f8256be">model_gene_variances_blocked()</a></code> when <code>ModelGeneVariancesOptions::average_policy = BlockAveragePolicy::MEAN</code> and <code><a class="el" href="#adcc6c3a8d53c6c7b785dedc53f7ef962">ModelGeneVariancesOptions::block_weight_policy</a> = scran_blocks::WeightPolicy::VARIABLE</code>. </p>
 
 </div>
 </div>
