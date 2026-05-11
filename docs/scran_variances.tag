@@ -80,6 +80,13 @@
     <name>scran_variances::FitVarianceTrendOptions</name>
     <filename>structscran__variances_1_1FitVarianceTrendOptions.html</filename>
     <member kind="variable">
+      <type>bool</type>
+      <name>mean_filter</name>
+      <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
+      <anchor>acaaa268e4ebcdfcc105fb05cc99fa91c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>double</type>
       <name>minimum_mean</name>
       <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
@@ -88,23 +95,9 @@
     </member>
     <member kind="variable">
       <type>bool</type>
-      <name>mean_filter</name>
-      <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
-      <anchor>acaaa268e4ebcdfcc105fb05cc99fa91c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>bool</type>
       <name>transform</name>
       <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
       <anchor>aa1e9b5b27d936b35e9cf18788c66792b</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>double</type>
-      <name>span</name>
-      <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
-      <anchor>a5b9937546b3f82e869d0a0563a624fab</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -126,6 +119,13 @@
       <name>minimum_window_count</name>
       <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
       <anchor>aaed78ddd1cc4ce209f7b318c67bf22c2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>span</name>
+      <anchorfile>structscran__variances_1_1FitVarianceTrendOptions.html</anchorfile>
+      <anchor>a5b9937546b3f82e869d0a0563a624fab</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
