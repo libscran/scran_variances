@@ -134,6 +134,7 @@ TEST(FitVarianceTrendTest, MinWidth) {
     }());
 
     scran_variances::FitVarianceTrendOptions opt;
+    opt.use_minimum_width = false;
     auto output = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
 
     opt.use_minimum_width = true;
@@ -146,6 +147,7 @@ TEST(FitVarianceTrendTest, MinWidth) {
     // They eventually converge when both all window widths are at their maximum;
     // either because of a large span, or because we need to get a minimum number of counts. 
     scran_variances::FitVarianceTrendOptions opt2;
+    opt2.use_minimum_width = false;
     opt2.span = 1;
     auto output2 = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt2);
 
