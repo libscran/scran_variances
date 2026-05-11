@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(scran_variances
-    VERSION 0.2.3
+    VERSION 0.2.4
     DESCRIPTION "Model per-gene variances in single-cell expression"
     LANGUAGES CXX)
 
@@ -22,12 +22,12 @@ option(SCRAN_VARIANCES_FETCH_EXTERN "Automatically fetch scran_variances's exter
 if(SCRAN_VARIANCES_FETCH_EXTERN)
     add_subdirectory(extern)
 else()
-    find_package(tatami_tatami 4.0.0 CONFIG REQUIRED)
+    find_package(tatami_tatami 4.1.0 CONFIG REQUIRED)
     find_package(tatami_tatami_stats 2.0.0 CONFIG REQUIRED)
-    find_package(ltla_WeightedLowess 2.0.0 CONFIG REQUIRED)
+    find_package(ltla_WeightedLowess 2.1.0 CONFIG REQUIRED)
     find_package(libscran_scran_blocks 0.1.0 CONFIG REQUIRED)
-    find_package(ltla_sanisizer 0.1.2 CONFIG REQUIRED)
-    find_package(libscran_topicks 0.1.0 CONFIG REQUIRED)
+    find_package(ltla_sanisizer 0.2.0 CONFIG REQUIRED)
+    find_package(libscran_topicks 0.2.0 CONFIG REQUIRED)
 endif()
 
 target_link_libraries(scran_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess libscran::scran_blocks ltla::sanisizer libscran::topicks)
