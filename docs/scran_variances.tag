@@ -149,9 +149,9 @@
     </member>
     <member kind="variable">
       <type>std::vector&lt; Float_ &gt;</type>
-      <name>residuals</name>
+      <name>residual</name>
       <anchorfile>structscran__variances_1_1FitVarianceTrendResults.html</anchorfile>
-      <anchor>a2f01d307daf4f11ad0558e25172e5e79</anchor>
+      <anchor>a5d346d34c14abcf2737931efe5d0f09b</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -204,16 +204,16 @@
     <templarg>typename Stat_</templarg>
     <member kind="variable">
       <type>Stat_ *</type>
-      <name>means</name>
+      <name>mean</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesBuffers.html</anchorfile>
-      <anchor>a2c8bfdbeb8eb86ced05eaeafe7cae484</anchor>
+      <anchor>a29de1b21a9beabcef60c846809e34db9</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Stat_ *</type>
-      <name>variances</name>
+      <name>variance</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesBuffers.html</anchorfile>
-      <anchor>aab31549e74c37274bccc1a691eecb2a4</anchor>
+      <anchor>abc1dc072eea00b8c26dd10483831d35e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -225,9 +225,9 @@
     </member>
     <member kind="variable">
       <type>Stat_ *</type>
-      <name>residuals</name>
+      <name>residual</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesBuffers.html</anchorfile>
-      <anchor>a6db98e3f6ace51821686ceaed178e4d6</anchor>
+      <anchor>ac3d4543897b999856471e89d68dd6af8</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -290,16 +290,16 @@
     <templarg>typename Stat_</templarg>
     <member kind="variable">
       <type>std::vector&lt; Stat_ &gt;</type>
-      <name>means</name>
+      <name>mean</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesResults.html</anchorfile>
-      <anchor>a36eee93c18e635f5bd3531dd1af129fd</anchor>
+      <anchor>ab47795c310b4dd50c1dbe63fefc6b28d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::vector&lt; Stat_ &gt;</type>
-      <name>variances</name>
+      <name>variance</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesResults.html</anchorfile>
-      <anchor>a57c63b5f006d82e5de2ff1a7f4f07871</anchor>
+      <anchor>a33aa33e6b9e6ec7bceb6eaf4ad62ee8e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -311,9 +311,9 @@
     </member>
     <member kind="variable">
       <type>std::vector&lt; Stat_ &gt;</type>
-      <name>residuals</name>
+      <name>residual</name>
       <anchorfile>structscran__variances_1_1ModelGeneVariancesResults.html</anchorfile>
-      <anchor>a399ae7f3838bb65fed1ce059d3b6572b</anchor>
+      <anchor>a5d27e1d778bdd8d0e00dd882f5d62bf7</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -364,8 +364,8 @@
       <type>void</type>
       <name>fit_variance_trend</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>a774f5059db93cedb24f461201f3131fd</anchor>
-      <arglist>(const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
+      <anchor>a7538ef96fdab8a4a14d2d62ba7a8925b</anchor>
+      <arglist>(const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residual, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>FitVarianceTrendResults&lt; Float_ &gt;</type>

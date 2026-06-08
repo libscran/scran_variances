@@ -110,13 +110,13 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.  <a href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendOptions.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendResults.html">FitVarianceTrendResults</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendResults.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendResults.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Workspace for <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendWorkspace.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Workspace for <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code>.  <a href="structscran__variances_1_1FitVarianceTrendWorkspace.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html">ModelGeneVariancesBlockedBuffers</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffers for <code><a class="el" href="#aef26d261c8f70f9f5ae985284b98701a">model_gene_variances_blocked()</a></code>.  <a href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#details">More...</a><br /></td></tr>
@@ -153,9 +153,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a526febe6eb07121cdd6649a938992ad2" id="r_a526febe6eb07121cdd6649a938992ad2"><td class="memTemplParams" colspan="2">template&lt;typename Index_ , typename Stat_ &gt; </td></tr>
 <tr class="memitem:a526febe6eb07121cdd6649a938992ad2"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a526febe6eb07121cdd6649a938992ad2">choose_highly_variable_genes_index</a> (const Index_ n, const Stat_ *const statistic, const <a class="el" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html">ChooseHighlyVariableGenesOptions</a> &amp;options)</td></tr>
 <tr class="separator:a526febe6eb07121cdd6649a938992ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a774f5059db93cedb24f461201f3131fd" id="r_a774f5059db93cedb24f461201f3131fd"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
-<tr class="memitem:a774f5059db93cedb24f461201f3131fd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend</a> (const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residuals, <a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace</a>&lt; Float_ &gt; &amp;workspace, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
-<tr class="separator:a774f5059db93cedb24f461201f3131fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7538ef96fdab8a4a14d2d62ba7a8925b" id="r_a7538ef96fdab8a4a14d2d62ba7a8925b"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
+<tr class="memitem:a7538ef96fdab8a4a14d2d62ba7a8925b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend</a> (const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residual, <a class="el" href="structscran__variances_1_1FitVarianceTrendWorkspace.html">FitVarianceTrendWorkspace</a>&lt; Float_ &gt; &amp;workspace, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
+<tr class="separator:a7538ef96fdab8a4a14d2d62ba7a8925b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada30bbfa19a0c28c23fb69f61355ea54" id="r_ada30bbfa19a0c28c23fb69f61355ea54"><td class="memTemplParams" colspan="2">template&lt;typename Float_ &gt; </td></tr>
 <tr class="memitem:ada30bbfa19a0c28c23fb69f61355ea54"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structscran__variances_1_1FitVarianceTrendResults.html">FitVarianceTrendResults</a>&lt; Float_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ada30bbfa19a0c28c23fb69f61355ea54">fit_variance_trend</a> (const std::size_t n, const Float_ *const mean, const Float_ *const variance, const <a class="el" href="structscran__variances_1_1FitVarianceTrendOptions.html">FitVarianceTrendOptions</a> &amp;options)</td></tr>
 <tr class="separator:ada30bbfa19a0c28c23fb69f61355ea54"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -341,8 +341,8 @@ template&lt;typename Index_ , typename Stat_ &gt; </div>
 
 </div>
 </div>
-<a id="a774f5059db93cedb24f461201f3131fd" name="a774f5059db93cedb24f461201f3131fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a774f5059db93cedb24f461201f3131fd">&#9670;&#160;</a></span>fit_variance_trend() <span class="overload">[1/2]</span></h2>
+<a id="a7538ef96fdab8a4a14d2d62ba7a8925b" name="a7538ef96fdab8a4a14d2d62ba7a8925b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7538ef96fdab8a4a14d2d62ba7a8925b">&#9670;&#160;</a></span>fit_variance_trend() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +372,7 @@ template&lt;typename Float_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Float_ *const</td>          <td class="paramname"><span class="paramname"><em>residuals</em></span>, </td>
+          <td class="paramtype">Float_ *const</td>          <td class="paramname"><span class="paramname"><em>residual</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -406,8 +406,8 @@ template&lt;typename Float_ &gt; </div>
     <tr><td class="paramdir">[in]</td><td class="paramname">mean</td><td>Pointer to an array of length <code>n</code>, containing the means for all features. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">variance</td><td>Pointer to an array of length <code>n</code>, containing the variances for all features. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">fitted</td><td>Pointer to an array of length <code>n</code>, to store the fitted values. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">residuals</td><td>Pointer to an array of length <code>n</code>, to store the residuals. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">workspace</td><td>Collection of temporary data structures. This can be re-used across multiple <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code> calls. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">residual</td><td>Pointer to an array of length <code>n</code>, to store the residuals. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">workspace</td><td>Collection of temporary data structures. This can be re-used across multiple <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code> calls. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
   </dd>
@@ -445,7 +445,7 @@ template&lt;typename Float_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Overload of <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code> that allocates the output vectors.</p>
+<p>Overload of <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code> that allocates the output vectors.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Float_</td><td>Floating-point type of the statistics.</td></tr>
@@ -490,7 +490,7 @@ template&lt;typename Value_ , typename Index_ , typename Stat_ &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Model the per-gene variances as a function of the mean in single-cell expression data. We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using <code><a class="el" href="#a774f5059db93cedb24f461201f3131fd">fit_variance_trend()</a></code>. We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting. Under this assumption, the residual can be treated as a measure of biologically interesting variation. Genes with large residuals can then be selected for downstream analyses, e.g., with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
+<p>Model the per-gene variances as a function of the mean in single-cell expression data. We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using <code><a class="el" href="#a7538ef96fdab8a4a14d2d62ba7a8925b">fit_variance_trend()</a></code>. We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the "uninteresting" variance - this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting. Under this assumption, the residual can be treated as a measure of biologically interesting variation. Genes with large residuals can then be selected for downstream analyses, e.g., with <code><a class="el" href="#a836ab33e2b96134e9b3ad47df42aeb5e">choose_highly_variable_genes()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Value_</td><td>Data type of the matrix. </td></tr>

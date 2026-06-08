@@ -109,10 +109,10 @@ $(function(){ initResizable(false); });
 <div class="line"><a class="code hl_struct" href="structscran__variances_1_1ModelGeneVariancesOptions.html">scran_variances::ModelGeneVariancesOptions</a> opt;</div>
 <div class="line"><span class="keyword">auto</span> res = <a class="code hl_function" href="namespacescran__variances.html#a157900d8d7e9a6de5bdcba49cc6b5369">scran_variances::model_gene_variances</a>(*mat, opt);</div>
 <div class="line"> </div>
-<div class="line">res.means; <span class="comment">// vector of means across genes.</span></div>
-<div class="line">res.variances; <span class="comment">// vector of variances across genes.</span></div>
+<div class="line">res.mean; <span class="comment">// vector of means across genes.</span></div>
+<div class="line">res.variance; <span class="comment">// vector of variances across genes.</span></div>
 <div class="line">res.fitted; <span class="comment">// vector of fitted values of the mean-variance trend for each gene.</span></div>
-<div class="line">res.residuals; <span class="comment">// vector of residuals from the trend.</span></div>
+<div class="line">res.residual; <span class="comment">// vector of residuals from the trend.</span></div>
 <div class="ttc" id="anamespacescran__variances_html_a157900d8d7e9a6de5bdcba49cc6b5369"><div class="ttname"><a href="namespacescran__variances.html#a157900d8d7e9a6de5bdcba49cc6b5369">scran_variances::model_gene_variances</a></div><div class="ttdeci">void model_gene_variances(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const ModelGeneVariancesBuffers&lt; Stat_ &gt; buffers, const ModelGeneVariancesOptions &amp;options)</div><div class="ttdef"><b>Definition</b> model_gene_variances.hpp:318</div></div>
 <div class="ttc" id="ascran__variances_8hpp_html"><div class="ttname"><a href="scran__variances_8hpp.html">scran_variances.hpp</a></div><div class="ttdoc">Variance modelling for single-cell expression data.</div></div>
 <div class="ttc" id="astructscran__variances_1_1ModelGeneVariancesOptions_html"><div class="ttname"><a href="structscran__variances_1_1ModelGeneVariancesOptions.html">scran_variances::ModelGeneVariancesOptions</a></div><div class="ttdoc">Options for model_gene_variances() and friends.</div><div class="ttdef"><b>Definition</b> model_gene_variances.hpp:36</div></div>
@@ -120,8 +120,8 @@ $(function(){ initResizable(false); });
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html">scran_variances::ChooseHighlyVariableGenesOptions</a> copt;</div>
 <div class="line">copt.<a class="code hl_variable" href="structscran__variances_1_1ChooseHighlyVariableGenesOptions.html#a207b3e1474c88a93e9c9511e3757c43a">top</a> = 5000;</div>
 <div class="line"><span class="keyword">auto</span> chosen = <a class="code hl_function" href="namespacescran__variances.html#a526febe6eb07121cdd6649a938992ad2">scran_variances::choose_highly_variable_genes_index</a>(</div>
-<div class="line">    res.residuals.size(), </div>
-<div class="line">    res.residuals.data(), </div>
+<div class="line">    res.residual.size(), </div>
+<div class="line">    res.residual.data(), </div>
 <div class="line">    copt</div>
 <div class="line">);</div>
 <div class="line"> </div>
@@ -135,10 +135,10 @@ $(function(){ initResizable(false); });
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structscran__variances_1_1FitVarianceTrendOptions.html">scran_variances::FitVarianceTrendOptions</a> fopt;</div>
 <div class="line">fopt.<a class="code hl_variable" href="structscran__variances_1_1FitVarianceTrendOptions.html#a5b9937546b3f82e869d0a0563a624fab">span</a> = 0.5;</div>
 <div class="line">fopt.<a class="code hl_variable" href="structscran__variances_1_1FitVarianceTrendOptions.html#aeb49baa7624a6aa1df7099761aa5fe53">minimum_mean</a> = 1;</div>
-<div class="line"><span class="keyword">auto</span> fit = <a class="code hl_function" href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">scran_variances::fit_variance_trend</a>(100, means, variances, fopt);</div>
+<div class="line"><span class="keyword">auto</span> fit = <a class="code hl_function" href="namespacescran__variances.html#a7538ef96fdab8a4a14d2d62ba7a8925b">scran_variances::fit_variance_trend</a>(100, means, variances, fopt);</div>
 <div class="line">fit.fitted; <span class="comment">// fitted values for all genes.</span></div>
-<div class="line">fit.residuals; <span class="comment">// residuals values for all genes.</span></div>
-<div class="ttc" id="anamespacescran__variances_html_a774f5059db93cedb24f461201f3131fd"><div class="ttname"><a href="namespacescran__variances.html#a774f5059db93cedb24f461201f3131fd">scran_variances::fit_variance_trend</a></div><div class="ttdeci">void fit_variance_trend(const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residuals, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:149</div></div>
+<div class="line">fit.residual; <span class="comment">// residuals values for all genes.</span></div>
+<div class="ttc" id="anamespacescran__variances_html_a7538ef96fdab8a4a14d2d62ba7a8925b"><div class="ttname"><a href="namespacescran__variances.html#a7538ef96fdab8a4a14d2d62ba7a8925b">scran_variances::fit_variance_trend</a></div><div class="ttdeci">void fit_variance_trend(const std::size_t n, const Float_ *const mean, const Float_ *const variance, Float_ *const fitted, Float_ *const residual, FitVarianceTrendWorkspace&lt; Float_ &gt; &amp;workspace, const FitVarianceTrendOptions &amp;options)</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:149</div></div>
 <div class="ttc" id="astructscran__variances_1_1FitVarianceTrendOptions_html"><div class="ttname"><a href="structscran__variances_1_1FitVarianceTrendOptions.html">scran_variances::FitVarianceTrendOptions</a></div><div class="ttdoc">Options for fit_variance_trend().</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:24</div></div>
 <div class="ttc" id="astructscran__variances_1_1FitVarianceTrendOptions_html_a5b9937546b3f82e869d0a0563a624fab"><div class="ttname"><a href="structscran__variances_1_1FitVarianceTrendOptions.html#a5b9937546b3f82e869d0a0563a624fab">scran_variances::FitVarianceTrendOptions::span</a></div><div class="ttdeci">double span</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:90</div></div>
 <div class="ttc" id="astructscran__variances_1_1FitVarianceTrendOptions_html_aeb49baa7624a6aa1df7099761aa5fe53"><div class="ttname"><a href="structscran__variances_1_1FitVarianceTrendOptions.html#aeb49baa7624a6aa1df7099761aa5fe53">scran_variances::FitVarianceTrendOptions::minimum_mean</a></div><div class="ttdeci">double minimum_mean</div><div class="ttdef"><b>Definition</b> fit_variance_trend.hpp:43</div></div>

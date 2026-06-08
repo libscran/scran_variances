@@ -111,14 +111,14 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2c8bfdbeb8eb86ced05eaeafe7cae484" id="r_a2c8bfdbeb8eb86ced05eaeafe7cae484"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c8bfdbeb8eb86ced05eaeafe7cae484">means</a></td></tr>
-<tr class="separator:a2c8bfdbeb8eb86ced05eaeafe7cae484"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab31549e74c37274bccc1a691eecb2a4" id="r_aab31549e74c37274bccc1a691eecb2a4"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab31549e74c37274bccc1a691eecb2a4">variances</a></td></tr>
-<tr class="separator:aab31549e74c37274bccc1a691eecb2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29de1b21a9beabcef60c846809e34db9" id="r_a29de1b21a9beabcef60c846809e34db9"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29de1b21a9beabcef60c846809e34db9">mean</a></td></tr>
+<tr class="separator:a29de1b21a9beabcef60c846809e34db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc1dc072eea00b8c26dd10483831d35e" id="r_abc1dc072eea00b8c26dd10483831d35e"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc1dc072eea00b8c26dd10483831d35e">variance</a></td></tr>
+<tr class="separator:abc1dc072eea00b8c26dd10483831d35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbfb61ecb3c2aef9ef4a04efff3bc5c9" id="r_abbfb61ecb3c2aef9ef4a04efff3bc5c9"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbfb61ecb3c2aef9ef4a04efff3bc5c9">fitted</a></td></tr>
 <tr class="separator:abbfb61ecb3c2aef9ef4a04efff3bc5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6db98e3f6ace51821686ceaed178e4d6" id="r_a6db98e3f6ace51821686ceaed178e4d6"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6db98e3f6ace51821686ceaed178e4d6">residuals</a></td></tr>
-<tr class="separator:a6db98e3f6ace51821686ceaed178e4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3d4543897b999856471e89d68dd6af8" id="r_ac3d4543897b999856471e89d68dd6af8"><td class="memItemLeft" align="right" valign="top">Stat_ *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3d4543897b999856471e89d68dd6af8">residual</a></td></tr>
+<tr class="separator:ac3d4543897b999856471e89d68dd6af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename Stat_&gt;<br />
@@ -131,8 +131,8 @@ struct scran_variances::ModelGeneVariancesBuffers&lt; Stat_ &gt;</div><p>Buffers
 </dl>
 <p>In general, the pointers in this class should <em>not</em> be set to <code>NULL</code>. The only exception is for instances of this class that are used as <code><a class="el" href="structscran__variances_1_1ModelGeneVariancesBlockedBuffers.html#a2b5059a052625bddab66169fe5b8184e">ModelGeneVariancesBlockedBuffers::average</a></code>, where setting the pointer to <code>NULL</code> will omit calculation of the corresponding average statistic. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a2c8bfdbeb8eb86ced05eaeafe7cae484" name="a2c8bfdbeb8eb86ced05eaeafe7cae484"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c8bfdbeb8eb86ced05eaeafe7cae484">&#9670;&#160;</a></span>means</h2>
+<a id="a29de1b21a9beabcef60c846809e34db9" name="a29de1b21a9beabcef60c846809e34db9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29de1b21a9beabcef60c846809e34db9">&#9670;&#160;</a></span>mean</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -140,7 +140,7 @@ struct scran_variances::ModelGeneVariancesBuffers&lt; Stat_ &gt;</div><p>Buffers
 template&lt;typename Stat_ &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::means</td>
+          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::mean</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -148,8 +148,8 @@ template&lt;typename Stat_ &gt; </div>
 
 </div>
 </div>
-<a id="aab31549e74c37274bccc1a691eecb2a4" name="aab31549e74c37274bccc1a691eecb2a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab31549e74c37274bccc1a691eecb2a4">&#9670;&#160;</a></span>variances</h2>
+<a id="abc1dc072eea00b8c26dd10483831d35e" name="abc1dc072eea00b8c26dd10483831d35e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc1dc072eea00b8c26dd10483831d35e">&#9670;&#160;</a></span>variance</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -157,7 +157,7 @@ template&lt;typename Stat_ &gt; </div>
 template&lt;typename Stat_ &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::variances</td>
+          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::variance</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -179,12 +179,12 @@ template&lt;typename Stat_ &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Pointer to an array of length equal to the number of genes, containing the fitted value of the mean-variance trend for each gene.</p>
-<p>If this or <code><a class="el" href="#a6db98e3f6ace51821686ceaed178e4d6">ModelGeneVariancesBuffers::residuals</a></code> is <code>NULL</code>, no trend is fitted. </p>
+<p>If this or <code><a class="el" href="#ac3d4543897b999856471e89d68dd6af8">ModelGeneVariancesBuffers::residual</a></code> is <code>NULL</code>, no trend is fitted. </p>
 
 </div>
 </div>
-<a id="a6db98e3f6ace51821686ceaed178e4d6" name="a6db98e3f6ace51821686ceaed178e4d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6db98e3f6ace51821686ceaed178e4d6">&#9670;&#160;</a></span>residuals</h2>
+<a id="ac3d4543897b999856471e89d68dd6af8" name="ac3d4543897b999856471e89d68dd6af8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3d4543897b999856471e89d68dd6af8">&#9670;&#160;</a></span>residual</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +192,7 @@ template&lt;typename Stat_ &gt; </div>
 template&lt;typename Stat_ &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::residuals</td>
+          <td class="memname">Stat_* <a class="el" href="structscran__variances_1_1ModelGeneVariancesBuffers.html">scran_variances::ModelGeneVariancesBuffers</a>&lt; Stat_ &gt;::residual</td>
         </tr>
       </table>
 </div><div class="memdoc">

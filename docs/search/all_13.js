@@ -4,7 +4,7 @@ var searchData=
   ['value_5ftype_1',['value_type',['https://tatami-inc.github.io/tatami/structtatami_1_1SomeNumericArray_1_1Iterator.html#a693024f83ad1ce62afd12619ff455815',1,'tatami::SomeNumericArray::Iterator::value_type'],['https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a3154ad89a70ee70e4f12784f2461fa2d',1,'tatami::Matrix::value_type']]],
   ['variable_5fblock_5fweight_5fparameters_2',['variable_block_weight_parameters',['../structscran__variances_1_1ModelGeneVariancesOptions.html#abe8aea0b4b820b47f52ed7c302d47db0',1,'scran_variances::ModelGeneVariancesOptions']]],
   ['variableweightparameters_3',['VariableWeightParameters',['https://libscran.github.io/scran_blocks/structscran__blocks_1_1VariableWeightParameters.html',1,'scran_blocks']]],
-  ['variance_20in_20expression_4',['Model per-gene variance in expression',['../index.html',1,'']]],
-  ['variances_5',['variances',['../structscran__variances_1_1ModelGeneVariancesBuffers.html#aab31549e74c37274bccc1a691eecb2a4',1,'scran_variances::ModelGeneVariancesBuffers::variances'],['../structscran__variances_1_1ModelGeneVariancesResults.html#a57c63b5f006d82e5de2ff1a7f4f07871',1,'scran_variances::ModelGeneVariancesResults::variances']]],
+  ['variance_4',['variance',['../structscran__variances_1_1ModelGeneVariancesBuffers.html#abc1dc072eea00b8c26dd10483831d35e',1,'scran_variances::ModelGeneVariancesBuffers::variance'],['../structscran__variances_1_1ModelGeneVariancesResults.html#a33aa33e6b9e6ec7bceb6eaf4ad62ee8e',1,'scran_variances::ModelGeneVariancesResults::variance']]],
+  ['variance_20in_20expression_5',['Model per-gene variance in expression',['../index.html',1,'']]],
   ['vectorptr_6',['VectorPtr',['https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f',1,'tatami']]]
 ];
