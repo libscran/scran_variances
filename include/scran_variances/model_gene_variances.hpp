@@ -1,11 +1,12 @@
-#ifndef SCRAN_MODEL_GENE_VARIANCES_H
-#define SCRAN_MODEL_GENE_VARIANCES_H
+#ifndef SCRAN_MODEL_GENE_VARIANCES_HPP
+#define SCRAN_MODEL_GENE_VARIANCES_HPP
 
 #include <algorithm>
 #include <vector>
 #include <limits>
 #include <cstddef>
 #include <cassert>
+#include <optional>
 
 #include "tatami/tatami.hpp"
 #include "tatami_stats/tatami_stats.hpp"
@@ -620,7 +621,7 @@ void model_gene_variances_blocked_running(
     std::optional<std::vector<std::optional<std::vector<std::vector<Stat_> > > > > all_partial_mean, all_partial_rss;
     if (do_parallel) {
         // -1, as we'll repurpose the RSS output buffer to store the partial RSS of the first thread.
-        all_partial_rss.emplace(sanisizer::cast<I<decltype(all_partial_mean->size())> >(num_threads - 1));
+        all_partial_rss.emplace(sanisizer::cast<I<decltype(all_partial_rss->size())> >(num_threads - 1));
         all_partial_mean.emplace(sanisizer::cast<I<decltype(all_partial_mean->size())> >(num_threads));
     }
     auto all_partial_count = sanisizer::create<std::vector<std::optional<std::vector<Index_> > > >(num_threads);
