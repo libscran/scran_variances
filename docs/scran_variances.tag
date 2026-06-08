@@ -382,18 +382,18 @@
       <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const ModelGeneVariancesBuffers&lt; Stat_ &gt; buffers, const ModelGeneVariancesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>model_gene_variances_blocked</name>
-      <anchorfile>namespacescran__variances.html</anchorfile>
-      <anchor>aef26d261c8f70f9f5ae985284b98701a</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const std::size_t num_blocks, const ModelGeneVariancesBlockedBuffers&lt; Stat_ &gt; &amp;buffers, const ModelGeneVariancesOptions &amp;options)</arglist>
-    </member>
-    <member kind="function">
       <type>ModelGeneVariancesResults&lt; Stat_ &gt;</type>
       <name>model_gene_variances</name>
       <anchorfile>namespacescran__variances.html</anchorfile>
       <anchor>ab7571d9531d24fb47fa0874ff5039725</anchor>
       <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const ModelGeneVariancesOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>model_gene_variances_blocked</name>
+      <anchorfile>namespacescran__variances.html</anchorfile>
+      <anchor>aef26d261c8f70f9f5ae985284b98701a</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;mat, const Block_ *const block, const std::size_t num_blocks, const ModelGeneVariancesBlockedBuffers&lt; Stat_ &gt; &amp;buffers, const ModelGeneVariancesOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>ModelGeneVariancesBlockedResults&lt; Stat_ &gt;</type>
