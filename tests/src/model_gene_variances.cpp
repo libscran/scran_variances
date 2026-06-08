@@ -36,19 +36,16 @@ TEST_P(ModelGeneVariancesTest, Unblocked) {
 
     if (nthreads == 1) {
         // Cursory checks.
-        auto means = tatami_stats::sums::by_row(dense_row.get());
-        for (auto& x : means) {
-            x /= dense_row->ncol();
-        }
-        scran_tests::compare_almost_equal_containers(ref.means, means, {});
-        scran_tests::compare_almost_equal_containers(ref.variances, tatami_stats::variances::by_row(*dense_row), {});
+        auto comp = tatami_stats::variance(true, *dense_row, {});
+        scran_tests::compare_almost_equal_containers(ref.mean, comp.mean, {});
+        scran_tests::compare_almost_equal_containers(ref.variance, comp.variance, {});
 
         for (auto f : ref.fitted) {
             EXPECT_TRUE(f > 0);
         }
 
         int nonzero = 0; 
-        for (auto f : ref.residuals) {
+        for (auto f : ref.residual) {
             nonzero += (f != 0);
         }
         EXPECT_TRUE(nonzero > 0); // there is at least one non-zero residual; but we can't expect this of everyone.
@@ -56,76 +53,80 @@ TEST_P(ModelGeneVariancesTest, Unblocked) {
     } else {
         // Checking against the same call, but parallelized.
         auto res1 = scran_variances::model_gene_variances(*dense_row, opt);
-        EXPECT_EQ(ref.means, res1.means);
-        EXPECT_EQ(ref.variances, res1.variances);
+        EXPECT_EQ(ref.mean, res1.mean);
+        EXPECT_EQ(ref.variance, res1.variance);
     }
 
     // Almost equal, as there are minor differences due to numerical imprecision.
     auto res2 = scran_variances::model_gene_variances(*dense_column, opt);
-    scran_tests::compare_almost_equal_containers(ref.means, res2.means, {});
-    scran_tests::compare_almost_equal_containers(ref.variances, res2.variances, {});
+    scran_tests::compare_almost_equal_containers(ref.mean, res2.mean, {});
+    scran_tests::compare_almost_equal_containers(ref.variance, res2.variance, {});
 
     auto res3 = scran_variances::model_gene_variances(*sparse_row, opt);
-    scran_tests::compare_almost_equal_containers(ref.means, res3.means, {});
-    scran_tests::compare_almost_equal_containers(ref.variances, res3.variances, {});
+    scran_tests::compare_almost_equal_containers(ref.mean, res3.mean, {});
+    scran_tests::compare_almost_equal_containers(ref.variance, res3.variance, {});
 
     auto res4 = scran_variances::model_gene_variances(*sparse_column, opt);
-    scran_tests::compare_almost_equal_containers(ref.means, res4.means, {});
-    scran_tests::compare_almost_equal_containers(ref.variances, res4.variances, {});
+    scran_tests::compare_almost_equal_containers(ref.mean, res4.mean, {});
+    scran_tests::compare_almost_equal_containers(ref.variance, res4.variance, {});
 }
 
 TEST_P(ModelGeneVariancesTest, Blocked) {
-    std::vector<int> blocks(dense_row->ncol());
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        blocks[i] = i % 3;
+    const int nblocks = 3;
+    const int NC = dense_row->ncol();
+    std::vector<int> blocks(NC);
+    for (int i = 0; i < NC; ++i) {
+        blocks[i] = i % nblocks;
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_average_policy = scran_variances::BlockAveragePolicy::NONE;
-    auto ref = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-    EXPECT_TRUE(ref.average.means.empty());
-    EXPECT_TRUE(ref.average.variances.empty());
+    auto ref = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
+    EXPECT_TRUE(ref.average.mean.empty());
+    EXPECT_TRUE(ref.average.variance.empty());
 
     auto nthreads = GetParam();
     opt.num_threads = nthreads;
 
     if (nthreads == 1) {
         // Cursory checks.
-        EXPECT_EQ(ref.per_block.size(), 3);
+        EXPECT_EQ(ref.per_block.size(), nblocks);
     } else {
         // Checking against the same call, but parallelized.
-        auto res1 = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        for (size_t i = 0; i < 3; ++i) {
-            EXPECT_EQ(ref.per_block[i].means, res1.per_block[i].means);
-            EXPECT_EQ(ref.per_block[i].variances, res1.per_block[i].variances);
+        auto res1 = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
+        for (int i = 0; i < nblocks; ++i) {
+            EXPECT_EQ(ref.per_block[i].mean, res1.per_block[i].mean);
+            EXPECT_EQ(ref.per_block[i].variance, res1.per_block[i].variance);
             EXPECT_EQ(ref.per_block[i].fitted, res1.per_block[i].fitted);
-            EXPECT_EQ(ref.per_block[i].residuals, res1.per_block[i].residuals);
+            EXPECT_EQ(ref.per_block[i].residual, res1.per_block[i].residual);
         }
     }
 
-    auto res2 = scran_variances::model_gene_variances_blocked(*dense_column, blocks.data(), opt);
-    for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res2.per_block[i].means, {});
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res2.per_block[i].variances, {});
+    auto res2 = scran_variances::model_gene_variances_blocked(*dense_column, blocks.data(), nblocks, opt);
+    for (int i = 0; i < nblocks; ++i) {
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].mean, res2.per_block[i].mean, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variance, res2.per_block[i].variance, {});
     }
 
-    auto res3 = scran_variances::model_gene_variances_blocked(*sparse_row, blocks.data(), opt);
-    for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res3.per_block[i].means, {});
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res3.per_block[i].variances, {});
+    auto res3 = scran_variances::model_gene_variances_blocked(*sparse_row, blocks.data(), nblocks, opt);
+    for (int i = 0; i < nblocks; ++i) {
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].mean, res3.per_block[i].mean, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variance, res3.per_block[i].variance, {});
     }
 
-    auto res4 = scran_variances::model_gene_variances_blocked(*sparse_column, blocks.data(), opt);
-    for (size_t i = 0; i < 3; ++i) {
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].means, res3.per_block[i].means, {});
-        scran_tests::compare_almost_equal_containers(ref.per_block[i].variances, res3.per_block[i].variances, {});
+    auto res4 = scran_variances::model_gene_variances_blocked(*sparse_column, blocks.data(), nblocks, opt);
+    for (int i = 0; i < nblocks; ++i) {
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].mean, res3.per_block[i].mean, {});
+        scran_tests::compare_almost_equal_containers(ref.per_block[i].variance, res3.per_block[i].variance, {});
     }
 }
 
 TEST_P(ModelGeneVariancesTest, BlockedMean) {
-    std::vector<int> blocks(dense_row->ncol());
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        blocks[i] = i % 3;
+    const int nblocks = 3;
+    const int NC = dense_row->ncol();
+    std::vector<int> blocks(NC);
+    for (int i = 0; i < NC; ++i) {
+        blocks[i] = i % nblocks;
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
@@ -134,60 +135,63 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
     // Checking averages with equiweighting.
     opt.block_weight_policy = scran_blocks::WeightPolicy::EQUAL;
     {
-        auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
+        auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
         std::vector<double> expected_means(dense_row->nrow()), 
             expected_variances(dense_row->nrow()),
             expected_fitted(dense_row->nrow()),
             expected_residuals(dense_row->nrow());
 
-        for (size_t r = 0, rend = expected_means.size(); r < rend; ++r) {
-            for (int b = 0; b < 3; ++b) {
-                expected_means[r] += ares.per_block[b].means[r];
-                expected_variances[r] += ares.per_block[b].variances[r];
+        for (std::size_t r = 0, rend = expected_means.size(); r < rend; ++r) {
+            for (int b = 0; b < nblocks; ++b) {
+                expected_means[r] += ares.per_block[b].mean[r];
+                expected_variances[r] += ares.per_block[b].variance[r];
                 expected_fitted[r] += ares.per_block[b].fitted[r];
-                expected_residuals[r] += ares.per_block[b].residuals[r];
+                expected_residuals[r] += ares.per_block[b].residual[r];
             }
 
-            expected_means[r] /= 3;
-            expected_variances[r] /= 3;
-            expected_fitted[r] /= 3;
-            expected_residuals[r] /= 3;
+            expected_means[r] /= nblocks;
+            expected_variances[r] /= nblocks;
+            expected_fitted[r] /= nblocks;
+            expected_residuals[r] /= nblocks;
         }
 
-        scran_tests::compare_almost_equal_containers(expected_means, ares.average.means, {});
-        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variances, {});
+        scran_tests::compare_almost_equal_containers(expected_means, ares.average.mean, {});
+        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variance, {});
         scran_tests::compare_almost_equal_containers(expected_fitted, ares.average.fitted, {});
-        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residuals, {});
+        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residual, {});
 
         // Checking limit of the variable policy.
         opt.block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
         opt.variable_block_weight_parameters.lower_bound = 0;
         opt.variable_block_weight_parameters.upper_bound = 0;
 
-        auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        scran_tests::compare_almost_equal_containers(ares.average.means, vres.average.means, {});
-        scran_tests::compare_almost_equal_containers(ares.average.variances, vres.average.variances, {});
+        auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
+        scran_tests::compare_almost_equal_containers(ares.average.mean, vres.average.mean, {});
+        scran_tests::compare_almost_equal_containers(ares.average.variance, vres.average.variance, {});
         scran_tests::compare_almost_equal_containers(ares.average.fitted, vres.average.fitted, {});
-        scran_tests::compare_almost_equal_containers(ares.average.residuals, vres.average.residuals, {});
+        scran_tests::compare_almost_equal_containers(ares.average.residual, vres.average.residual, {});
     }
 
     // Checking averages without equiweighting.
     opt.block_weight_policy = scran_blocks::WeightPolicy::SIZE;
     {
-        auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        auto block_size = tatami_stats::tabulate_groups(blocks.data(), blocks.size());
+        auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
+        std::vector<int> block_size(nblocks);
+        for (int c = 0; c < NC; ++c) {
+            block_size[blocks[c]] += 1;
+        }
 
         std::vector<double> expected_means(dense_row->nrow()), 
             expected_variances(dense_row->nrow()),
             expected_fitted(dense_row->nrow()),
             expected_residuals(dense_row->nrow());
 
-        for (size_t r = 0, rend = expected_means.size(); r < rend; ++r) {
-            for (int b = 0; b < 3; ++b) {
-                expected_means[r] += ares.per_block[b].means[r] * block_size[b];
-                expected_variances[r] += ares.per_block[b].variances[r] * block_size[b];
+        for (std::size_t r = 0, rend = expected_means.size(); r < rend; ++r) {
+            for (int b = 0; b < nblocks; ++b) {
+                expected_means[r] += ares.per_block[b].mean[r] * block_size[b];
+                expected_variances[r] += ares.per_block[b].variance[r] * block_size[b];
                 expected_fitted[r] += ares.per_block[b].fitted[r] * block_size[b];
-                expected_residuals[r] += ares.per_block[b].residuals[r] * block_size[b];
+                expected_residuals[r] += ares.per_block[b].residual[r] * block_size[b];
             }
 
             expected_means[r] /= blocks.size();
@@ -196,33 +200,35 @@ TEST_P(ModelGeneVariancesTest, BlockedMean) {
             expected_residuals[r] /= blocks.size();
         }
 
-        scran_tests::compare_almost_equal_containers(expected_means, ares.average.means, {});
-        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variances, {});
+        scran_tests::compare_almost_equal_containers(expected_means, ares.average.mean, {});
+        scran_tests::compare_almost_equal_containers(expected_variances, ares.average.variance, {});
         scran_tests::compare_almost_equal_containers(expected_fitted, ares.average.fitted, {});
-        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residuals, {});
+        scran_tests::compare_almost_equal_containers(expected_residuals, ares.average.residual, {});
 
         // Checking limit of the variable policy.
         opt.block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
         opt.variable_block_weight_parameters.lower_bound = 0;
         opt.variable_block_weight_parameters.upper_bound = 100000;
 
-        auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-        scran_tests::compare_almost_equal_containers(ares.average.means, vres.average.means, {});
-        scran_tests::compare_almost_equal_containers(ares.average.variances, vres.average.variances, {});
+        auto vres = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
+        scran_tests::compare_almost_equal_containers(ares.average.mean, vres.average.mean, {});
+        scran_tests::compare_almost_equal_containers(ares.average.variance, vres.average.variance, {});
         scran_tests::compare_almost_equal_containers(ares.average.fitted, vres.average.fitted, {});
-        scran_tests::compare_almost_equal_containers(ares.average.residuals, vres.average.residuals, {});
+        scran_tests::compare_almost_equal_containers(ares.average.residual, vres.average.residual, {});
     }
 }
 
 TEST_P(ModelGeneVariancesTest, BlockedMedian) {
-    std::vector<int> blocks(dense_row->ncol());
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        blocks[i] = i % 3;
+    const int nblocks = 3;
+    const int NC = dense_row->ncol();
+    std::vector<int> blocks(NC);
+    for (int i = 0; i < NC; ++i) {
+        blocks[i] = i % nblocks;
     }
 
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
-    auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
+    auto ares = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), nblocks, opt);
 
     std::vector<double> expected_means(dense_row->nrow()), buffer_means,
         expected_variances(dense_row->nrow()), buffer_variances,
@@ -236,10 +242,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMedian) {
         buffer_residuals.clear();
 
         for (int b = 0; b < 3; ++b) {
-            buffer_means.push_back(ares.per_block[b].means[r]);
-            buffer_variances.push_back(ares.per_block[b].variances[r]);
+            buffer_means.push_back(ares.per_block[b].mean[r]);
+            buffer_variances.push_back(ares.per_block[b].variance[r]);
             buffer_fitted.push_back(ares.per_block[b].fitted[r]);
-            buffer_residuals.push_back(ares.per_block[b].residuals[r]);
+            buffer_residuals.push_back(ares.per_block[b].residual[r]);
         }
 
         std::sort(buffer_means.begin(), buffer_means.end());
@@ -253,10 +259,10 @@ TEST_P(ModelGeneVariancesTest, BlockedMedian) {
         expected_residuals[r] = buffer_residuals[1];
     }
 
-    EXPECT_EQ(expected_means, ares.average.means);
-    EXPECT_EQ(expected_variances, ares.average.variances);
+    EXPECT_EQ(expected_means, ares.average.mean);
+    EXPECT_EQ(expected_variances, ares.average.variance);
     EXPECT_EQ(expected_fitted, ares.average.fitted);
-    EXPECT_EQ(expected_residuals, ares.average.residuals);
+    EXPECT_EQ(expected_residuals, ares.average.residual);
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -297,40 +303,40 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Mean) {
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_weight_policy = scran_blocks::WeightPolicy::SIZE;
 
-    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
-    EXPECT_FALSE(std::isnan(res.per_block[0].means[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[0].variances[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[1].means[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[1].variances[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[2].means[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[2].variances[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[3].means[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[3].variances[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[4].means[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[4].variances[0]));
+    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), 5, opt);
+    EXPECT_FALSE(std::isnan(res.per_block[0].mean[0]));
+    EXPECT_FALSE(std::isnan(res.per_block[0].variance[0]));
+    EXPECT_FALSE(std::isnan(res.per_block[1].mean[0]));
+    EXPECT_TRUE(std::isnan(res.per_block[1].variance[0]));
+    EXPECT_TRUE(std::isnan(res.per_block[2].mean[0]));
+    EXPECT_TRUE(std::isnan(res.per_block[2].variance[0]));
+    EXPECT_FALSE(std::isnan(res.per_block[3].mean[0]));
+    EXPECT_TRUE(std::isnan(res.per_block[3].variance[0]));
+    EXPECT_FALSE(std::isnan(res.per_block[4].mean[0]));
+    EXPECT_FALSE(std::isnan(res.per_block[4].variance[0]));
 
     // Subset to blocks 0 and 4 to ignore all blocks with fewer than two cells. This means we do [2, ncol).
     tatami::DelayedSubsetBlock<double, int> sub(dense_row, 2, nc - 2, false);
     std::vector<int> subblocks(nc - 2);
     subblocks[0] = 1;
     subblocks[1] = 1;
-    auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), opt);
-    EXPECT_EQ(ref.average.variances, res.average.variances);
+    auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), 2, opt);
+    EXPECT_EQ(ref.average.variance, res.average.variance);
     EXPECT_EQ(ref.average.fitted, res.average.fitted);
-    EXPECT_EQ(ref.average.residuals, res.average.residuals);
+    EXPECT_EQ(ref.average.residual, res.average.residual);
 
     // Computing the expected mean. As the weight policy is SIZE, we basically just take the row means.
-    auto expected = tatami_stats::sums::by_row(dense_row.get());
+    auto expected = tatami_stats::sum(true, *dense_row, {});
     for (auto& x : expected) {
         x /= nc;
     }
-    scran_tests::compare_almost_equal_containers(expected, res.average.means, {});
+    scran_tests::compare_almost_equal_containers(expected, res.average.mean, {});
 }
 
 TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
-    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), opt);
+    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), 5, opt);
 
     // Subset to blocks 0 and 4 to ignore all blocks with fewer than two cells. This means we do [2, ncol).
     tatami::DelayedSubsetBlock<double, int> sub(dense_row, 2, nc - 2, false);
@@ -338,10 +344,10 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
     subblocks[0] = 1;
     subblocks[1] = 1;
 
-    auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), opt);
-    EXPECT_EQ(ref.average.variances, res.average.variances);
+    auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), 2, opt);
+    EXPECT_EQ(ref.average.variance, res.average.variance);
     EXPECT_EQ(ref.average.fitted, res.average.fitted);
-    EXPECT_EQ(ref.average.residuals, res.average.residuals);
+    EXPECT_EQ(ref.average.residual, res.average.residual);
 
     // Computing the expected mean by indexing block levels to remove all empty blocks. 
     std::vector<int> mblocks(nc);
@@ -350,8 +356,8 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
     mblocks[2] = 3;
     mblocks[3] = 3;
 
-    auto mref = scran_variances::model_gene_variances_blocked(*dense_row, mblocks.data(), opt);
-    EXPECT_EQ(mref.average.means, res.average.means);
+    auto mref = scran_variances::model_gene_variances_blocked(*dense_row, mblocks.data(), 4, opt);
+    EXPECT_EQ(mref.average.mean, res.average.mean);
 }
 
 TEST(ModelGeneVariances, NullAverages) {
@@ -379,28 +385,28 @@ TEST(ModelGeneVariances, NullAverages) {
     sanisizer::resize(buffers.per_block, nblocks);
     for (decltype(nblocks) b = 0; b < nblocks; ++b) {
         auto& current = buffers.per_block[b];
-        current.means = output.per_block[b].means.data();
-        current.variances = output.per_block[b].variances.data();
+        current.mean = output.per_block[b].mean.data();
+        current.variance = output.per_block[b].variance.data();
         current.fitted = output.per_block[b].fitted.data();
-        current.residuals = output.per_block[b].residuals.data();
+        current.residual = output.per_block[b].residual.data();
     }
 
-    buffers.average.means = NULL;
-    buffers.average.variances = NULL;
+    buffers.average.mean = NULL;
+    buffers.average.variance = NULL;
     buffers.average.fitted = NULL;
-    buffers.average.residuals = NULL;
+    buffers.average.residual = NULL;
 
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
-    scran_variances::model_gene_variances_blocked(mat, blocks.data(), buffers, opt);
+    scran_variances::model_gene_variances_blocked(mat, blocks.data(), 3, buffers, opt);
     opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
-    scran_variances::model_gene_variances_blocked(mat, blocks.data(), buffers, opt);
+    scran_variances::model_gene_variances_blocked(mat, blocks.data(), 3, buffers, opt);
 
     for (decltype(nblocks) b = 0; b < nblocks; ++b) {
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].means[0]));
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].variances[1]));
+        EXPECT_FALSE(std::isnan(buffers.per_block[b].mean[0]));
+        EXPECT_FALSE(std::isnan(buffers.per_block[b].variance[1]));
         EXPECT_FALSE(std::isnan(buffers.per_block[b].fitted[2]));
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].residuals[4]));
+        EXPECT_FALSE(std::isnan(buffers.per_block[b].residual[4]));
     }
 }
 
@@ -422,10 +428,10 @@ TEST(ModelGeneVariances, NoTrend) {
 
         opt.trend = false;
         auto res = scran_variances::model_gene_variances(mat, opt);
-        EXPECT_EQ(ref.means, res.means);
-        EXPECT_EQ(ref.variances, res.variances);
+        EXPECT_EQ(ref.mean, res.mean);
+        EXPECT_EQ(ref.variance, res.variance);
         EXPECT_TRUE(res.fitted.empty());
-        EXPECT_TRUE(res.residuals.empty());
+        EXPECT_TRUE(res.residual.empty());
     }
 
     std::vector<int> block { 0, 1, 0, 1, 0, 1 };
@@ -433,21 +439,21 @@ TEST(ModelGeneVariances, NoTrend) {
     // Check blocked as well.
     {
         scran_variances::ModelGeneVariancesOptions opt;
-        auto ref = scran_variances::model_gene_variances_blocked(mat, block.data(), opt);
+        auto ref = scran_variances::model_gene_variances_blocked(mat, block.data(), 2, opt);
 
         opt.trend = false;
-        auto res = scran_variances::model_gene_variances_blocked(mat, block.data(), opt);
-        EXPECT_EQ(ref.average.means, res.average.means);
-        EXPECT_EQ(ref.average.variances, res.average.variances);
+        auto res = scran_variances::model_gene_variances_blocked(mat, block.data(), 2, opt);
+        EXPECT_EQ(ref.average.mean, res.average.mean);
+        EXPECT_EQ(ref.average.variance, res.average.variance);
         EXPECT_TRUE(res.average.fitted.empty());
-        EXPECT_TRUE(res.average.residuals.empty());
+        EXPECT_TRUE(res.average.residual.empty());
 
         ASSERT_EQ(res.per_block.size(), 2);
         for (int b = 0; b < 2; ++b) {
-            EXPECT_EQ(ref.per_block[b].means, res.per_block[b].means);
-            EXPECT_EQ(ref.per_block[b].variances, res.per_block[b].variances);
+            EXPECT_EQ(ref.per_block[b].mean, res.per_block[b].mean);
+            EXPECT_EQ(ref.per_block[b].variance, res.per_block[b].variance);
             EXPECT_TRUE(res.per_block[b].fitted.empty());
-            EXPECT_TRUE(res.per_block[b].residuals.empty());
+            EXPECT_TRUE(res.per_block[b].residual.empty());
         }
     }
 
@@ -458,23 +464,23 @@ TEST(ModelGeneVariances, NoTrend) {
         sanisizer::resize(buffers.per_block, 2);
         for (int b = 0; b < 2; ++b) {
             auto& current = buffers.per_block[b];
-            current.means = output.per_block[b].means.data();
-            current.variances = output.per_block[b].variances.data();
+            current.mean = output.per_block[b].mean.data();
+            current.variance = output.per_block[b].variance.data();
             current.fitted = NULL;
-            current.residuals = NULL;
+            current.residual = NULL;
         }
 
         scran_variances::ModelGeneVariancesResults<double> averages(nr, /* trend = */ true);
         scran_variances::ModelGeneVariancesBuffers<double> abuffers;
-        abuffers.means = averages.means.data();
-        abuffers.variances = averages.means.data();
+        abuffers.mean = averages.mean.data();
+        abuffers.variance = averages.mean.data();
         abuffers.fitted = averages.fitted.data();
-        abuffers.residuals = averages.fitted.data();
+        abuffers.residual = averages.residual.data();
         buffers.average = abuffers; 
 
         std::string msg;
         try {
-            scran_variances::model_gene_variances_blocked(mat, block.data(), buffers, {});
+            scran_variances::model_gene_variances_blocked(mat, block.data(), 2, buffers, {});
         } catch (std::exception& e) {
             msg = e.what();
         }

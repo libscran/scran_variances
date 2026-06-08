@@ -4,14 +4,22 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/libscran/scran_tests
   GIT_TAG master
 )
+
+FetchContent_Declare(
+  tatami_stats
+  GIT_REPOSITORY https://github.com/tatami-inc/tatami_stats
+  GIT_TAG master
+)
+
 FetchContent_MakeAvailable(scran_tests)
+FetchContent_MakeAvailable(tatami_stats)
 
 include(GoogleTest)
 
 option(CODE_COVERAGE "Enable coverage testing" OFF)
 set(DO_CODE_COVERAGE OFF)
 if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    set(DO_CODE_COVERAGE ON)
+set(DO_CODE_COVERAGE ON)
 endif()
 
 macro(decorate_test target)
@@ -19,6 +27,7 @@ macro(decorate_test target)
         ${target}
         scran_variances
         scran_tests
+        tatami_stats
     )
 
     target_compile_options(${target} PRIVATE -Wall -Werror -Wpedantic -Wextra)

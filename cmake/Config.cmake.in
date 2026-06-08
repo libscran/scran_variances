@@ -2,9 +2,9 @@
 
 include(CMakeFindDependencyMacro)
 find_dependency(tatami_tatami 4.1.0 CONFIG)
-find_dependency(tatami_tatami_stats 2.0.0 CONFIG)
+find_dependency(ltla_quickstats 0.1.0 CONFIG)
 find_dependency(ltla_WeightedLowess 2.1.0 CONFIG)
-find_dependency(libscran_scran_blocks 0.1.0 CONFIG)
+find_dependency(libscran_scran_blocks 0.1.3 CONFIG)
 find_dependency(ltla_sanisizer 0.2.0 CONFIG )
 find_dependency(libscran_topicks 0.2.0 CONFIG)
 

@@ -67,7 +67,7 @@ TEST(FitVarianceTrendTest, Residuals) {
     for (size_t i = 0; i < x.size(); ++i) {
         ref[i] = y[i] - output.fitted[i];
     }
-    EXPECT_EQ(output.residuals, ref);
+    EXPECT_EQ(output.residual, ref);
 
     // And again, without transformation.
     opt.transform = false;
@@ -76,7 +76,7 @@ TEST(FitVarianceTrendTest, Residuals) {
     for (size_t i = 0; i < x.size(); ++i) {
         ref[i] = y[i] - output.fitted[i];
     }
-    EXPECT_EQ(output.residuals, ref);
+    EXPECT_EQ(output.residual, ref);
 }
 
 TEST(FitVarianceTrendTest, Filtering) {
@@ -100,7 +100,7 @@ TEST(FitVarianceTrendTest, Filtering) {
 
     opt.mean_filter = false;
     auto output_unfilt = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
-    EXPECT_NE(ref.residuals, output_unfilt.residuals); // check that there is a difference.
+    EXPECT_NE(ref.residual, output_unfilt.residual); // check that there is a difference.
 
     std::vector<double> submean, subvar, subfit, subresid;
     for (size_t i = 0; i < x.size(); ++i) {
@@ -108,12 +108,12 @@ TEST(FitVarianceTrendTest, Filtering) {
             submean.push_back(x[i]);
             subvar.push_back(y[i]);
             subfit.push_back(ref.fitted[i]);
-            subresid.push_back(ref.residuals[i]);
+            subresid.push_back(ref.residual[i]);
         }
     }
 
     auto output_manual = scran_variances::fit_variance_trend(submean.size(), submean.data(), subvar.data(), opt);
-    EXPECT_EQ(output_manual.residuals, subresid);
+    EXPECT_EQ(output_manual.residual, subresid);
     EXPECT_EQ(output_manual.fitted, subfit);
 }
 
@@ -142,7 +142,7 @@ TEST(FitVarianceTrendTest, MinWidth) {
     opt.minimum_width = 0.2;
     auto foutput = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt);
 
-    EXPECT_NE(output.residuals, foutput.residuals);
+    EXPECT_NE(output.residual, foutput.residual);
 
     // They eventually converge when both all window widths are at their maximum;
     // either because of a large span, or because we need to get a minimum number of counts. 
@@ -154,10 +154,10 @@ TEST(FitVarianceTrendTest, MinWidth) {
     opt2.use_minimum_width = true;
     opt2.minimum_window_count = 200;
     auto foutput2 = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt2);
-    EXPECT_EQ(output2.residuals, foutput2.residuals);
+    EXPECT_EQ(output2.residual, foutput2.residual);
 
     opt2.minimum_window_count = 0;
     opt2.minimum_width = 10;
     foutput2 = scran_variances::fit_variance_trend(x.size(), x.data(), y.data(), opt2);
-    EXPECT_EQ(output2.residuals, foutput2.residuals);
+    EXPECT_EQ(output2.residual, foutput2.residual);
 }

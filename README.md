@@ -24,10 +24,10 @@ std::shared_ptr<tatami::Matrix<double, int> > mat = some_data_source();
 scran_variances::ModelGeneVariancesOptions opt;
 auto res = scran_variances::model_gene_variances(*mat, opt);
 
-res.means; // vector of means across genes.
-res.variances; // vector of variances across genes.
+res.mean; // vector of means across genes.
+res.variance; // vector of variances across genes.
 res.fitted; // vector of fitted values of the mean-variance trend for each gene.
-res.residuals; // vector of residuals from the trend.
+res.residual; // vector of residuals from the trend.
 ```
 
 Typically, the residuals are used for feature selection, as these account for non-trivial mean-variance trends in transformed count data.
@@ -36,8 +36,8 @@ Typically, the residuals are used for feature selection, as these account for no
 scran_variances::ChooseHighlyVariableGenesOptions copt;
 copt.top = 5000;
 auto chosen = scran_variances::choose_highly_variable_genes_index(
-    res.residuals.size(), 
-    res.residuals.data(), 
+    res.residual.size(), 
+    res.residual.data(), 
     copt
 );
 
@@ -53,7 +53,7 @@ fopt.span = 0.5;
 fopt.minimum_mean = 1;
 auto fit = scran_variances::fit_variance_trend(100, means, variances, fopt);
 fit.fitted; // fitted values for all genes.
-fit.residuals; // residuals values for all genes.
+fit.residual; // residuals values for all genes.
 ```
 
 Check out the [reference documentation](https://libscran.github.io/scran_variances) for more details.
