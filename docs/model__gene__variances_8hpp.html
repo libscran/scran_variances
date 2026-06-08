@@ -113,6 +113,7 @@ $(function(){ initResizable(false); });
 <code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;cassert&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
 <code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html">tatami/tatami.hpp</a>&quot;</code><br />
 <code>#include &quot;tatami_stats/tatami_stats.hpp&quot;</code><br />
 <code>#include &quot;<a class="elRef" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html">scran_blocks/scran_blocks.hpp</a>&quot;</code><br />
@@ -124,29 +125,31 @@ Include dependency graph for model_gene_variances.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="model__gene__variances_8hpp__incl.png" border="0" usemap="#ascran__variances_2model__gene__variances_8hpp" alt=""/></div>
 <map name="ascran__variances_2model__gene__variances_8hpp" id="ascran__variances_2model__gene__variances_8hpp">
-<area shape="rect" title="Model the per&#45;gene variances." alt="" coords="464,5,619,46"/>
+<area shape="rect" title="Model the per&#45;gene variances." alt="" coords="496,5,651,46"/>
 <area shape="rect" title=" " alt="" coords="5,183,80,208"/>
-<area shape="poly" title=" " alt="" coords="463,35,402,42,331,54,257,72,186,96,152,113,120,134,68,174,65,170,117,129,150,109,184,92,256,67,330,49,401,37,463,29"/>
+<area shape="poly" title=" " alt="" coords="495,33,427,39,348,51,265,69,185,96,151,113,119,134,68,174,64,170,116,129,149,109,183,92,264,64,347,46,426,34,495,28"/>
 <area shape="rect" title=" " alt="" coords="103,183,160,208"/>
-<area shape="poly" title=" " alt="" coords="464,37,359,57,304,74,250,96,222,113,196,133,154,173,150,169,193,129,219,109,248,92,302,69,358,52,463,32"/>
+<area shape="poly" title=" " alt="" coords="495,35,439,42,376,54,311,71,249,96,221,113,195,133,154,173,150,169,192,129,218,109,247,92,309,66,375,48,438,36,495,29"/>
 <area shape="rect" title=" " alt="" coords="579,102,631,127"/>
-<area shape="poly" title=" " alt="" coords="558,45,590,88,585,91,554,48"/>
+<area shape="poly" title=" " alt="" coords="583,46,598,86,593,88,578,47"/>
 <area shape="rect" title=" " alt="" coords="185,183,249,208"/>
-<area shape="poly" title=" " alt="" coords="464,38,379,58,336,74,296,96,276,112,259,132,233,170,228,167,255,128,272,109,293,92,334,69,378,53,462,33"/>
+<area shape="poly" title=" " alt="" coords="495,34,448,42,396,53,344,71,296,96,276,112,259,131,232,170,228,167,254,128,272,108,293,92,342,66,394,48,447,36,495,29"/>
 <area shape="rect" title=" " alt="" coords="656,102,720,127"/>
-<area shape="poly" title=" " alt="" coords="576,44,656,91,653,96,573,49"/>
-<area shape="rect" target="_parent" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html" title=" " alt="" coords="744,102,866,127"/>
-<area shape="poly" title=" " alt="" coords="602,44,755,94,753,99,600,49"/>
-<area shape="rect" title=" " alt="" coords="890,94,1024,135"/>
-<area shape="poly" title=" " alt="" coords="620,39,876,91,875,96,619,44"/>
-<area shape="rect" target="_parent" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html" title=" " alt="" coords="1047,94,1182,135"/>
-<area shape="poly" title=" " alt="" coords="619,32,804,55,1032,91,1032,96,803,60,619,38"/>
+<area shape="poly" title=" " alt="" coords="601,44,662,90,659,95,598,49"/>
+<area shape="rect" title=" " alt="" coords="744,102,810,127"/>
+<area shape="poly" title=" " alt="" coords="620,44,736,93,734,98,618,49"/>
+<area shape="rect" target="_parent" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html" title=" " alt="" coords="834,102,955,127"/>
+<area shape="poly" title=" " alt="" coords="647,44,835,94,834,100,646,49"/>
+<area shape="rect" title=" " alt="" coords="980,94,1113,135"/>
+<area shape="poly" title=" " alt="" coords="652,36,793,59,965,91,964,96,793,64,651,41"/>
+<area shape="rect" target="_parent" href="https://libscran.github.io/scran_blocks/scran__blocks_8hpp.html" title=" " alt="" coords="1137,94,1271,135"/>
+<area shape="poly" title=" " alt="" coords="652,31,860,53,989,70,1122,91,1121,96,989,75,860,58,651,36"/>
 <area shape="rect" title=" " alt="" coords="620,183,772,208"/>
-<area shape="poly" title=" " alt="" coords="532,47,524,67,517,90,517,113,525,133,539,145,563,157,625,176,623,181,561,162,536,150,520,136,511,114,512,89,519,65,527,45"/>
+<area shape="poly" title=" " alt="" coords="554,48,538,67,524,89,518,112,520,123,525,133,539,145,563,157,625,176,623,181,561,162,536,150,520,136,515,124,513,112,519,87,533,64,550,45"/>
 <area shape="rect" href="fit__variance__trend_8hpp.html" title="Fit a mean&#45;variance trend to log&#45;count data." alt="" coords="306,102,454,127"/>
-<area shape="poly" title=" " alt="" coords="506,49,417,96,414,92,503,44"/>
+<area shape="poly" title=" " alt="" coords="530,49,422,97,419,92,528,44"/>
 <area shape="rect" title=" " alt="" coords="796,183,865,208"/>
-<area shape="poly" title=" " alt="" coords="543,46,547,90,555,113,568,133,592,153,615,165,638,171,662,174,715,174,781,180,780,185,715,179,662,179,637,177,614,170,589,157,565,136,550,116,542,91,537,47"/>
+<area shape="poly" title=" " alt="" coords="567,47,558,90,559,113,569,133,590,155,612,168,635,175,659,177,714,175,746,176,781,180,780,185,745,181,714,180,659,182,634,180,610,173,587,159,564,136,554,114,552,90,562,46"/>
 <area shape="poly" title=" " alt="" coords="328,130,96,184,94,179,326,125"/>
 <area shape="poly" title=" " alt="" coords="342,130,176,183,175,178,341,125"/>
 <area shape="poly" title=" " alt="" coords="356,130,257,178,254,173,354,125"/>
