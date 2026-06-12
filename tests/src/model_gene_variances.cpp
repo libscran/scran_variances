@@ -6,6 +6,30 @@
 
 #include <cmath>
 
+template<typename Stat_>
+bool is_all_nan(const std::vector<Stat_>& values) {
+    EXPECT_GT(values.size(), 0);
+    for (auto v : values) {
+        if (!std::isnan(v)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+template<typename Stat_>
+bool has_no_nan(const std::vector<Stat_>& values) {
+    EXPECT_GT(values.size(), 0);
+    for (auto v : values) {
+        if (std::isnan(v)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**********************************/
+
 class ModelGeneVariancesTest : public ::testing::TestWithParam<int> {
 protected:
     inline static std::shared_ptr<tatami::NumericMatrix> dense_row, dense_column, sparse_row, sparse_column;
@@ -271,25 +295,27 @@ INSTANTIATE_TEST_SUITE_P(
     ::testing::Values(1, 3) // number of threads
 );
 
-class ModelGeneVariancesNearEmptyBlockTest : public ::testing::Test {
+/**********************************/
+
+class ModelGeneVariancesNearEmptyBlockTest : public ::testing::TestWithParam<std::tuple<int, bool> > {
 protected:
     int nr = 109, nc = 152;
-    std::shared_ptr<tatami::NumericMatrix> dense_row;
+    std::vector<double> vec;
     std::vector<int> blocks;
 
     void SetUp() {
-        auto vec = scran_tests::simulate_vector(nr * nc, []{
+        vec = scran_tests::simulate_vector(nr * nc, []{
             scran_tests::SimulateVectorParameters sparams;
-            sparams.density = 0.1;
+            sparams.density = 1; // make sure there's enough genes with means above the minimum in block 4.
             sparams.seed = 69;
             sparams.lower = 0;
             sparams.upper = 5;
             return sparams;
         }());
-        dense_row.reset(new tatami::DenseMatrix<double, int, decltype(vec)>(nr, nc, std::move(vec), true));
 
         // Block 0 has everything in it.
         // Block 1 and 3 have one observation.
+        // Block 2 has no observations.
         // Block 4 has two observations.
         blocks.resize(nc);
         blocks[0] = 1;
@@ -299,55 +325,69 @@ protected:
     }
 };
 
-TEST_F(ModelGeneVariancesNearEmptyBlockTest, Mean) {
+TEST_P(ModelGeneVariancesNearEmptyBlockTest, Mean) {
+    auto params = GetParam();
+    const auto nthreads = std::get<0>(params);
+    const auto rowmajor = std::get<1>(params);
+
+    auto mat = std::make_shared<tatami::DenseMatrix<double, int, decltype(vec)> >(nr, nc, vec, rowmajor);
+
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_weight_policy = scran_blocks::WeightPolicy::SIZE;
+    opt.num_threads = nthreads;
 
-    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), 5, opt);
-    EXPECT_FALSE(std::isnan(res.per_block[0].mean[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[0].variance[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[1].mean[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[1].variance[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[2].mean[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[2].variance[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[3].mean[0]));
-    EXPECT_TRUE(std::isnan(res.per_block[3].variance[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[4].mean[0]));
-    EXPECT_FALSE(std::isnan(res.per_block[4].variance[0]));
+    auto res = scran_variances::model_gene_variances_blocked(*mat, blocks.data(), 5, opt);
+    EXPECT_TRUE(has_no_nan(res.per_block[0].mean));
+    EXPECT_TRUE(has_no_nan(res.per_block[0].variance));
+    EXPECT_TRUE(has_no_nan(res.per_block[1].mean));
+    EXPECT_TRUE(is_all_nan(res.per_block[1].variance));
+    EXPECT_TRUE(is_all_nan(res.per_block[2].mean));
+    EXPECT_TRUE(is_all_nan(res.per_block[2].variance));
+    EXPECT_TRUE(has_no_nan(res.per_block[3].mean));
+    EXPECT_TRUE(is_all_nan(res.per_block[3].variance));
+    EXPECT_TRUE(has_no_nan(res.per_block[4].mean));
+    EXPECT_TRUE(has_no_nan(res.per_block[4].variance));
 
     // Subset to blocks 0 and 4 to ignore all blocks with fewer than two cells. This means we do [2, ncol).
-    tatami::DelayedSubsetBlock<double, int> sub(dense_row, 2, nc - 2, false);
+    tatami::DelayedSubsetBlock<double, int> sub(mat, 2, nc - 2, false);
     std::vector<int> subblocks(nc - 2);
     subblocks[0] = 1;
     subblocks[1] = 1;
     auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), 2, opt);
-    EXPECT_EQ(ref.average.variance, res.average.variance);
-    EXPECT_EQ(ref.average.fitted, res.average.fitted);
-    EXPECT_EQ(ref.average.residual, res.average.residual);
+    scran_tests::compare_almost_equal_containers(ref.average.variance, res.average.variance, {});
+    scran_tests::compare_almost_equal_containers(ref.average.fitted, res.average.fitted, {});
+    scran_tests::compare_almost_equal_containers(ref.average.residual, res.average.residual, {});
 
     // Computing the expected mean. As the weight policy is SIZE, we basically just take the row means.
-    auto expected = tatami_stats::sum(true, *dense_row, {});
+    auto expected = tatami_stats::sum(true, *mat, {});
     for (auto& x : expected) {
         x /= nc;
     }
     scran_tests::compare_almost_equal_containers(expected, res.average.mean, {});
 }
 
-TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
+TEST_P(ModelGeneVariancesNearEmptyBlockTest, Median) {
+    auto params = GetParam();
+    const auto nthreads = std::get<0>(params);
+    const auto rowmajor = std::get<1>(params);
+
+    auto mat = std::make_shared<tatami::DenseMatrix<double, int, decltype(vec)> >(nr, nc, vec, rowmajor);
+
     scran_variances::ModelGeneVariancesOptions opt;
     opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
-    auto res = scran_variances::model_gene_variances_blocked(*dense_row, blocks.data(), 5, opt);
+    opt.num_threads = nthreads;
+    auto res = scran_variances::model_gene_variances_blocked(*mat, blocks.data(), 5, opt);
 
     // Subset to blocks 0 and 4 to ignore all blocks with fewer than two cells. This means we do [2, ncol).
-    tatami::DelayedSubsetBlock<double, int> sub(dense_row, 2, nc - 2, false);
+    tatami::DelayedSubsetBlock<double, int> sub(mat, 2, nc - 2, false);
     std::vector<int> subblocks(nc - 2);
     subblocks[0] = 1;
     subblocks[1] = 1;
 
     auto ref = scran_variances::model_gene_variances_blocked(sub, subblocks.data(), 2, opt);
-    EXPECT_EQ(ref.average.variance, res.average.variance);
-    EXPECT_EQ(ref.average.fitted, res.average.fitted);
-    EXPECT_EQ(ref.average.residual, res.average.residual);
+    scran_tests::compare_almost_equal_containers(ref.average.variance, res.average.variance, {});
+    scran_tests::compare_almost_equal_containers(ref.average.fitted, res.average.fitted, {});
+    scran_tests::compare_almost_equal_containers(ref.average.residual, res.average.residual, {});
 
     // Computing the expected mean by indexing block levels to remove all empty blocks. 
     std::vector<int> mblocks(nc);
@@ -356,9 +396,20 @@ TEST_F(ModelGeneVariancesNearEmptyBlockTest, Median) {
     mblocks[2] = 3;
     mblocks[3] = 3;
 
-    auto mref = scran_variances::model_gene_variances_blocked(*dense_row, mblocks.data(), 4, opt);
-    EXPECT_EQ(mref.average.mean, res.average.mean);
+    auto mref = scran_variances::model_gene_variances_blocked(*mat, mblocks.data(), 4, opt);
+    scran_tests::compare_almost_equal_containers(mref.average.mean, res.average.mean, {});
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    ModelGeneVariances,
+    ModelGeneVariancesNearEmptyBlockTest,
+    ::testing::Combine(
+        ::testing::Values(1, 3), // number of threads
+        ::testing::Values(false, true) // row-major or not.
+    )
+);
+
+/**********************************/
 
 TEST(ModelGeneVariances, NullAverages) {
     // Get some test coverage for the case where the Buffer::average pointers
@@ -403,10 +454,10 @@ TEST(ModelGeneVariances, NullAverages) {
     scran_variances::model_gene_variances_blocked(mat, blocks.data(), 3, buffers, opt);
 
     for (decltype(nblocks) b = 0; b < nblocks; ++b) {
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].mean[0]));
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].variance[1]));
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].fitted[2]));
-        EXPECT_FALSE(std::isnan(buffers.per_block[b].residual[4]));
+        EXPECT_TRUE(has_no_nan(output.per_block[b].mean));
+        EXPECT_TRUE(has_no_nan(output.per_block[b].variance));
+        EXPECT_TRUE(has_no_nan(output.per_block[b].fitted));
+        EXPECT_TRUE(has_no_nan(output.per_block[b].residual));
     }
 }
 
@@ -499,3 +550,66 @@ TEST(ModelGeneVariances, BlockedMismatch) {
     }
     EXPECT_TRUE(msg.find("not equal to") != std::string::npos);
 }
+
+/**********************************/
+
+class ModelGeneVariancesEmptyTest : public ::testing::TestWithParam<std::tuple<int, bool> > {};
+
+TEST_P(ModelGeneVariancesEmptyTest, Basic) {
+    auto param = GetParam();
+    const auto nthreads = std::get<0>(param);
+    const auto rowmajor = std::get<1>(param);
+
+    scran_variances::ModelGeneVariancesOptions opt;
+    opt.num_threads = nthreads;
+
+    tatami::DenseMatrix<double, int, std::vector<double> > mat(10, 0, std::vector<double>(), rowmajor);
+    auto res = scran_variances::model_gene_variances(mat, opt);
+
+    EXPECT_TRUE(is_all_nan(res.mean));
+    EXPECT_TRUE(is_all_nan(res.variance));
+    EXPECT_TRUE(is_all_nan(res.fitted));
+    EXPECT_TRUE(is_all_nan(res.residual));
+}
+
+TEST_P(ModelGeneVariancesEmptyTest, Blocked) {
+    auto param = GetParam();
+    const auto nthreads = std::get<0>(param);
+    const auto rowmajor = std::get<1>(param);
+
+    scran_variances::ModelGeneVariancesOptions opt;
+    opt.num_threads = nthreads;
+
+    tatami::DenseMatrix<double, int, std::vector<double> > mat(10, 0, std::vector<double>(), rowmajor);
+    auto bres = scran_variances::model_gene_variances_blocked(mat, static_cast<const int*>(NULL), 0, opt);
+
+    EXPECT_EQ(bres.per_block.size(), 0);
+    EXPECT_TRUE(is_all_nan(bres.average.mean));
+    EXPECT_TRUE(is_all_nan(bres.average.variance));
+    EXPECT_TRUE(is_all_nan(bres.average.fitted));
+    EXPECT_TRUE(is_all_nan(bres.average.residual));
+
+    auto bres2 = scran_variances::model_gene_variances_blocked(mat, static_cast<const int*>(NULL), 3, opt);
+
+    EXPECT_EQ(bres2.per_block.size(), 3);
+    for (const auto& pb : bres2.per_block) {
+        EXPECT_TRUE(is_all_nan(pb.mean));
+        EXPECT_TRUE(is_all_nan(pb.variance));
+        EXPECT_TRUE(is_all_nan(pb.fitted));
+        EXPECT_TRUE(is_all_nan(pb.residual));
+    }
+
+    EXPECT_TRUE(is_all_nan(bres2.average.mean));
+    EXPECT_TRUE(is_all_nan(bres2.average.variance));
+    EXPECT_TRUE(is_all_nan(bres2.average.fitted));
+    EXPECT_TRUE(is_all_nan(bres2.average.residual));
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    ModelGeneVariances,
+    ModelGeneVariancesEmptyTest,
+    ::testing::Combine(
+        ::testing::Values(1, 3), // number of threads
+        ::testing::Values(false, true) // row major
+    )
+);

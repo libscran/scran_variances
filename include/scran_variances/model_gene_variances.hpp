@@ -293,6 +293,11 @@ void model_gene_variances_running(
         }
     }
 
+    if (NC == 0) {
+        // If NC == 0, nused = 0 and RssRunning::finish() doesn't even get called.
+        // So, we have to fill the output means with NaNs manually.
+        std::fill_n(output_mean, NR, std::numeric_limits<Stat_>::quiet_NaN());
+    }
     quickstats::rss_to_variance(NR, NC, output_variance);
 }
 /**
@@ -524,16 +529,13 @@ void model_gene_variances_blocked_direct(
     const tatami::Matrix<Value_, Index_>& mat, 
     const Block_* const block, 
     const std::size_t num_blocks,
-    std::vector<Index_>& block_sizes,
+    const std::vector<Index_>& block_sizes,
     const std::vector<ModelGeneVariancesBuffers<Stat_> >& output, 
     int num_threads
 ) {
     const auto NR = mat.nrow(), NC = mat.ncol();
     assert(sanisizer::is_equal(num_blocks, output.size()));
     assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-    for (Index_ c = 0; c < NC; ++c) {
-        block_sizes[block[c]] += 1;
-    }
 
     if (mat.sparse()) {
         tatami::parallelize([&](int, Index_ s, Index_ l) -> void {
@@ -610,7 +612,7 @@ void model_gene_variances_blocked_running(
     const tatami::Matrix<Value_, Index_>& mat,
     const Group_* const block, 
     const std::size_t num_blocks,
-    std::vector<Index_>& block_sizes,
+    const std::vector<Index_>& block_sizes,
     const std::vector<ModelGeneVariancesBuffers<Stat_> >& output, 
     int num_threads
 ) {
@@ -619,12 +621,13 @@ void model_gene_variances_blocked_running(
 
     const bool do_parallel = num_threads > 1;
     std::optional<std::vector<std::optional<std::vector<std::vector<Stat_> > > > > all_partial_mean, all_partial_rss;
+    std::optional<std::vector<std::optional<std::vector<Index_> > > > all_partial_count;
     if (do_parallel) {
         // -1, as we'll repurpose the RSS output buffer to store the partial RSS of the first thread.
         all_partial_rss.emplace(sanisizer::cast<I<decltype(all_partial_rss->size())> >(num_threads - 1));
         all_partial_mean.emplace(sanisizer::cast<I<decltype(all_partial_mean->size())> >(num_threads));
+        all_partial_count.emplace(sanisizer::cast<I<decltype(all_partial_count->size())> >(num_threads));
     }
-    auto all_partial_count = sanisizer::create<std::vector<std::optional<std::vector<Index_> > > >(num_threads);
 
     assert(sanisizer::is_equal(num_blocks, output.size()));
     for (std::size_t b = 0; b < num_blocks; ++b) {
@@ -664,11 +667,6 @@ void model_gene_variances_blocked_running(
                     tmp_rss_ptrs[b] = (*cur_rss)[b].data();
                 }
             }
-        }
-
-        auto cur_count = sanisizer::create<std::vector<Index_> >(num_blocks);
-        for (Index_ x = 0; x < l; ++x) {
-            cur_count[block[x + s]] += 1;
         }
 
         if (is_sparse) {
@@ -713,8 +711,13 @@ void model_gene_variances_blocked_running(
             }
         }
 
-        all_partial_count[thread] = std::move(cur_count);
         if (do_parallel) {
+            auto cur_count = sanisizer::create<std::vector<Index_> >(num_blocks);
+            for (Index_ x = 0; x < l; ++x) {
+                cur_count[block[x + s]] += 1;
+            }
+            (*all_partial_count)[thread] = std::move(cur_count);
+
             (*all_partial_mean)[thread] = std::move(cur_mean);
             if (thread > 0) {
                 (*all_partial_rss)[thread - 1] = std::move(cur_rss);
@@ -723,51 +726,61 @@ void model_gene_variances_blocked_running(
     }, NC, num_threads);
 
     if (!do_parallel) {
-        const auto& cur_count = *(all_partial_count[0]);
         for (std::size_t b = 0; b < num_blocks; ++b) {
-            quickstats::rss_to_variance(NR, cur_count[b], output[b].variance);
+            quickstats::rss_to_variance(NR, block_sizes[b], output[b].variance);
+        }
+        if (NC == 0) {
+            // If NC == 0, nused = 0 and RssRunning::finish() doesn't even get called.
+            // So, we have to fill the output means with NaNs manually.
+            for (std::size_t b = 0; b < num_blocks; ++b) {
+                std::fill_n(output[b].mean, NR, std::numeric_limits<Stat_>::quiet_NaN());
+            }
         }
 
     } else {
         const auto& ap_mean = *all_partial_mean;
         const auto& ap_rss = *all_partial_rss;
 
-        assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-        for (int u = 0; u < nused; ++u) {
-            const auto& cur_count = *(all_partial_count[u]);
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                block_sizes[b] += cur_count[b];
-            }
-        }
-
         // Computing the global mean.
+        assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
         for (std::size_t b = 0; b < num_blocks; ++b) {
             const auto cur_output = output[b].mean;
+            if (block_sizes[b] == 0) {
+                std::fill_n(cur_output, NR, std::numeric_limits<Stat_>::quiet_NaN());
+                continue;
+            }
             for (int u = 0; u < nused; ++u) {
+                const auto cur_count = (*((*all_partial_count)[u]))[b];
+                if (cur_count == 0) {
+                    continue;
+                }
                 const auto& cur_mean = (*(ap_mean[u]))[b];
-                const Stat_ mult = static_cast<Stat_>((*(all_partial_count[u]))[b]) / static_cast<Stat_>(block_sizes[b]);
+                const Stat_ mult = static_cast<Stat_>(cur_count) / static_cast<Stat_>(block_sizes[b]);
                 for (Index_ d = 0; d < NR; ++d) {
                     cur_output[d] += cur_mean[d] * mult;
                 }
             }
         }
 
-        // Combining the RSS. We need to use the safe variant of recenter_rss(), just to protect against the
-        // case where a block has no observations within a particular thread. 
+        // Combining the RSS. 
         for (std::size_t b = 0; b < num_blocks; ++b) {
             const auto& cur_global = output[b].mean;
             const auto cur_output = output[b].variance;
             for (int u = 0; u < nused; ++u) {
-                const auto cur_count = (*(all_partial_count[u]))[b];
+                const auto cur_count = (*((*all_partial_count)[u]))[b];
+                if (cur_count == 0) {
+                    continue;
+                }
                 const auto& cur_mean = (*(ap_mean[u]))[b];
-                if (u == 0) {
+                if (u == 0) { 
                     for (Index_ d = 0; d < NR; ++d) {
-                        cur_output[d] = quickstats::recenter_rss(cur_count, cur_output[d], cur_mean[d], cur_global[d]); 
+                        // At this point, we know cur_count > 0, so we can use the unsafe function.
+                        cur_output[d] = quickstats::recenter_rss_unsafe(cur_count, cur_output[d], cur_mean[d], cur_global[d]); 
                     }
                 } else {
                     const auto& cur_rss = (*(ap_rss[u - 1]))[b];
                     for (Index_ d = 0; d < NR; ++d) {
-                        cur_output[d] += quickstats::recenter_rss(cur_count, cur_rss[d], cur_mean[d], cur_global[d]); 
+                        cur_output[d] += quickstats::recenter_rss_unsafe(cur_count, cur_rss[d], cur_mean[d], cur_global[d]); 
                     }
                 }
             }
@@ -856,7 +869,13 @@ void model_gene_variances_blocked(
     }
     assert(mat.ncol() == 0 || sanisizer::is_less_than(*std::max_element(block, block + mat.ncol()), num_blocks));
 
+    // Just compute the block sizes here for simplicity.
     auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
+    const auto NC = mat.ncol();
+    for (Index_ c = 0; c < NC; ++c) {
+        block_sizes[block[c]] += 1;
+    }
+
     if (mat.prefer_rows()) {
         model_gene_variances_blocked_direct(mat, block, num_blocks, block_sizes, buffers.per_block, options.num_threads);
     } else {
