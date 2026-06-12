@@ -851,6 +851,11 @@ void model_gene_variances_blocked(
     const ModelGeneVariancesBlockedBuffers<Stat_>& buffers,
     const ModelGeneVariancesOptions& options
 ) {
+    if (!sanisizer::is_equal(num_blocks, buffers.per_block.size())) {
+        throw std::runtime_error("length of 'buffers.per_block' is not equal to 'num_blocks'");
+    }
+    assert(mat.ncol() == 0 || sanisizer::is_less_than(*std::max_element(block, block + mat.ncol()), num_blocks));
+
     auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
     if (mat.prefer_rows()) {
         model_gene_variances_blocked_direct(mat, block, num_blocks, block_sizes, buffers.per_block, options.num_threads);

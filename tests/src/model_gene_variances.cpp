@@ -487,3 +487,15 @@ TEST(ModelGeneVariances, NoTrend) {
         EXPECT_TRUE(msg.find("per-block trend fits") != std::string::npos);
     }
 }
+
+TEST(ModelGeneVariances, BlockedMismatch) {
+    tatami::DenseMatrix<double, int, std::vector<double> > mat(10, 0, std::vector<double>(), true);
+    scran_variances::ModelGeneVariancesBlockedBuffers<double> buffers;
+    std::string msg;
+    try {
+        scran_variances::model_gene_variances_blocked(mat, static_cast<const int*>(NULL), 3, buffers, {});
+    } catch (std::exception& e) {
+        msg = e.what();
+    }
+    EXPECT_TRUE(msg.find("not equal to") != std::string::npos);
+}
