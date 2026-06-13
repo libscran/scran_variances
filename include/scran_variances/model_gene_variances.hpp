@@ -133,177 +133,6 @@ struct ModelGeneVariancesBuffers {
     Stat_* residual;
 };
 
-/**
- * @cond
- */
-template<typename Value_, typename Index_, typename Stat_>
-void model_gene_variances_direct(
-    const tatami::Matrix<Value_, Index_>& mat,
-    Stat_* const output_mean,
-    Stat_* const output_variance,
-    const int num_threads
-) {
-    const auto NR = mat.nrow();
-    const auto NC = mat.ncol();
-
-    if (mat.sparse()) {
-        tatami::Options topt;
-        topt.sparse_extract_index = false;
-
-        tatami::parallelize([&](int, Index_ s, Index_ l) -> void {
-            auto ext = tatami::consecutive_extractor<true>(mat, true, s, l, topt);
-            auto vbuffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NC);
-            quickstats::RssWorkspace<Stat_> work;
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(vbuffer.data(), NULL);
-                const auto res = quickstats::rss(NC, out.number, out.value, work);
-                output_mean[x + s] = res.mean;
-                output_variance[x + s] = quickstats::rss_to_variance(NC, res.rss);
-            }
-        }, NR, num_threads);
-
-    } else {
-        tatami::parallelize([&](int, Index_ s, Index_ l) -> void {
-            auto ext = tatami::consecutive_extractor<false>(mat, true, s, l);
-            auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NC);
-            quickstats::RssWorkspace<Stat_> work;
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(buffer.data());
-                const auto res = quickstats::rss(NC, out, work);
-                output_mean[x + s] = res.mean;
-                output_variance[x + s] = quickstats::rss_to_variance(NC, res.rss);
-            }
-        }, NR, num_threads);
-    }
-}
-
-template<typename Value_, typename Index_, typename Stat_>
-void model_gene_variances_running(
-    const tatami::Matrix<Value_, Index_>& mat,
-    Stat_* const output_mean,
-    Stat_* const output_variance,
-    const int num_threads
-) {
-    const auto NR = mat.nrow();
-    const auto NC = mat.ncol();
-    const bool is_sparse = mat.is_sparse();
-
-    const bool do_parallel = num_threads > 1;
-    std::optional<std::vector<std::optional<std::vector<Stat_> > > > all_partial_mean, all_partial_rss;
-    std::optional<std::vector<Index_> > all_partial_count;
-    if (do_parallel) {
-        // -1, as we'll repurpose the RSS output buffer to store the partial RSS of the first thread.
-        all_partial_rss.emplace(sanisizer::cast<I<decltype(all_partial_rss->size())> >(num_threads - 1));
-        all_partial_mean.emplace(sanisizer::cast<I<decltype(all_partial_mean->size())> >(num_threads));
-        all_partial_count.emplace(sanisizer::cast<I<decltype(all_partial_count->size())> >(num_threads));
-    }
-
-    std::fill_n(output_variance, NR, 0);
-    std::fill_n(output_mean, NR, 0);
-
-    const int nused = tatami::parallelize([&](int thread, Index_ s, Index_ l) -> void {
-        Stat_* rss_ptr;
-        Stat_* mean_ptr;
-        std::optional<std::vector<Stat_> > cur_rss, cur_mean;
-
-        if (!do_parallel) {
-            // Storing mean and RSS directly in the output vector to cut down two allocations if we're not working in parallel.
-            rss_ptr = output_variance;
-            mean_ptr = output_mean;
-        } else {
-            // Storing the partial RSS directly in the output vector to save ourselves an allocation if we're in the first thread.
-            // We can't do the same for the mean, though, as we need to keep the partial mean and the global mean separate for the reduction.
-            cur_mean.emplace(tatami::cast_Index_to_container_size<std::vector<Stat_> >(NR));
-            mean_ptr = cur_mean->data();
-            if (thread == 0) {
-                rss_ptr = output_variance;
-            } else {
-                cur_rss.emplace(tatami::cast_Index_to_container_size<std::vector<Stat_> >(NR));
-                rss_ptr = cur_rss->data();
-            }
-        }
-
-        if (is_sparse) {
-            tatami::Options topt;
-            topt.sparse_ordered_index = false; // we don't care about the ordering of the non-zero elements.
-            auto ext = tatami::consecutive_extractor<true>(mat, false, s, l, topt);
-            auto vbuffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NR);
-            auto ibuffer = tatami::create_container_of_Index_size<std::vector<Index_> >(NR);
-            auto nonzeros = tatami::create_container_of_Index_size<std::vector<Index_> >(NR);
-
-            quickstats::RssRunningSparse<Index_, Value_, Stat_> runner(NR, mean_ptr, rss_ptr, nonzeros.data());
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(vbuffer.data(), ibuffer.data());
-                runner.add(out.number, out.value, out.index);
-            }
-            runner.finish();
-
-        } else {
-            auto ext = tatami::consecutive_extractor<false>(mat, false, s, l);
-            auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NR);
-
-            quickstats::RssRunningDense<Value_, Stat_> runner(NR, mean_ptr, rss_ptr);
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(buffer.data());
-                runner.add(out);
-            }
-            runner.finish();
-        }
-
-        if (do_parallel) {
-            (*all_partial_count)[thread] = l;
-            (*all_partial_mean)[thread] = std::move(cur_mean);
-            if (thread > 0) {
-                (*all_partial_rss)[thread - 1] = std::move(cur_rss);
-            }
-        }
-    }, NC, num_threads);
-
-    // Don't check nused > 1, as it's possible for do_parallel = true with nused = 1 if not all threads are used.
-    // This would cause us to leave output_mean and output_variance empty.
-    if (do_parallel) {
-        const auto& ap_count = *all_partial_count;
-        const auto& ap_mean = *all_partial_mean;
-        const auto& ap_rss = *all_partial_rss;
-
-        // Computing the global mean.
-        for (int u = 0; u < nused; ++u) {
-            const Stat_ mult = static_cast<Stat_>(ap_count[u]) / static_cast<Stat_>(NC);
-            const auto& cur_mean = *(ap_mean[u]);
-            for (Index_ d = 0; d < NR; ++d) {
-                output_mean[d] += cur_mean[d] * mult;
-            }
-        }
-
-        // Combining the RSS. We can use recenter_rss_unsafe() as we are guaranteed that cur_count > 0,
-        // as parallelize() will only ever split into non-empty ranges if those ranges are used.
-        for (int u = 0; u < nused; ++u) {
-            const auto cur_count = ap_count[u];
-            const auto& cur_mean = *(ap_mean[u]);
-            if (u == 0) {
-                for (Index_ d = 0; d < NR; ++d) {
-                    output_variance[d] = quickstats::recenter_rss_unsafe(cur_count, output_variance[d], cur_mean[d], output_mean[d]); 
-                }
-            } else {
-                const auto& cur_rss = *(ap_rss[u - 1]);
-                for (Index_ d = 0; d < NR; ++d) {
-                    output_variance[d] += quickstats::recenter_rss_unsafe(cur_count, cur_rss[d], cur_mean[d], output_mean[d]); 
-                }
-            }
-        }
-    }
-
-    if (NC == 0) {
-        // If NC == 0, nused = 0 and RssRunning::finish() doesn't even get called.
-        // So, we have to fill the output means with NaNs manually.
-        std::fill_n(output_mean, NR, std::numeric_limits<Stat_>::quiet_NaN());
-    }
-    quickstats::rss_to_variance(NR, NC, output_variance);
-}
-/**
- * @endcond
- */
-
 /** 
  * Model the per-gene variances as a function of the mean in single-cell expression data.
  * We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using `fit_variance_trend()`.
@@ -327,11 +156,13 @@ void model_gene_variances(
     const ModelGeneVariancesBuffers<Stat_> buffers,
     const ModelGeneVariancesOptions& options
 ) {
-    if (mat.prefer_rows()) {
-        model_gene_variances_direct(mat, buffers.mean, buffers.variance, options.num_threads);
-    } else {
-        model_gene_variances_running(mat, buffers.mean, buffers.variance, options.num_threads);
-    }
+    tatami_stats::VarianceBuffers<Stat_> vbuf;
+    vbuf.mean = buffers.mean;    
+    vbuf.variance = buffers.variance;    
+
+    tatami_stats::VarianceOptions vopt;
+    vopt.num_threads = options.num_threads;
+    tatami_stats::variance(true, mat, vbuf, vopt);
 
     FitVarianceTrendWorkspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
@@ -505,290 +336,6 @@ struct ModelGeneVariancesBlockedResults {
 /**
  * @cond
  */
-template<typename Index_, typename Stat_>
-void finalize_direct_block_means(
-    const std::size_t num_blocks,
-    const std::vector<Index_>& block_sizes,
-    std::vector<Stat_>& cur_means, 
-    const Index_ i,
-    const std::vector<ModelGeneVariancesBuffers<Stat_> >& output
-) {
-    for (std::size_t b = 0; b < num_blocks; ++b) {
-        auto& mean = cur_means[b];
-        if (block_sizes[b] == 0) {
-            mean = std::numeric_limits<Stat_>::quiet_NaN();
-        } else {
-            mean /= block_sizes[b];
-        }
-        output[b].mean[i] = mean;
-    }
-}
-
-template<typename Value_, typename Index_, typename Block_, typename Stat_>
-void model_gene_variances_blocked_direct(
-    const tatami::Matrix<Value_, Index_>& mat, 
-    const Block_* const block, 
-    const std::size_t num_blocks,
-    const std::vector<Index_>& block_sizes,
-    const std::vector<ModelGeneVariancesBuffers<Stat_> >& output, 
-    int num_threads
-) {
-    const auto NR = mat.nrow(), NC = mat.ncol();
-    assert(sanisizer::is_equal(num_blocks, output.size()));
-    assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-
-    if (mat.sparse()) {
-        tatami::parallelize([&](int, Index_ s, Index_ l) -> void {
-            auto ext = tatami::consecutive_extractor<true>(mat, true, s, l);
-            auto vbuffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NC);
-            auto ibuffer = tatami::create_container_of_Index_size<std::vector<Index_> >(NC);
-            auto cur_means = sanisizer::create<std::vector<Stat_> >(num_blocks);
-            auto cur_rss = sanisizer::create<std::vector<Stat_> >(num_blocks);
-            auto cur_non_zeros = sanisizer::create<std::vector<Index_> >(num_blocks);
-
-            for (Index_ x = 0; x < l; ++x) {
-                auto range = ext->fetch(vbuffer.data(), ibuffer.data());
-
-                // Computing the mean first.
-                for (Index_ i = 0; i < range.number; ++i) {
-                    const auto g = block[range.index[i]];
-                    cur_means[g] += range.value[i];
-                    ++cur_non_zeros[g];
-                }
-                finalize_direct_block_means(num_blocks, block_sizes, cur_means, static_cast<Index_>(s + x), output);
-
-                // Now computing the RSS.
-                for (Index_ i = 0; i < range.number; ++i) {
-                    const auto g = block[range.index[i]];
-                    const auto delta = range.value[i] - cur_means[g];
-                    cur_rss[g] += delta * delta;
-                }
-                for (std::size_t b = 0; b < num_blocks; ++b) {
-                    const Stat_ my_rss = cur_rss[b] + cur_means[b] * cur_means[b] * (block_sizes[b] - cur_non_zeros[b]);
-                    output[b].variance[s + x] = quickstats::rss_to_variance(block_sizes[b], my_rss);
-                }
-
-                std::fill(cur_means.begin(), cur_means.end(), 0);
-                std::fill(cur_rss.begin(), cur_rss.end(), 0);
-                std::fill(cur_non_zeros.begin(), cur_non_zeros.end(), 0);
-            }
-        }, NR, num_threads);
-
-    } else {
-        tatami::parallelize([&](int, Index_ s, Index_ l) -> void {
-            auto ext = tatami::consecutive_extractor<false>(mat, true, s, l);
-            auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NC);
-            auto cur_means = sanisizer::create<std::vector<Stat_> >(num_blocks);
-            auto cur_rss = sanisizer::create<std::vector<Stat_> >(num_blocks);
-
-            for (Index_ x = 0; x < l; ++x) {
-                auto ptr = ext->fetch(buffer.data());
-
-                // Computing the mean first.
-                for (Index_ j = 0; j < NC; ++j) {
-                    cur_means[block[j]] += ptr[j];
-                }
-                finalize_direct_block_means(num_blocks, block_sizes, cur_means, static_cast<Index_>(s + x), output);
-
-                // Now computing the RSS.
-                for (Index_ j = 0; j < NC; ++j) {
-                    const auto g = block[j];
-                    const auto delta = ptr[j] - cur_means[g];
-                    cur_rss[g] += delta * delta;
-                }
-                for (std::size_t b = 0; b < num_blocks; ++b) {
-                    output[b].variance[s + x] = quickstats::rss_to_variance(block_sizes[b], cur_rss[b]);
-                }
-
-                std::fill(cur_means.begin(), cur_means.end(), 0);
-                std::fill(cur_rss.begin(), cur_rss.end(), 0);
-            }
-        }, NR, num_threads);
-    }
-}
-
-template<typename Value_, typename Index_, typename Group_, typename Stat_>
-void model_gene_variances_blocked_running(
-    const tatami::Matrix<Value_, Index_>& mat,
-    const Group_* const block, 
-    const std::size_t num_blocks,
-    const std::vector<Index_>& block_sizes,
-    const std::vector<ModelGeneVariancesBuffers<Stat_> >& output, 
-    int num_threads
-) {
-    const auto NR = mat.nrow(), NC = mat.ncol();
-    const bool is_sparse = mat.is_sparse();
-
-    const bool do_parallel = num_threads > 1;
-    std::optional<std::vector<std::optional<std::vector<std::vector<Stat_> > > > > all_partial_mean, all_partial_rss;
-    std::optional<std::vector<std::optional<std::vector<Index_> > > > all_partial_count;
-    if (do_parallel) {
-        // -1, as we'll repurpose the RSS output buffer to store the partial RSS of the first thread.
-        all_partial_rss.emplace(sanisizer::cast<I<decltype(all_partial_rss->size())> >(num_threads - 1));
-        all_partial_mean.emplace(sanisizer::cast<I<decltype(all_partial_mean->size())> >(num_threads));
-        all_partial_count.emplace(sanisizer::cast<I<decltype(all_partial_count->size())> >(num_threads));
-    }
-
-    assert(sanisizer::is_equal(num_blocks, output.size()));
-    for (std::size_t b = 0; b < num_blocks; ++b) {
-        std::fill_n(output[b].mean, NR, 0);
-        std::fill_n(output[b].variance, NR, 0);
-    }
-
-    const int nused = tatami::parallelize([&](int thread, Index_ s, Index_ l) -> void {
-        auto tmp_mean_ptrs = sanisizer::create<std::vector<Stat_*> >(num_blocks);
-        auto tmp_rss_ptrs = sanisizer::create<std::vector<Stat_*> >(num_blocks);
-        std::optional<std::vector<std::vector<Stat_> > > cur_mean, cur_rss;
-
-        if (!do_parallel) {
-            // Storing mean and RSS directly in the output vector to cut down two allocations if we're not working in parallel.
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                tmp_mean_ptrs[b] = output[b].mean;
-                tmp_rss_ptrs[b] = output[b].variance;
-            }
-
-        } else {
-            // Storing the partial RSS directly in the output vectors to save ourselves an allocation if we're in the first thread.
-            // We can't do the same for the mean, though, as we need to keep the partial mean and the global mean separate for the reduction.
-            cur_mean.emplace(sanisizer::cast<I<decltype(cur_mean->size())> >(num_blocks));
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                tatami::resize_container_to_Index_size((*cur_mean)[b], NR);
-                tmp_mean_ptrs[b] = (*cur_mean)[b].data();
-            }
-
-            if (thread == 0) {
-                for (std::size_t b = 0; b < num_blocks; ++b) {
-                    tmp_rss_ptrs[b] = output[b].variance;
-                }
-            } else {
-                cur_rss.emplace(sanisizer::cast<I<decltype(cur_rss->size())> >(num_blocks));
-                for (std::size_t b = 0; b < num_blocks; ++b) {
-                    tatami::resize_container_to_Index_size((*cur_rss)[b], NR);
-                    tmp_rss_ptrs[b] = (*cur_rss)[b].data();
-                }
-            }
-        }
-
-        if (is_sparse) {
-            auto ext = tatami::consecutive_extractor<true>(mat, false, s, l);
-            auto vbuffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NR);
-            auto ibuffer = tatami::create_container_of_Index_size<std::vector<Index_> >(NR);
-
-            auto nonzeros = sanisizer::create<std::vector<std::vector<Index_> > >(num_blocks);
-            std::vector<quickstats::RssRunningSparse<Index_, Value_, Stat_> > runners;
-            sanisizer::reserve(runners, num_blocks);
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                tatami::resize_container_to_Index_size(nonzeros[b], NR);
-                runners.emplace_back(NR, tmp_mean_ptrs[b], tmp_rss_ptrs[b], nonzeros[b].data());
-            }
-
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(vbuffer.data(), ibuffer.data());
-                runners[block[x + s]].add(out.number, out.value, out.index);
-            }
-
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                runners[b].finish();
-            }
-
-        } else {
-            auto ext = tatami::consecutive_extractor<false>(mat, false, s, l);
-            auto buffer = tatami::create_container_of_Index_size<std::vector<Value_> >(NR);
-
-            std::vector<quickstats::RssRunningDense<Value_, Stat_> > runners;
-            sanisizer::reserve(runners, num_blocks);
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                runners.emplace_back(NR, tmp_mean_ptrs[b], tmp_rss_ptrs[b]);
-            }
-
-            for (Index_ x = 0; x < l; ++x) {
-                auto out = ext->fetch(buffer.data());
-                runners[block[x + s]].add(out);
-            }
-
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                runners[b].finish();
-            }
-        }
-
-        if (do_parallel) {
-            auto cur_count = sanisizer::create<std::vector<Index_> >(num_blocks);
-            for (Index_ x = 0; x < l; ++x) {
-                cur_count[block[x + s]] += 1;
-            }
-            (*all_partial_count)[thread] = std::move(cur_count);
-
-            (*all_partial_mean)[thread] = std::move(cur_mean);
-            if (thread > 0) {
-                (*all_partial_rss)[thread - 1] = std::move(cur_rss);
-            }
-        }
-    }, NC, num_threads);
-
-    if (!do_parallel) {
-        for (std::size_t b = 0; b < num_blocks; ++b) {
-            quickstats::rss_to_variance(NR, block_sizes[b], output[b].variance);
-        }
-        if (NC == 0) {
-            // If NC == 0, nused = 0 and RssRunning::finish() doesn't even get called.
-            // So, we have to fill the output means with NaNs manually.
-            for (std::size_t b = 0; b < num_blocks; ++b) {
-                std::fill_n(output[b].mean, NR, std::numeric_limits<Stat_>::quiet_NaN());
-            }
-        }
-
-    } else {
-        const auto& ap_mean = *all_partial_mean;
-        const auto& ap_rss = *all_partial_rss;
-
-        // Computing the global mean.
-        assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-        for (std::size_t b = 0; b < num_blocks; ++b) {
-            const auto cur_output = output[b].mean;
-            if (block_sizes[b] == 0) {
-                std::fill_n(cur_output, NR, std::numeric_limits<Stat_>::quiet_NaN());
-                continue;
-            }
-            for (int u = 0; u < nused; ++u) {
-                const auto cur_count = (*((*all_partial_count)[u]))[b];
-                if (cur_count == 0) {
-                    continue;
-                }
-                const auto& cur_mean = (*(ap_mean[u]))[b];
-                const Stat_ mult = static_cast<Stat_>(cur_count) / static_cast<Stat_>(block_sizes[b]);
-                for (Index_ d = 0; d < NR; ++d) {
-                    cur_output[d] += cur_mean[d] * mult;
-                }
-            }
-        }
-
-        // Combining the RSS. 
-        for (std::size_t b = 0; b < num_blocks; ++b) {
-            const auto& cur_global = output[b].mean;
-            const auto cur_output = output[b].variance;
-            for (int u = 0; u < nused; ++u) {
-                const auto cur_count = (*((*all_partial_count)[u]))[b];
-                if (cur_count == 0) {
-                    continue;
-                }
-                const auto& cur_mean = (*(ap_mean[u]))[b];
-                if (u == 0) { 
-                    for (Index_ d = 0; d < NR; ++d) {
-                        // At this point, we know cur_count > 0, so we can use the unsafe function.
-                        cur_output[d] = quickstats::recenter_rss_unsafe(cur_count, cur_output[d], cur_mean[d], cur_global[d]); 
-                    }
-                } else {
-                    const auto& cur_rss = (*(ap_rss[u - 1]))[b];
-                    for (Index_ d = 0; d < NR; ++d) {
-                        cur_output[d] += quickstats::recenter_rss_unsafe(cur_count, cur_rss[d], cur_mean[d], cur_global[d]); 
-                    }
-                }
-            }
-            quickstats::rss_to_variance(NR, block_sizes[b], cur_output);
-        }
-    }
-}
-
 template<typename Stat_, typename Index_>
 void extract_blocked_weights(
     const std::size_t num_blocks,
@@ -870,17 +417,25 @@ void model_gene_variances_blocked(
     assert(mat.ncol() == 0 || sanisizer::is_less_than(*std::max_element(block, block + mat.ncol()), num_blocks));
 
     // Just compute the block sizes here for simplicity.
+    // At some point, tatami_stats::variance() will accept the block sizes as input for greater efficiency.
+    // But, alas, today is not that day.
     auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
     const auto NC = mat.ncol();
     for (Index_ c = 0; c < NC; ++c) {
         block_sizes[block[c]] += 1;
     }
 
-    if (mat.prefer_rows()) {
-        model_gene_variances_blocked_direct(mat, block, num_blocks, block_sizes, buffers.per_block, options.num_threads);
-    } else {
-        model_gene_variances_blocked_running(mat, block, num_blocks, block_sizes, buffers.per_block, options.num_threads);
+    tatami_stats::GroupVarianceBuffers<Stat_> vbuf;
+    vbuf.mean.reserve(num_blocks);
+    vbuf.variance.reserve(num_blocks);
+    for (std::size_t b = 0; b < num_blocks; ++b) {
+        vbuf.mean.push_back(buffers.per_block[b].mean);
+        vbuf.variance.push_back(buffers.per_block[b].variance);
     }
+
+    tatami_stats::GroupVarianceOptions vopt;
+    vopt.num_threads = options.num_threads;
+    tatami_stats::group_variance(true, mat, block, num_blocks, vbuf, vopt);
 
     FitVarianceTrendWorkspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
