@@ -24,13 +24,24 @@ if(SCRAN_VARIANCES_FETCH_EXTERN)
 else()
     find_package(tatami_tatami 4.1.0 CONFIG REQUIRED)
     find_package(tatami_tatami_stats 3.0.0 CONFIG REQUIRED)
+    find_package(ltla_quickstats 0.1.0 CONFIG REQUIRED)
     find_package(ltla_WeightedLowess 2.1.0 CONFIG REQUIRED)
     find_package(libscran_scran_blocks 0.1.3 CONFIG REQUIRED)
     find_package(ltla_sanisizer 0.2.0 CONFIG REQUIRED)
     find_package(libscran_topicks 0.2.0 CONFIG REQUIRED)
 endif()
 
-target_link_libraries(scran_variances INTERFACE tatami::tatami tatami::tatami_stats ltla::WeightedLowess libscran::scran_blocks ltla::sanisizer libscran::topicks)
+target_link_libraries(
+    scran_variances
+    INTERFACE
+    tatami::tatami
+    tatami::tatami_stats
+    ltla::quickstats
+    ltla::WeightedLowess
+    libscran::scran_blocks
+    ltla::sanisizer
+    libscran::topicks
+)
 
 # Tests
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

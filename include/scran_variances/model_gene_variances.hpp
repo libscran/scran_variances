@@ -10,6 +10,7 @@
 
 #include "tatami/tatami.hpp"
 #include "tatami_stats/tatami_stats.hpp"
+#include "quickstats/quickstats.hpp"
 #include "scran_blocks/scran_blocks.hpp"
 #include "sanisizer/sanisizer.hpp"
 
@@ -416,33 +417,32 @@ void model_gene_variances_blocked(
     }
     assert(mat.ncol() == 0 || sanisizer::is_less_than(*std::max_element(block, block + mat.ncol()), num_blocks));
 
-    // Just compute the block sizes here for simplicity.
-    // At some point, tatami_stats::variance() will accept the block sizes as input for greater efficiency.
-    // But, alas, today is not that day.
-    auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
-    const auto NC = mat.ncol();
-    for (Index_ c = 0; c < NC; ++c) {
-        block_sizes[block[c]] += 1;
-    }
-
-    tatami_stats::GroupVarianceBuffers<Stat_> vbuf;
+    tatami_stats::GroupRssBuffers<Stat_, Index_> vbuf;
     vbuf.mean.reserve(num_blocks);
-    vbuf.variance.reserve(num_blocks);
+    vbuf.rss.reserve(num_blocks);
     for (std::size_t b = 0; b < num_blocks; ++b) {
         vbuf.mean.push_back(buffers.per_block[b].mean);
-        vbuf.variance.push_back(buffers.per_block[b].variance);
+        vbuf.rss.push_back(buffers.per_block[b].variance);
     }
 
-    tatami_stats::GroupVarianceOptions vopt;
+    auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
+    vbuf.count = block_sizes.data();
+
+    // Using group_rss() instead of group_variance(), as the latter doesn't pass back the block sizes yet.
+    tatami_stats::GroupRssOptions vopt;
     vopt.num_threads = options.num_threads;
-    tatami_stats::group_variance(true, mat, block, num_blocks, vbuf, vopt);
+    tatami_stats::group_rss(true, mat, block, num_blocks, vbuf, vopt);
+
+    const auto NR = mat.nrow();
+    for (std::size_t b = 0; b < num_blocks; ++b) {
+        quickstats::rss_to_variance(NR, block_sizes[b], vbuf.rss[b]); 
+    }
 
     FitVarianceTrendWorkspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
     fopt.num_threads = options.num_threads;
     bool all_trends_fitted = true;
 
-    const auto NR = mat.nrow();
     for (std::size_t b = 0; b < num_blocks; ++b) {
         const auto& current = buffers.per_block[b];
         if (current.fitted == NULL || current.residual == NULL) {

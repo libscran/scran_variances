@@ -13,6 +13,12 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
+  quickstats 
+  GIT_REPOSITORY https://github.com/LTLA/quickstats
+  GIT_TAG master # ^0.1.4
+)
+
+FetchContent_Declare(
   WeightedLowess 
   GIT_REPOSITORY https://github.com/libscran/WeightedLowess
   GIT_TAG master # ^2.1.0
@@ -38,6 +44,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(tatami)
 FetchContent_MakeAvailable(tatami_stats)
+FetchContent_MakeAvailable(quickstats)
 FetchContent_MakeAvailable(WeightedLowess)
 FetchContent_MakeAvailable(scran_blocks)
 FetchContent_MakeAvailable(sanisizer)
