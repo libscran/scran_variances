@@ -415,28 +415,27 @@ void model_gene_variances_blocked(
     if (!sanisizer::is_equal(num_blocks, buffers.per_block.size())) {
         throw std::runtime_error("length of 'buffers.per_block' is not equal to 'num_blocks'");
     }
-    assert(mat.ncol() == 0 || sanisizer::is_less_than(*std::max_element(block, block + mat.ncol()), num_blocks));
 
-    tatami_stats::GroupRssBuffers<Stat_, Index_> vbuf;
+    const Index_ NR = mat.nrow();
+    const Index_ NC = mat.ncol();
+    assert(NC == 0 || sanisizer::is_less_than(*std::max_element(block, block + NC), num_blocks));
+
+    tatami_stats::GroupVarianceBuffers<Stat_> vbuf;
     vbuf.mean.reserve(num_blocks);
-    vbuf.rss.reserve(num_blocks);
+    vbuf.variance.reserve(num_blocks);
     for (std::size_t b = 0; b < num_blocks; ++b) {
         vbuf.mean.push_back(buffers.per_block[b].mean);
-        vbuf.rss.push_back(buffers.per_block[b].variance);
+        vbuf.variance.push_back(buffers.per_block[b].variance);
     }
 
     auto block_sizes = sanisizer::create<std::vector<Index_> >(num_blocks);
-    vbuf.count = block_sizes.data();
-
-    // Using group_rss() instead of group_variance(), as the latter doesn't pass back the block sizes yet.
-    tatami_stats::GroupRssOptions vopt;
-    vopt.num_threads = options.num_threads;
-    tatami_stats::group_rss(true, mat, block, num_blocks, vbuf, vopt);
-
-    const auto NR = mat.nrow();
-    for (std::size_t b = 0; b < num_blocks; ++b) {
-        quickstats::rss_to_variance(NR, block_sizes[b], vbuf.rss[b]); 
+    for (Index_ c = 0; c < NC; ++c) {
+        block_sizes[block[c]] += 1;
     }
+
+    tatami_stats::GroupVarianceOptions vopt;
+    vopt.num_threads = options.num_threads;
+    tatami_stats::group_variance(true, mat, block, num_blocks, block_sizes.data(), vbuf, vopt);
 
     FitVarianceTrendWorkspace<Stat_> work;
     auto fopt = options.fit_variance_trend_options;
