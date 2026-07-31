@@ -164,10 +164,10 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structscran__variances_1_1ModelGeneVariancesOptions.html">ModelGeneVariancesOptions</a>&amp; options</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>) {</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    tatami_stats::VarianceBuffers&lt;Stat_&gt; vbuf;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    vbuf.mean = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBuffers.html#a29de1b21a9beabcef60c846809e34db9">mean</a>;    </div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    vbuf.variance = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBuffers.html#abc1dc072eea00b8c26dd10483831d35e">variance</a>;    </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    vbuf.mean = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBuffers.html#a29de1b21a9beabcef60c846809e34db9">mean</a>;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    vbuf.variance = buffers.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesBuffers.html#abc1dc072eea00b8c26dd10483831d35e">variance</a>;</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    tatami_stats::VarianceOptions vopt;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    tatami_stats::VarianceOptions&lt;Stat_&gt; vopt;</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    vopt.num_threads = options.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesOptions.html#ac7673607b1436c8edde68a3df08519aa">num_threads</a>;</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    tatami_stats::variance(<span class="keyword">true</span>, mat, vbuf, vopt);</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
@@ -342,7 +342,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        block_sizes[block[c]] += 1;</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    }</div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span> </div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    tatami_stats::GroupVarianceOptions vopt;</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    tatami_stats::GroupVarianceOptions&lt;Stat_&gt; vopt;</div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>    vopt.num_threads = options.<a class="code hl_variable" href="structscran__variances_1_1ModelGeneVariancesOptions.html#ac7673607b1436c8edde68a3df08519aa">num_threads</a>;</div>
 <div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    tatami_stats::group_variance(<span class="keyword">true</span>, mat, block, num_blocks, block_sizes.data(), vbuf, vopt);</div>
 <div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span> </div>
