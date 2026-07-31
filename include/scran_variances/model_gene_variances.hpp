@@ -158,10 +158,10 @@ void model_gene_variances(
     const ModelGeneVariancesOptions& options
 ) {
     tatami_stats::VarianceBuffers<Stat_> vbuf;
-    vbuf.mean = buffers.mean;    
-    vbuf.variance = buffers.variance;    
+    vbuf.mean = buffers.mean;
+    vbuf.variance = buffers.variance;
 
-    tatami_stats::VarianceOptions vopt;
+    tatami_stats::VarianceOptions<Stat_> vopt;
     vopt.num_threads = options.num_threads;
     tatami_stats::variance(true, mat, vbuf, vopt);
 
@@ -433,7 +433,7 @@ void model_gene_variances_blocked(
         block_sizes[block[c]] += 1;
     }
 
-    tatami_stats::GroupVarianceOptions vopt;
+    tatami_stats::GroupVarianceOptions<Stat_> vopt;
     vopt.num_threads = options.num_threads;
     tatami_stats::group_variance(true, mat, block, num_blocks, block_sizes.data(), vbuf, vopt);
 
