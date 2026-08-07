@@ -9,13 +9,13 @@ FetchContent_Declare(
 FetchContent_Declare(
   tatami_stats
   GIT_REPOSITORY https://github.com/tatami-inc/tatami_stats
-  GIT_TAG master # ^3.0.1
+  GIT_TAG master # ^3.1.0
 )
 
 FetchContent_Declare(
   quickstats 
   GIT_REPOSITORY https://github.com/LTLA/quickstats
-  GIT_TAG master # ^0.1.4
+  GIT_TAG master # ^0.2.0
 )
 
 FetchContent_Declare(
