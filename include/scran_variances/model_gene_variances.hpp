@@ -10,11 +10,11 @@
 
 #include "tatami/tatami.hpp"
 #include "tatami_stats/tatami_stats.hpp"
-#include "quickstats/quickstats.hpp"
 #include "scran_blocks/scran_blocks.hpp"
 #include "sanisizer/sanisizer.hpp"
 
 #include "fit_variance_trend.hpp"
+#include "parallel_averages.hpp"
 #include "utils.hpp"
 
 /**
@@ -334,51 +334,6 @@ struct ModelGeneVariancesBlockedResults {
     ModelGeneVariancesResults<Stat_> average;
 };
 
-/**
- * @cond
- */
-template<typename Stat_, typename Index_>
-void extract_blocked_weights(
-    const std::size_t num_blocks,
-    const std::vector<Stat_>& block_weights,
-    const std::vector<Index_>& block_sizes,
-    const Index_ min_size,
-    std::vector<Stat_>& tmp_weights
-) {
-    assert(sanisizer::is_equal(num_blocks, block_weights.size()));
-    assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-    tmp_weights.clear();
-    for (std::size_t b = 0; b < num_blocks; ++b) {
-        if (block_sizes[b] < min_size) { // skip blocks with insufficient cells.
-            continue;
-        }
-        tmp_weights.push_back(block_weights[b]);
-    }
-}
-
-template<typename Stat_, typename Index_, class Function_>
-void extract_blocked_pointers(
-    const std::size_t num_blocks,
-    const std::vector<ModelGeneVariancesBuffers<Stat_> >& per_block, 
-    const std::vector<Index_>& block_sizes,
-    const Index_ min_size,
-    const Function_ fun,
-    std::vector<Stat_*>& tmp_pointers
-) {
-    assert(sanisizer::is_equal(num_blocks, per_block.size()));
-    assert(sanisizer::is_equal(num_blocks, block_sizes.size()));
-    tmp_pointers.clear();
-    for (std::size_t b = 0; b < num_blocks; ++b) {
-        if (block_sizes[b] < min_size) { // skip blocks with insufficient cells.
-            continue;
-        }
-        tmp_pointers.push_back(fun(per_block[b]));
-    }
-}
-/**
- * @endcond
- */
-
 /** 
  * Model the per-feature variances from a log-expression matrix with blocking.
  * The mean and variance of each gene is computed separately for all cells in each block,
@@ -470,54 +425,48 @@ void model_gene_variances_blocked(
 
     if (options.block_average_policy == BlockAveragePolicy::MEAN) {
         const auto block_weight = scran_blocks::compute_weights<Stat_>(block_sizes, options.block_weight_policy, options.variable_block_weight_parameters);
-        std::vector<Stat_> tmp_weights;
-        tmp_weights.reserve(num_blocks);
 
         if (ave_means) {
-            extract_blocked_weights(num_blocks, block_weight, block_sizes, static_cast<Index_>(1), tmp_weights);
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(1), [](const auto& x) -> Stat_* { return x.mean; }, tmp_pointers);
-            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_means, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].mean; };
+            parallel_weighted_means(NR, num_blocks, std::move(get_ptr), block_weight, block_sizes, static_cast<Index_>(1), ave_means);
         }
 
         // Skip blocks without enough cells to compute the variance.
-        extract_blocked_weights(num_blocks, block_weight, block_sizes, static_cast<Index_>(2), tmp_weights);
-
         if (ave_variances) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.variance; }, tmp_pointers);
-            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_variances, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].variance; };
+            parallel_weighted_means(NR, num_blocks, std::move(get_ptr), block_weight, block_sizes, static_cast<Index_>(2), ave_variances);
         }
 
         if (ave_fitted) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.fitted; }, tmp_pointers);
-            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_fitted, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].fitted; };
+            parallel_weighted_means(NR, num_blocks, std::move(get_ptr), block_weight, block_sizes, static_cast<Index_>(2), ave_fitted);
         }
 
         if (ave_residuals) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.residual; }, tmp_pointers);
-            scran_blocks::parallel_weighted_means(NR, tmp_pointers, tmp_weights.data(), ave_residuals, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].residual; };
+            parallel_weighted_means(NR, num_blocks, std::move(get_ptr), block_weight, block_sizes, static_cast<Index_>(2), ave_residuals);
         }
 
     } else if (options.block_average_policy == BlockAveragePolicy::QUANTILE) {
         if (ave_means) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(1), [](const auto& x) -> Stat_* { return x.mean; }, tmp_pointers);
-            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.block_quantile, ave_means, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].mean; };
+            parallel_quantiles(NR, num_blocks, std::move(get_ptr), block_sizes, static_cast<Index_>(1), options.block_quantile, ave_means);
         }
 
-        // Again, skip blocks without enough cells to compute the variance.
-
+        // Skip blocks without enough cells to compute the variance.
         if (ave_variances) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.variance; }, tmp_pointers);
-            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.block_quantile, ave_variances, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].variance; };
+            parallel_quantiles(NR, num_blocks, std::move(get_ptr), block_sizes, static_cast<Index_>(2), options.block_quantile, ave_variances);
         }
 
         if (ave_fitted) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.fitted; }, tmp_pointers);
-            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.block_quantile, ave_fitted, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].fitted; };
+            parallel_quantiles(NR, num_blocks, std::move(get_ptr), block_sizes, static_cast<Index_>(2), options.block_quantile, ave_fitted);
         }
 
         if (ave_residuals) {
-            extract_blocked_pointers(num_blocks, buffers.per_block, block_sizes, static_cast<Index_>(2), [](const auto& x) -> Stat_* { return x.residual; }, tmp_pointers);
-            scran_blocks::parallel_quantiles(NR, tmp_pointers, options.block_quantile, ave_residuals, /* skip_nan = */ false);
+            auto get_ptr = [&](const Index_ b) -> Stat_* { return buffers.per_block[b].residual; };
+            parallel_quantiles(NR, num_blocks, std::move(get_ptr), block_sizes, static_cast<Index_>(2), options.block_quantile, ave_residuals);
         }
     }
 }

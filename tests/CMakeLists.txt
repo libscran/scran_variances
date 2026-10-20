@@ -43,6 +43,7 @@ endmacro()
 add_executable(
     libtest 
     src/fit_variance_trend.cpp
+    src/parallel_averages.cpp
     src/model_gene_variances.cpp
     src/choose_highly_variable_genes.cpp
 )
