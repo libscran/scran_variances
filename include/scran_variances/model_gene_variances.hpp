@@ -363,7 +363,7 @@ template<typename Value_, typename Index_, typename Block_, typename Stat_>
 void model_gene_variances_blocked(
     const tatami::Matrix<Value_, Index_>& mat, 
     const Block_* const block, 
-    const std::size_t num_blocks,
+    const Block_ num_blocks,
     const ModelGeneVariancesBlockedBuffers<Stat_>& buffers,
     const ModelGeneVariancesOptions& options
 ) {
@@ -378,7 +378,7 @@ void model_gene_variances_blocked(
     tatami_stats::GroupVarianceBuffers<Stat_> vbuf;
     vbuf.mean.reserve(num_blocks);
     vbuf.variance.reserve(num_blocks);
-    for (std::size_t b = 0; b < num_blocks; ++b) {
+    for (Block_ b = 0; b < num_blocks; ++b) {
         vbuf.mean.push_back(buffers.per_block[b].mean);
         vbuf.variance.push_back(buffers.per_block[b].variance);
     }
@@ -397,7 +397,7 @@ void model_gene_variances_blocked(
     fopt.num_threads = options.num_threads;
     bool all_trends_fitted = true;
 
-    for (std::size_t b = 0; b < num_blocks; ++b) {
+    for (Block_ b = 0; b < num_blocks; ++b) {
         const auto& current = buffers.per_block[b];
         if (current.fitted == NULL || current.residual == NULL) {
             all_trends_fitted = false;
@@ -492,7 +492,7 @@ template<typename Stat_ = double, typename Value_, typename Index_, typename Blo
 ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(
     const tatami::Matrix<Value_, Index_>& mat,
     const Block_* const block,
-    const std::size_t num_blocks,
+    const Block_ num_blocks,
     const ModelGeneVariancesOptions& options
 ) {
     const bool do_average = options.compute_average /* for back-compatibility */ && options.block_average_policy != BlockAveragePolicy::NONE;
@@ -505,7 +505,7 @@ ModelGeneVariancesBlockedResults<Stat_> model_gene_variances_blocked(
 
     ModelGeneVariancesBlockedBuffers<Stat_> buffers;
     sanisizer::resize(buffers.per_block, num_blocks);
-    for (std::size_t b = 0; b < num_blocks; ++b) {
+    for (Block_ b = 0; b < num_blocks; ++b) {
         auto& current = buffers.per_block[b];
         current.mean = output.per_block[b].mean.data();
         current.variance = output.per_block[b].variance.data();
