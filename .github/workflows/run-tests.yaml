@@ -15,29 +15,51 @@ jobs:
       matrix:
         config:
         - {
-            name: "Ubuntu Latest GCC, coverage enabled", 
+            name: "Ubuntu Latest GCC, debug, coverage enabled", 
             os: ubuntu-latest,
             cov: true
           }
         - {
-            name: "macOS Latest Clang", 
+            name: "Ubuntu Latest GCC, debug, force copy", 
+            os: ubuntu-latest,
+            force-copy: true
+          }
+        - {
+            name: "macOS Latest Clang, debug", 
+            os: macos-latest
+          }
+        - {
+            name: "Ubuntu Latest GCC, release", 
+            os: ubuntu-latest,
+            release: true
+          }
+        - {
+            name: "macOS Latest Clang, release", 
             os: macos-latest,
-            cov: false
+            release: true
           }
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Get latest CMake
       uses: lukka/get-cmake@latest
 
-    - name: Configure the build with coverage
+    - name: Configure Linux build with coverage
       if: ${{ matrix.config.cov }}
-      run: cmake -S . -B build -DCODE_COVERAGE=ON
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON
 
-    - name: Configure the build with custom parallelization
-      if: ${{ ! matrix.config.cov }}
-      run: cmake -S . -B build
+    - name: Configure Linux build with forced copy
+      if: ${{ matrix.config.force-copy }}
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DFORCE_COPY=ON
+
+    - name: Configure Mac debug build 
+      if: ${{ !matrix.config.release && matrix.config.os == 'macos-latest' }}
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Configure release build 
+      if: ${{ matrix.config.release }}
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
     - name: Run the build
       run: cmake --build build

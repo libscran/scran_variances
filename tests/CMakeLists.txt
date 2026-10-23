@@ -19,8 +19,10 @@ include(GoogleTest)
 option(CODE_COVERAGE "Enable coverage testing" OFF)
 set(DO_CODE_COVERAGE OFF)
 if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-set(DO_CODE_COVERAGE ON)
+  set(DO_CODE_COVERAGE ON)
 endif()
+
+option(FORCE_COPY "Force copying in tatami::fetch()" OFF)
 
 macro(decorate_test target)
     target_link_libraries(
@@ -35,6 +37,10 @@ macro(decorate_test target)
     if(DO_CODE_COVERAGE)
         target_compile_options(${target} PRIVATE -O0 -g --coverage)
         target_link_options(${target} PRIVATE --coverage)
+    endif()
+
+    if(FORCE_COPY)
+        target_compile_definitions(${target} PRIVATE TATAMI_DEBUG_FORCE_COPY=1)
     endif()
 
     gtest_discover_tests(${target})
